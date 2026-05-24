@@ -3017,10 +3017,10 @@
                         <h3 style="margin-top: 0;">Add Money</h3>
 
                         <div class="wallet-quick-grid">
-                            <button onclick="addMoneyToWallet(50)">₹50</button>
-                            <button onclick="addMoneyToWallet(100)">₹100</button>
-                            <button onclick="addMoneyToWallet(200)">₹200</button>
-                            <button onclick="addMoneyToWallet(500)">₹500</button>
+                            <button onclick="initiateUropayPayment(50)">₹50</button>
+                            <button onclick="initiateUropayPayment(100)">₹100</button>
+                            <button onclick="initiateUropayPayment(200)">₹200</button>
+                            <button onclick="initiateUropayPayment(500)">₹500</button>
                         </div>
 
                         <div class="form-group">
@@ -3044,7 +3044,7 @@
                                 <span style="font-size: 0.75em; opacity: 0.8;">Card / Net Banking</span>
                             </button>
 
-                            <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value || selectedAmount)" 
+                            <button onclick="initiateUropayPayment(document.getElementById('wallet-custom-amount')?.value || 0)" 
                                     style="background: linear-gradient(135deg, #6a0dad, #9b30ff);
                                            color: white; border: none; padding: 12px 8px;
                                            border-radius: 8px; font-weight: 700; font-size: 0.85em;
@@ -4086,6 +4086,32 @@
           }
         }
 
+        async function initiateUropayPayment(amount) {
+          const user = auth.currentUser;
+          if (!user) { showToast('Please login first', 'error'); return; }
+          amount = Number(amount);
+          if (!amount || amount < 10 || amount > 10000) {
+            showToast('Enter amount between 10-10000', 'error');
+            return;
+          }
+          try {
+            showToast('Creating payment...', 'info');
+            const response = await fetch(
+              'https://techno-esports-backend.onrender.com/api/payment/create-uropay-order',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.uid, amount })
+              }
+            );
+            const data = await response.json();
+            if (!data.success) { showToast(data.message || 'Failed', 'error'); return; }
+            showUpiPaymentModal(data);
+          } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+          }
+        }
+
         function showUpiPaymentModal(data) {
           const existingModal = document.getElementById('upi-payment-modal');
           if (existingModal) existingModal.remove();
@@ -4175,7 +4201,7 @@
                 <div style="background:#fff; border-radius:12px; padding:14px; 
                             display:inline-block; box-shadow:0 0 0 1px #333;
                             position:relative; overflow:hidden;">
-                  <img src="${data.qrCodeUrl}" alt="UPI QR" 
+                  <img src="${data.isBase64 ? data.qrCodeUrl : data.qrCodeUrl}" alt="UPI QR" 
                        style="width:170px; height:170px; display:block; border-radius:6px;">
                   <!-- Animated scan line -->
                   <div style="position:absolute; left:14px; right:14px; height:3px;
