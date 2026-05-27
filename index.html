@@ -4099,7 +4099,7 @@
             }
             try {
                 showToast('Creating payment order...', 'info');
-                const response = await fetch(`https://techno-esports-backend.onrender.com/api/payment/create-niceupi-order`, {
+                const response = await fetch(`https://techno-esports-backend.onrender.com/api/payments/initiate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: user.uid, amount })
@@ -4109,335 +4109,269 @@
                     showToast(data.message || 'Failed to create order', 'error');
                     return;
                 }
-                showNiceUPIPaymentModal(data);
+                showBharatPePaymentModal(data);
             } catch (error) {
                 showToast('Error: ' + error.message, 'error');
             }
         }
 
-        function showUpiPaymentModal(data) {
-          const existingModal = document.getElementById('upi-payment-modal');
-          if (existingModal) existingModal.remove();
-
-          const modal = document.createElement('div');
-          modal.id = 'upi-payment-modal';
-          modal.style.cssText = `
-            position:fixed; top:0; left:0; width:100%; height:100%;
-            background:rgba(0,0,0,0.92); z-index:9999;
-            display:flex; align-items:center; justify-content:center;
-            backdrop-filter:blur(8px); padding:16px; box-sizing:border-box;
-          `;
-
-          modal.innerHTML = `
-            <style>
-              @keyframes upiPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.8} }
-              @keyframes upiScan { 0%{top:0;opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{top:calc(100% - 3px);opacity:0} }
-              @keyframes upiBlink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-              @keyframes upiShimmer { 0%{left:-100%} 100%{left:100%} }
-              @keyframes upiSlideIn { 0%{opacity:0;transform:translateY(30px)} 100%{opacity:1;transform:translateY(0)} }
-              @keyframes upiGlow { 0%,100%{box-shadow:0 0 5px rgba(255,70,85,0.3)} 50%{box-shadow:0 0 20px rgba(255,70,85,0.6)} }
-              @keyframes upiFadeIn { 0%{opacity:0} 100%{opacity:1} }
-              @keyframes upiDotPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.8)} }
-              .upi-app-card:hover { transform:translateY(-3px) !important; border-color:#444 !important; background:#1e1e1e !important; }
-              .upi-app-card { transition: all 0.25s ease !important; }
-              .upi-verify-btn { position:relative; overflow:hidden; }
-              .upi-verify-btn::after { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent); animation:upiShimmer 2.5s infinite; }
-            </style>
-            <div style="background:#111; border-radius:20px; padding:0;
-                        width:100%; max-width:360px; border:1px solid #222;
-                        overflow:hidden; max-height:92vh; overflow-y:auto;
-                        animation:upiSlideIn 0.4s ease-out;">
-
-              <!-- Header -->
-              <div style="background:#161616; padding:18px 20px; 
-                          display:flex; justify-content:space-between; align-items:center;
-                          border-bottom:1px solid #222;">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <div style="width:36px; height:36px; background:linear-gradient(135deg,#ff4655,#d91a2a);
-                              border-radius:10px; display:flex; align-items:center; justify-content:center;
-                              animation:upiPulse 2s ease-in-out infinite;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <div style="color:#fff; font-weight:700; font-size:1em;">Complete Payment</div>
-                    <div style="color:#888; font-size:0.75em; margin-top:2px;">Secure UPI Payment</div>
-                  </div>
-                </div>
-                <button onclick="document.getElementById('upi-payment-modal').remove();"
-                        style="background:#222; border:none; color:#888; width:32px; height:32px;
-                               border-radius:50%; cursor:pointer; font-size:1.1em; display:flex;
-                               align-items:center; justify-content:center; transition:all 0.2s;"
-                        onmouseover="this.style.background='#333';this.style.color='#fff'"
-                        onmouseout="this.style.background='#222';this.style.color='#888'">✕</button>
-              </div>
-
-              <!-- Amount -->
-              <div style="padding:20px; text-align:center; border-bottom:1px solid #1a1a1a;
-                          animation:upiFadeIn 0.5s ease-out 0.1s both;">
-                <div style="color:#888; font-size:0.78em; letter-spacing:0.5px; 
-                            text-transform:uppercase; margin-bottom:6px;">Amount Due</div>
-                <div style="color:#fff; font-size:2.4em; font-weight:800; letter-spacing:-1px;">
-                  ₹${data.amount}
-                </div>
-                <div style="display:inline-flex; align-items:center; gap:6px; margin-top:8px;
-                            background:#1a2a1a; border:1px solid #2a4a2a; 
-                            border-radius:20px; padding:4px 12px;">
-                  <div style="width:6px; height:6px; background:#4CAF50; border-radius:50%;
-                              animation:upiDotPulse 1.5s ease-in-out infinite;"></div>
-                  <span style="color:#4CAF50; font-size:0.72em; font-weight:600;">Secured by UPI</span>
-                </div>
-              </div>
-
-              <!-- QR Code -->
-              <div style="padding:20px; text-align:center; border-bottom:1px solid #1a1a1a;
-                          animation:upiFadeIn 0.5s ease-out 0.2s both;">
-                <div style="color:#aaa; font-size:0.78em; margin-bottom:12px; letter-spacing:0.3px;
-                            display:flex; align-items:center; justify-content:center; gap:6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
-                  </svg>
-                  Scan QR with any UPI app
-                </div>
-                <div style="background:#fff; border-radius:12px; padding:14px; 
-                            display:inline-block; box-shadow:0 0 0 1px #333;
-                            position:relative; overflow:hidden;">
-                  <img src="${data.qrCodeUrl}" alt="UPI QR" 
-                       style="width:170px; height:170px; display:block; border-radius:6px;">
-                  <!-- Animated scan line -->
-                  <div style="position:absolute; left:14px; right:14px; height:3px;
-                              background:linear-gradient(90deg, transparent, #ff4655, transparent);
-                              border-radius:2px; animation:upiScan 2.5s ease-in-out infinite;"></div>
-                </div>
-                <div style="color:#555; font-size:0.7em; margin-top:10px; display:flex; align-items:center; justify-content:center; gap:4px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  Valid for 10 minutes only
-                </div>
-              </div>
-
-              <!-- Reference Number -->
-              <div style="margin:0 16px; margin-top:16px; 
-                          background:#1a1400; border:1px solid #3a3000;
-                          border-radius:12px; padding:14px; text-align:center;
-                          animation:upiFadeIn 0.5s ease-out 0.3s both, upiGlow 3s ease-in-out infinite;">
-                <div style="color:#f0a500; font-size:0.72em; font-weight:600;
-                            text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;
-                            display:flex; align-items:center; justify-content:center; gap:5px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"
-                       style="animation:upiBlink 1.5s ease-in-out infinite;">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  Add in Payment Remarks
-                </div>
-                <div style="color:#fff; font-size:1.6em; font-weight:800;
-                            font-family:'Courier New', monospace; letter-spacing:4px;">
-                  ${data.refNumber}
-                </div>
-                <div style="color:#888; font-size:0.7em; margin-top:6px; display:flex; align-items:center; justify-content:center; gap:4px;">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                  </svg>
-                  Type this reference in remarks / note field
-                </div>
-              </div>
-
-              <!-- UPI Apps -->
-              <div style="padding:16px; animation:upiFadeIn 0.5s ease-out 0.4s both;">
-                <div style="color:#666; font-size:0.72em; text-align:center; 
-                            margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">
-                  Or pay directly with
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-          
-                  <!-- Google Pay -->
-                  <a href="${data.gpayLink}" style="text-decoration:none;">
-                    <div class="upi-app-card" style="background:#161616; border:1px solid #222; border-radius:12px;
-                                padding:12px 8px; text-align:center; cursor:pointer;">
-                      <svg width="40" height="24" viewBox="0 0 80 32" style="margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;">
-                        <text x="0" y="24" font-family="Arial" font-weight="800" font-size="26" fill="#4285F4">G</text>
-                        <text x="20" y="24" font-family="Arial" font-weight="400" font-size="20" fill="#4285F4">Pay</text>
-                      </svg>
-                      <div style="color:#aaa; font-size:0.7em; font-weight:600;">Google Pay</div>
-                    </div>
-                  </a>
-
-                  <!-- PhonePe -->
-                  <a href="${data.phonepeLink}" style="text-decoration:none;">
-                    <div class="upi-app-card" style="background:#161616; border:1px solid #222; border-radius:12px;
-                                padding:12px 8px; text-align:center; cursor:pointer;">
-                      <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;">
-                        <rect width="40" height="24" rx="4" fill="#5f259f"/>
-                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="11" fill="white">Pe</text>
-                      </svg>
-                      <div style="color:#aaa; font-size:0.7em; font-weight:600;">PhonePe</div>
-                    </div>
-                  </a>
-
-                  <!-- BHIM UPI -->
-                  <a href="${data.upiLink}" style="text-decoration:none;">
-                    <div class="upi-app-card" style="background:#161616; border:1px solid #222; border-radius:12px;
-                                padding:12px 8px; text-align:center; cursor:pointer;">
-                      <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom:6px; display:block; margin-left:auto; margin-right:auto;">
-                        <rect width="40" height="24" rx="4" fill="#00529C"/>
-                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="10" fill="white">BHIM</text>
-                      </svg>
-                      <div style="color:#aaa; font-size:0.7em; font-weight:600;">BHIM / UPI</div>
-                    </div>
-                  </a>
-
-                </div>
-              </div>
-
-              <!-- Waiting for Payment -->
-              <div style="padding:16px 20px 20px; animation:upiFadeIn 0.5s ease-out 0.5s both;">
-                <div style="text-align:center;">
-                  <div style="margin-bottom:16px;">
-                    <div style="display:inline-block; width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#ff4655,#d91a2a); display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" style="animation:upiPulse 1.5s ease-in-out infinite;">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <div style="color:#fff; font-size:1.1em; font-weight:700; margin-bottom:8px;">
-                    Waiting for payment confirmation...
-                  </div>
-                  <div style="color:#aaa; font-size:0.85em; line-height:1.6;">
-                    Payment will be automatically confirmed once
-                    <br/>UPay detects the UPI credit SMS on your phone.
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          `;
-
-          document.body.appendChild(modal);
-          startPaymentPolling(data.uroPayOrderId);
-        }
-
-        function startPaymentPolling(uroPayOrderId) {
-          if (!uroPayOrderId) return;
-          let attempts = 0;
-          const maxAttempts = 60;
-
-          const pollInterval = setInterval(async () => {
-            attempts++;
-            try {
-              const res = await fetch(
-                `https://techno-esports-backend.onrender.com/api/payment/check-upi-payment/${uroPayOrderId}`
-              );
-              const data = await res.json();
-
-              if (data.status === 'completed') {
-                clearInterval(pollInterval);
-                const modal = document.getElementById('upi-payment-modal');
-                if (modal) modal.remove();
-                showToast('Payment successful! Wallet credited.', 'success');
-                await fetchWalletBalance();
-                await fetchWalletTransactions();
-                return;
-              }
-              if (data.status === 'expired') {
-                clearInterval(pollInterval);
-                const modal = document.getElementById('upi-payment-modal');
-                if (modal) modal.remove();
-                showToast('Session expired. Please try again.', 'error');
-                return;
-              }
-            } catch (e) {
-              console.log('Poll attempt', attempts, ':', e.message);
-            }
-            if (attempts >= maxAttempts) {
-              clearInterval(pollInterval);
-              showToast('Not confirmed. Contact support: ' + uroPayOrderId, 'info');
-            }
-          }, 5000);
-        }
-
-        function showNiceUPIPaymentModal(data) {
-            const existingModal = document.getElementById('niceupi-payment-modal');
+        function showBharatPePaymentModal(paymentData) {
+            // Remove any existing modals
+            const existingModal = document.getElementById('bharatpe-payment-modal');
             if (existingModal) existingModal.remove();
 
             const modal = document.createElement('div');
-            modal.id = 'niceupi-payment-modal';
+            modal.id = 'bharatpe-payment-modal';
             modal.style.cssText = `
-                position:fixed; top:0; left:0; width:100%; height:100%;
-                background:rgba(0,0,0,0.92); z-index:9999;
-                display:flex; align-items:center; justify-content:center;
-                backdrop-filter:blur(8px); padding:16px; box-sizing:border-box;
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.95); z-index: 9999;
+                display: flex; align-items: center; justify-content: center;
+                backdrop-filter: blur(8px); padding: 16px; box-sizing: border-box;
             `;
+
+            const orderId = paymentData.orderId;
+            const amount = paymentData.amount;
+            const upiId = paymentData.upiId;
+            const qrCodeUrl = paymentData.qrCodeUrl;
+            const gpayLink = paymentData.gpayLink || '';
+            const phonepeLink = paymentData.phonepeLink || '';
+            const upiLink = paymentData.upiLink || '';
 
             modal.innerHTML = `
-                <div style="background:#111; border-radius:20px; padding:0;
-                            width:100%; max-width:360px; border:1px solid #222;
-                            overflow:hidden; max-height:92vh; overflow-y:auto;">
-                    <div style="background:#161616; padding:18px 20px; 
-                                display:flex; justify-content:space-between; align-items:center;
-                                border-bottom:1px solid #222;">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <div style="width:36px; height:36px; background:linear-gradient(135deg,#ff4655,#d91a2a);
-                                        border-radius:10px; display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-mobile-alt" style="color:white;"></i>
+                <style>
+                    @keyframes bharatpePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.8; } }
+                    @keyframes bharatpeScan { 0% { top: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { top: calc(100% - 3px); opacity: 0; } }
+                    @keyframes bharatpeSlideIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+                    @keyframes bharatpeGlow { 0%, 100% { box-shadow: 0 0 5px rgba(255, 70, 85, 0.3); } 50% { box-shadow: 0 0 20px rgba(255, 70, 85, 0.6); } }
+                    @keyframes bharatpeFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+                    .bharatpe-app-card:hover { transform: translateY(-3px) !important; border-color: #444 !important; background: #1e1e1e !important; }
+                    .bharatpe-app-card { transition: all 0.25s ease !important; }
+                    .copy-btn { position: relative; overflow: hidden; cursor: pointer; }
+                    .copy-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: bharatpeShimmer 2.5s infinite; }
+                    @keyframes bharatpeShimmer { 0% { left: -100%; } 100% { left: 100%; } }
+                    .copied-toast { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 12px 20px; border-radius: 8px; z-index: 10000; animation: bharatpeSlideIn 0.3s ease-out; }
+                </style>
+                <div style="background: #111; border-radius: 20px; padding: 0;
+                            width: 100%; max-width: 360px; border: 1px solid #222;
+                            overflow: hidden; max-height: 92vh; overflow-y: auto;
+                            animation: bharatpeSlideIn 0.4s ease-out;">
+
+                    <!-- Header -->
+                    <div style="background: #161616; padding: 18px 20px;
+                                display: flex; justify-content: space-between; align-items: center;
+                                border-bottom: 1px solid #222;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #ff4655, #d91a2a);
+                                        border-radius: 10px; display: flex; align-items: center; justify-content: center;
+                                        animation: bharatpePulse 2s ease-in-out infinite;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
                             </div>
                             <div>
-                                <div style="color:#fff; font-weight:700;">Pay with NiceUPI</div>
-                                <div style="color:#888; font-size:0.75em;">Secure UPI payment</div>
+                                <div style="color: #fff; font-weight: 700; font-size: 1em;">BharatPe Payment</div>
+                                <div style="color: #888; font-size: 0.75em; margin-top: 2px;">Secure UPI Payment</div>
                             </div>
                         </div>
-                        <button onclick="document.getElementById('niceupi-payment-modal')?.remove();"
-                                style="background:#222; border:none; color:#888; width:32px; height:32px;
-                                       border-radius:50%; cursor:pointer;">✕</button>
+                        <button onclick="document.getElementById('bharatpe-payment-modal').remove();"
+                                style="background: #222; border: none; color: #888; width: 32px; height: 32px;
+                                       border-radius: 50%; cursor: pointer; font-size: 1.1em; display: flex;
+                                       align-items: center; justify-content: center; transition: all 0.2s;"
+                                onmouseover="this.style.background='#333';this.style.color='#fff'"
+                                onmouseout="this.style.background='#222';this.style.color='#888'">✕</button>
                     </div>
 
-                    <div style="padding:20px; text-align:center;">
-                        <div style="color:#888; font-size:0.78em;">Amount Due</div>
-                        <div style="color:#fff; font-size:2.4em; font-weight:800;">₹${data.amount}</div>
-                    </div>
-
-                    <div style="margin:0 16px; background:#1a1a2e; border-radius:12px; padding:12px;">
-                        <div style="color:#ffc700; font-size:0.8em; margin-bottom:6px;">Payment Link</div>
-                        <div style="display:flex; gap:8px; align-items:center;">
-                            <input id="payment-link-input" type="text" value="${data.paymentUrl}" readonly
-                                   style="flex:1; background:#222; border:1px solid #444; padding:8px; border-radius:6px; color:#fff; font-size:0.75em;">
-                            <button onclick="navigator.clipboard.writeText('${data.paymentUrl}')" 
-                                    style="background:#ff4655; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Copy</button>
+                    <!-- Amount -->
+                    <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1a1a1a;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.1s both;">
+                        <div style="color: #888; font-size: 0.78em; letter-spacing: 0.5px;
+                                    text-transform: uppercase; margin-bottom: 6px;">Amount Due</div>
+                        <div style="color: #fff; font-size: 2.4em; font-weight: 800; letter-spacing: -1px;">
+                            ₹${amount}
                         </div>
-                        <a href="${data.paymentUrl}" target="_blank" 
-                           style="display:block; text-align:center; margin-top:12px; background:#26a269; color:white; text-decoration:none; padding:10px; border-radius:8px;">
-                            Click to Pay (Opens UPI App)
-                        </a>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+                                    background: #1a2a1a; border: 1px solid #2a4a2a;
+                                    border-radius: 20px; padding: 4px 12px;">
+                            <div style="width: 6px; height: 6px; background: #4CAF50; border-radius: 50%;"></div>
+                            <span style="color: #4CAF50; font-size: 0.72em; font-weight: 600;">Secured by BharatPe</span>
+                        </div>
                     </div>
 
-                    <div style="padding:20px; text-align:center;">
-                        <div style="color:#aaa; font-size:0.75em;">Waiting for payment confirmation...</div>
-                        <div class="loading-spinner" style="margin:10px auto;"></div>
+                    <!-- QR Code -->
+                    <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1a1a1a;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.2s both;">
+                        <div style="color: #aaa; font-size: 0.78em; margin-bottom: 12px; letter-spacing: 0.3px;
+                                    display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                            Scan QR with any UPI app
+                        </div>
+                        <div style="background: #fff; border-radius: 12px; padding: 14px;
+                                    display: inline-block; box-shadow: 0 0 0 1px #333;
+                                    position: relative; overflow: hidden;">
+                            <img src="${qrCodeUrl}" alt="BharatPe QR" 
+                                 style="width: 170px; height: 170px; display: block; border-radius: 6px;">
+                            <!-- Animated scan line -->
+                            <div style="position: absolute; left: 14px; right: 14px; height: 3px;
+                                        background: linear-gradient(90deg, transparent, #ff4655, transparent);
+                                        border-radius: 2px; animation: bharatpeScan 2.5s ease-in-out infinite;"></div>
+                        </div>
+                        <div style="color: #555; font-size: 0.7em; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Valid for 10 minutes only
+                        </div>
                     </div>
+
+                    <!-- Order Remark (Reference Number) -->
+                    <div style="margin: 0 16px; margin-top: 16px;
+                                background: #1a1400; border: 1px solid #3a3000;
+                                border-radius: 12px; padding: 14px; text-align: center;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.3s both, bharatpeGlow 3s ease-in-out infinite;">
+                        <div style="color: #f0a500; font-size: 0.72em; font-weight: 600;
+                                    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
+                                    display: flex; align-items: center; justify-content: center; gap: 5px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            Add this in Payment Remarks
+                        </div>
+                        <div style="color: #fff; font-size: 1.6em; font-weight: 800;
+                                    font-family: 'Courier New', monospace; letter-spacing: 4px; margin-bottom: 10px;">
+                            ${orderId}
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('${orderId}', 'Order remark copied!')"
+                                style="background: #2a2a00; border: 1px solid #444; color: #f0a500; width: 100%; padding: 8px 12px;
+                                       border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600;
+                                       transition: all 0.2s;">
+                            📋 Copy Remark
+                        </button>
+                        <div style="color: #888; font-size: 0.7em; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Add this as the payment note/remark
+                        </div>
+                    </div>
+
+                    <!-- UPI ID -->
+                    <div style="margin: 16px; margin-top: 16px;
+                                background: #1a1a2e; border: 1px solid #2a3a4a;
+                                border-radius: 12px; padding: 14px; text-align: center;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.35s both;">
+                        <div style="color: #4a9eff; font-size: 0.72em; font-weight: 600;
+                                    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+                            UPI ID
+                        </div>
+                        <div style="color: #fff; font-size: 1.2em; font-weight: 600;
+                                    font-family: 'Courier New', monospace; margin-bottom: 10px;
+                                    word-break: break-all;">
+                            ${upiId}
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('${upiId}', 'UPI ID copied!')"
+                                style="background: #1a2a3e; border: 1px solid #2a4a6a; color: #4a9eff; width: 100%; padding: 8px 12px;
+                                       border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600;
+                                       transition: all 0.2s;">
+                            📋 Copy UPI ID
+                        </button>
+                    </div>
+
+                    <!-- UPI Apps -->
+                    <div style="padding: 16px; animation: bharatpeFadeIn 0.5s ease-out 0.4s both;">
+                        <div style="color: #666; font-size: 0.72em; text-align: center;
+                                    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Or pay directly with
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+
+                            ${gpayLink ? `
+                            <a href="${gpayLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 80 32" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <text x="0" y="24" font-family="Arial" font-weight="800" font-size="26" fill="#4285F4">G</text>
+                                        <text x="20" y="24" font-family="Arial" font-weight="400" font-size="20" fill="#4285F4">Pay</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">Google Pay</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                            ${phonepeLink ? `
+                            <a href="${phonepeLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <rect width="40" height="24" rx="4" fill="#5f259f"/>
+                                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="11" fill="white">Pe</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">PhonePe</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                            ${upiLink ? `
+                            <a href="${upiLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <rect width="40" height="24" rx="4" fill="#00529C"/>
+                                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="10" fill="white">BHIM</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">BHIM / UPI</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                        </div>
+                    </div>
+
+                    <!-- Waiting for Payment -->
+                    <div style="padding: 16px 20px 20px; animation: bharatpeFadeIn 0.5s ease-out 0.5s both;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: inline-block; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ff4655, #d91a2a); display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" style="animation: bharatpePulse 1.5s ease-in-out infinite;">
+                                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="color: #fff; font-size: 1.1em; font-weight: 700; margin-bottom: 8px;">
+                                Waiting for payment confirmation...
+                            </div>
+                            <div style="color: #aaa; font-size: 0.85em; line-height: 1.6;">
+                                Payment will be automatically confirmed once
+                                <br/>we detect the UPI credit.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             `;
-            document.body.appendChild(modal);
 
-            startNiceUPIPolling(data.orderId);
+            document.body.appendChild(modal);
+            startBharatPePolling(orderId);
         }
 
-        function startNiceUPIPolling(ourOrderId) {
+        function startBharatPePolling(orderId) {
+            if (!orderId) return;
             let attempts = 0;
             const maxAttempts = 60; // 5 minutes (60 * 5 sec)
 
             const pollInterval = setInterval(async () => {
                 attempts++;
                 try {
-                    const res = await fetch(`https://techno-esports-backend.onrender.com/api/payment/check-niceupi-payment/${ourOrderId}`);
+                    const res = await fetch(`https://techno-esports-backend.onrender.com/api/payments/check/${orderId}`);
                     const data = await res.json();
 
                     if (data.status === 'completed') {
                         clearInterval(pollInterval);
-                        const modal = document.getElementById('niceupi-payment-modal');
+                        const modal = document.getElementById('bharatpe-payment-modal');
                         if (modal) modal.remove();
                         showToast('Payment successful! Wallet credited.', 'success');
                         await fetchWalletBalance();
@@ -4446,61 +4380,76 @@
                     }
                     if (data.status === 'expired' || data.status === 'error') {
                         clearInterval(pollInterval);
-                        const modal = document.getElementById('niceupi-payment-modal');
+                        const modal = document.getElementById('bharatpe-payment-modal');
                         if (modal) modal.remove();
                         showToast(data.message || 'Payment session expired or failed. Please try again.', 'error');
                         return;
                     }
                 } catch (e) {
-                    console.log('Polling error:', e);
+                    console.log('BharatPe poll attempt', attempts, ':', e.message);
                 }
                 if (attempts >= maxAttempts) {
                     clearInterval(pollInterval);
-                    showToast('Payment confirmation timeout. Please contact support with order ID: ' + ourOrderId, 'info');
+                    showToast('Payment confirmation timeout. Please contact support with order ID: ' + orderId, 'info');
                 }
             }, 5000);
         }
 
+        function copyToClipboard(text, successMessage) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'copied-toast';
+                toast.textContent = successMessage;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            }).catch(err => {
+                showToast('Failed to copy', 'error');
+            });
+        }
+
+        // DEPRECATED: Old showUpiPaymentModal function - replaced with showBharatPePaymentModal
+        /*
+        function showUpiPaymentModal(data) {
+          // This function has been replaced by showBharatPePaymentModal
+        }
+        */
+
+        // DEPRECATED: Old startPaymentPolling function - replaced with startBharatPePolling
+        /*
+        function startPaymentPolling(uroPayOrderId) {
+          // This function has been replaced by startBharatPePolling
+        }
+        */
+
+        // DEPRECATED: Old showNiceUPIPaymentModal function - replaced with showBharatPePaymentModal
+        /*
+        function showNiceUPIPaymentModal(data) {
+          // This function has been replaced by showBharatPePaymentModal
+        }
+        */
+
+        // DEPRECATED: Old startNiceUPIPolling function - replaced with startBharatPePolling
+        /*
+        function startNiceUPIPolling(ourOrderId) {
+          // This function has been replaced by startBharatPePolling
+        }
+        */
+
+        // DEPRECATED: Old showUpiModal function - replaced with showBharatPePaymentModal
+        /*
         function showUpiModal(data) {
-          const existing = document.getElementById('upi-pay-modal');
-          if (existing) existing.remove();
-          document.body.insertAdjacentHTML('beforeend', `
-            <div id="upi-pay-modal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.97);z-index:99999;display:flex;align-items:center;justify-content:center;padding:15px;box-sizing:border-box;">
-              <div style="background:#1a1a1a;border-radius:16px;padding:22px;max-width:340px;width:100%;border:1px solid #333;text-align:center;max-height:90vh;overflow-y:auto;">
-                <h3 style="color:#ff4655;margin:0 0 4px;">Pay Rs.${data.amount}</h3>
-                <p style="color:#aaa;font-size:0.8em;margin:0 0 10px;">Scan QR with GPay / PhonePe / Paytm</p>
-                <div style="background:white;padding:10px;border-radius:10px;display:inline-block;margin-bottom:12px;">
-                  <img src="${data.qrCodeUrl}" style="width:200px;height:200px;display:block;">
-                </div>
-                <div style="background:#111;border-radius:8px;padding:8px;margin-bottom:12px;font-size:0.75em;color:#666;">
-                  Ref: ${data.refNumber}
-                </div>
-                <div style="background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:12px;border:1px solid #333;text-align:left;">
-                  <p style="color:#ffc700;font-size:0.82em;margin:0 0 8px;text-align:center;">
-                    Pay చేసిన తర్వాత UTR number enter చేయి
-                  </p>
-                  <input type="number" id="utr-input"
-                    placeholder="UTR Number (12 digits)"
-                    style="width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#111;color:#fff;font-size:0.9em;box-sizing:border-box;margin-bottom:8px;">
-                  <button onclick="verifyUTR('${data.refNumber}', ${data.amount})"
-                    style="width:100%;background:linear-gradient(135deg,#26a269,#2ec27e);color:white;padding:12px;border-radius:8px;border:none;font-weight:700;font-size:0.9em;cursor:pointer;">
-                    Verify & Add to Wallet
-                  </button>
-                </div>
-                <div id="utr-status" style="display:none;font-size:0.78em;padding:8px;background:#111;border-radius:6px;margin-bottom:10px;"></div>
-                <button onclick="closeUpiModal()" style="background:transparent;border:1px solid #444;color:#aaa;padding:10px;border-radius:8px;cursor:pointer;width:100%;">Cancel</button>
-              </div>
-            </div>
-          `);
-          startPaymentPolling(data.refNumber);
+          // This function has been replaced by showBharatPePaymentModal
         }
+        */
 
 
 
+        // DEPRECATED: Old closeUpiModal function - replaced with inline close button in BharatPe modal
+        /*
         function closeUpiModal() {
-          const modal = document.getElementById('upi-pay-modal');
-          if (modal) modal.remove();
+          // This function has been replaced by inline close button in showBharatPePaymentModal
         }
+        */
 
 
 
