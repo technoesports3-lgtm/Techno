@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- OneSignal SDK Integration Start -->
@@ -2702,55 +2702,60 @@
         }
 
         /* Wallet Block Buttons - Professional UI */
-        .wallet-block-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 10px 6px;
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-align: center;
-            line-height: 1.3;
-            min-height: 52px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
+.wallet-block-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 10px 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+    line-height: 1.3;
+    min-height: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
 
-        .wallet-block-btn:hover {
-            border-color: #ff4655;
-            background: rgba(255, 70, 85, 0.08);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(255, 70, 85, 0.15);
-        }
+.wallet-block-btn:hover {
+    border-color: #ff4655;
+    background: rgba(255, 70, 85, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(255, 70, 85, 0.15);
+}
 
-        .wallet-block-btn:active {
-            transform: scale(0.96);
-            transition-duration: 0.05s;
-        }
+.wallet-block-btn:active {
+    transform: scale(0.96);
+    transition-duration: 0.05s;
+}
 
-        .wallet-block-btn span {
-            display: block;
-            margin-top: 2px;
-        }
+.wallet-block-btn span {
+    display: block;
+    margin-top: 2px;
+}
 
-        /* Responsive: 3 columns on small screens */
-        @media (max-width: 480px) {
-            .wallet-block-btn {
-                font-size: 0.78em;
-                padding: 8px 4px;
-                min-height: 44px;
-                border-radius: 8px;
-            }
-            .wallet-block-btn span {
-                font-size: 0.7em !important;
-            }
-        }
+#custom-coin-preview {
+    color: #ffc700;
+    font-weight: 500;
+}
+
+/* Responsive: 3 columns on small screens */
+@media (max-width: 480px) {
+    .wallet-block-btn {
+        font-size: 0.78em;
+        padding: 8px 4px;
+        min-height: 44px;
+        border-radius: 8px;
+    }
+    .wallet-block-btn span {
+        font-size: 0.7em !important;
+    }
+}
 
     </style>
 </head>
@@ -2815,10 +2820,12 @@
 
                 <div class="auth-body">
                     <div class="auth-tabs">
+                        <!-- MODIFICATION 1: Switched order - Sign Up first, then Login -->
                         <div class="auth-tab active" id="signup-tab" onclick="switchAuthTab('signup')">Sign Up</div>
                         <div class="auth-tab" id="login-tab" onclick="switchAuthTab('login')">Login</div>
                     </div>
 
+                    <!-- MODIFICATION 1: Sign Up form is now active by default -->
                     <div id="signup-form" class="auth-form active">
                         <div class="form-group">
                             <input type="text" id="signup-username" placeholder="Username" required>
@@ -2843,6 +2850,7 @@
                         </div>
                         <button class="auth-button" onclick="handleProfessionalSignup()" id="signup-button">Create Account</button>
                         
+                        <!-- Google Sign-In Button -->
                         <div class="divider">
                             <div class="divider-text">Or Continue With</div>
                         </div>
@@ -2853,6 +2861,7 @@
                             </button>
                         </div>
                         
+                        <!-- Already have an account link -->
                         <div style="text-align: center; margin-top: 18px; color: #aaa; font-size: 0.85em; animation: fadeIn 0.5s ease-out 0.85s both;">
                             Already have an account? 
                             <a href="#" onclick="switchAuthTab('login')" style="color: #ff4655; text-decoration: none; font-weight: 700; transition: all 0.3s; position: relative;">Login here<span style="position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #ff4655; transition: width 0.3s;" class="underline-hover"></span></a>
@@ -2872,6 +2881,7 @@
                         </div>
                         <button class="auth-button" onclick="handleProfessionalLogin()" id="login-button">Sign In</button>
                         
+                        <!-- Google Sign-In Button -->
                         <div class="divider">
                             <div class="divider-text">Or Continue With</div>
                         </div>
@@ -2882,6 +2892,7 @@
                             </button>
                         </div>
                         
+                        <!-- Don't have an account link -->
                         <div style="text-align: center; margin-top: 18px; color: #aaa; font-size: 0.85em; animation: fadeIn 0.5s ease-out 0.85s both;">
                             Don't have an account? 
                             <a href="#" onclick="switchAuthTab('signup')" style="color: #ff4655; text-decoration: none; font-weight: 700; transition: all 0.3s;">Sign up here</a>
@@ -2891,6 +2902,7 @@
             </div>
         </div>
 
+        <!-- MODIFICATION 2: Updated Forgot Password Alert with multilingual support -->
         <div id="forgot-password-alert" class="fullscreen-alert">
             <div class="fullscreen-alert-content">
                 <h3>Forgotten Password</h3>
@@ -2947,197 +2959,95 @@
                     <p>Gaming Tournaments</p>
                 </div>
 
-                <a href="#" class="sidebar-menu-item" onclick="showSection('home-section')">
-                    <span class="menu-icon-symbol"><i class="fas fa-gamepad"></i></span> Tournaments
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showSection('wallet-section')">
-                    <span class="menu-icon-symbol"><i class="fas fa-wallet"></i></span> Wallet
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showSection('profile-section')">
-                    <span class="menu-icon-symbol"><i class="fas fa-user"></i></span> Profile
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showSection('referral-section')">
-                    <span class="menu-icon-symbol"><i class="fas fa-gift"></i></span> Refer & Earn
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showContent('contact')">
-                    <span class="menu-icon-symbol"><i class="fas fa-headset"></i></span> Contact & Support
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showContent('privacy')">
-                    <span class="menu-icon-symbol"><i class="fas fa-user-secret"></i></span> Privacy Policy
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showContent('terms')">
-                    <span class="menu-icon-symbol"><i class="fas fa-file-contract"></i></span> Terms & Conditions
-                </a>
-                <a href="#" class="sidebar-menu-item" onclick="showLogoutConfirmation()" style="color: #ff4655; border-top: 1px solid #333; margin-top: 10px;">
-                    <span class="menu-icon-symbol"><i class="fas fa-sign-out-alt"></i></span> Logout
-                </a>
+<!-- Wallet Section -->
+<section id="wallet-section" class="section">
+    <div class="wallet-balance-card">
+        <div style="color: #aaa; font-size: 0.9em;">Current Wallet Balance</div>
+        <div id="wallet-balance-display" style="font-size: 2em; font-weight: 700; color: #ff4655; margin-top: 8px;">0.00</div>
+    </div>
+
+    <div class="wallet-panel">
+        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">💰 Add Money — Choose Amount</h3>
+        <p style="color: #888; font-size: 0.85em; margin-bottom: 12px;">1 Rupee = 1 Coin &nbsp;•&nbsp; 
+            <span style="color: #ffc700;">Paise bonus: ≥50 paise → +1 extra coin</span>
+        </p>
+
+        <!-- Pre-defined blocks grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
+            <!-- 10 to 50 -->
+            <button onclick="addMoneyToWallet(10)" class="wallet-block-btn">₹10<br><span style="font-size:0.75em;color:#ffc700;">= 10 coins</span></button>
+            <button onclick="addMoneyToWallet(15)" class="wallet-block-btn">₹15<br><span style="font-size:0.75em;color:#ffc700;">= 15 coins</span></button>
+            <button onclick="addMoneyToWallet(20)" class="wallet-block-btn">₹20<br><span style="font-size:0.75em;color:#ffc700;">= 20 coins</span></button>
+            <button onclick="addMoneyToWallet(25)" class="wallet-block-btn">₹25<br><span style="font-size:0.75em;color:#ffc700;">= 25 coins</span></button>
+            <button onclick="addMoneyToWallet(30)" class="wallet-block-btn">₹30<br><span style="font-size:0.75em;color:#ffc700;">= 30 coins</span></button>
+            <button onclick="addMoneyToWallet(35)" class="wallet-block-btn">₹35<br><span style="font-size:0.75em;color:#ffc700;">= 35 coins</span></button>
+            <button onclick="addMoneyToWallet(40)" class="wallet-block-btn">₹40<br><span style="font-size:0.75em;color:#ffc700;">= 40 coins</span></button>
+            <button onclick="addMoneyToWallet(45)" class="wallet-block-btn">₹45<br><span style="font-size:0.75em;color:#ffc700;">= 45 coins</span></button>
+            <button onclick="addMoneyToWallet(50)" class="wallet-block-btn">₹50<br><span style="font-size:0.75em;color:#ffc700;">= 50 coins</span></button>
+            <button onclick="addMoneyToWallet(55)" class="wallet-block-btn">₹55<br><span style="font-size:0.75em;color:#ffc700;">= 55 coins</span></button>
+            <button onclick="addMoneyToWallet(60)" class="wallet-block-btn">₹60<br><span style="font-size:0.75em;color:#ffc700;">= 60 coins</span></button>
+            <button onclick="addMoneyToWallet(65)" class="wallet-block-btn">₹65<br><span style="font-size:0.75em;color:#ffc700;">= 65 coins</span></button>
+            <button onclick="addMoneyToWallet(70)" class="wallet-block-btn">₹70<br><span style="font-size:0.75em;color:#ffc700;">= 70 coins</span></button>
+            <button onclick="addMoneyToWallet(80)" class="wallet-block-btn">₹80<br><span style="font-size:0.75em;color:#ffc700;">= 80 coins</span></button>
+            <button onclick="addMoneyToWallet(90)" class="wallet-block-btn">₹90<br><span style="font-size:0.75em;color:#ffc700;">= 90 coins</span></button>
+            <button onclick="addMoneyToWallet(100)" class="wallet-block-btn">₹100<br><span style="font-size:0.75em;color:#ffc700;">= 100 coins</span></button>
+            <button onclick="addMoneyToWallet(150)" class="wallet-block-btn">₹150<br><span style="font-size:0.75em;color:#ffc700;">= 150 coins</span></button>
+            <button onclick="addMoneyToWallet(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
+        </div>
+
+        <!-- Custom amount with paise logic (Optional) -->
+        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; margin-top: 6px; border: 1px dashed #444;">
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div style="flex: 2; min-width: 140px;">
+                    <label style="color: #888; font-size: 0.8em;">Other Amount (₹10 - ₹10000)</label>
+                    <input type="number" id="wallet-custom-amount" 
+                           placeholder="e.g. 10.60 → 11 coins" 
+                           min="10" max="10000" step="0.01"
+                           style="padding: 10px 12px; margin: 4px 0; border: 2px solid rgba(255,70,85,0.2); border-radius: 8px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
+                </div>
+                <div style="flex: 1; min-width: 100px; display: flex; gap: 6px;">
+                    <button onclick="addCustomMoneyToWallet()" 
+                            style="background: linear-gradient(135deg, #002970, #0052cc); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
+                        <i class="fas fa-credit-card"></i> Pay
+                    </button>
+                    <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value)" 
+                            style="background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
+                        <i class="fas fa-mobile-alt"></i> UPI
+                    </button>
+                </div>
             </div>
-            <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+            <div style="color: #666; font-size: 0.7em; margin-top: 6px; text-align: center;">
+                <i class="fas fa-info-circle"></i> 
+                <span id="custom-coin-preview">Enter amount to see coins</span>
+            </div>
+        </div>
 
-            <div id="content-area">
+        <div style="text-align: center; color: #555; font-size: 0.72em; margin-top: 10px;">
+            Razorpay = instant credit &nbsp;|&nbsp; UPI = auto credit after payment
+        </div>
+    </div>
 
-                <!-- Contact & Support Section -->
-                <section id="contact-section" class="section">
-                    <div class="contact-header">
-                        <h2>Contact Support</h2>
-                        <p>We're here to help you 24/7</p>
-                    </div>
+    <div class="wallet-panel">
+        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
+        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
+            <p style="color: #888; text-align: center;">Loading transactions...</p>
+        </div>
+    </div>
 
-                    <div class="contact-info-container">
-                        <!-- Instagram Info -->
-                        <div class="contact-info-item">
-                            <div class="contact-label">
-                                <i class="fab fa-instagram"></i> Instagram
-                            </div>
-                            <div class="contact-value">
-                                <span class="contact-text" id="instagram-text">Loading...</span>
-                                <button class="contact-action-btn instagram" onclick="openInstagram()" id="instagram-btn">
-                                    <i class="fab fa-instagram"></i> Follow
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Email Info -->
-                        <div class="contact-info-item">
-                            <div class="contact-label">
-                                <i class="fas fa-envelope"></i> Email Support
-                            </div>
-                            <div class="contact-value">
-                                <span class="contact-text" id="contact-email-text">Loading...</span>
-                                <button class="contact-action-btn" onclick="copyContactEmail()" id="copy-email-btn">
-                                    <i class="fas fa-copy"></i> Copy
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; color: #888; font-size: 0.9em; margin-bottom: 20px;">
-                        Click below to connect with us directly
-                    </div>
-
-                    <div class="social-icons">
-                        <a href="#" class="social-icon instagram" id="social-instagram" target="_blank" onclick="openInstagram(); return false;">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="social-icon email" id="social-email" onclick="openEmail(); return false;">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- Home Section (Tournaments) -->
-                <section id="home-section" class="section" style="display: block;">
-                    <div class="tournament-tabs">
-                        <div class="tournament-tab active" onclick="switchTournamentTab('solo')">Solo</div>
-                        <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
-                        <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
-                    </div>
-                    
-                    <div id="solo-tournaments" style="display: block;"></div>
-                    <div id="duo-tournaments" style="display: none;"></div>
-                    <div id="squad-tournaments" style="display: none;"></div>
-                </section>
-
-                <!-- Referral Section -->
-                <section id="referral-section" class="section">
-                    <div class="referral-card">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <i class="fas fa-gift" style="font-size: 3em; color: #ff4655; margin-bottom: 10px;"></i>
-                            <h3 style="margin: 0 0 5px; color: #fff;">Refer & Earn</h3>
-                            <p style="color: #aaa; font-size: 0.9em; margin: 0;">Share your code with friends and earn 10 coins for each successful registration!</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label style="color: #aaa; font-size: 0.85em; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Your Referral Code</label>
-                            <div class="referral-code-row">
-                                <div id="referral-code-display">Loading...</div>
-                                <button class="referral-copy-btn" onclick="copyReferralCode()" title="Copy Code">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="referral-stats-grid">
-                            <div class="referral-stat-card">
-                                <div style="color: #aaa; font-size: 0.8em; margin-bottom: 5px; text-transform: uppercase;">Total Referrals</div>
-                                <div style="color: #fff; font-size: 1.5em; font-weight: bold;" id="referral-count-display">0</div>
-                            </div>
-                            <div class="referral-stat-card">
-                                <div style="color: #aaa; font-size: 0.8em; margin-bottom: 5px; text-transform: uppercase;">Total Earnings</div>
-                                <div style="color: #ff4655; font-size: 1.5em; font-weight: bold;"><i class="fas fa-coins" style="font-size: 0.8em;"></i> <span id="referral-earnings-display">0</span></div>
-                            </div>
-                        </div>
-                        
-                        <button class="auth-button share-referral-btn" onclick="shareReferralLink()">
-                            <i class="fas fa-share-alt"></i> Share Referral Link
-                        </button>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px; margin-top: 15px;">
-                        <h4 style="color: #ff4655; margin-top: 0; margin-bottom: 10px; font-size: 1em;">How it works</h4>
-                        <ol style="color: #ddd; font-size: 0.9em; padding-left: 20px; margin: 0; line-height: 1.6;">
-                            <li style="margin-bottom: 8px;">Share your referral code with your friends.</li>
-                            <li style="margin-bottom: 8px;">Your friend signs up using your referral code.</li>
-                            <li>You instantly get <strong style="color:#ffc700;">10 coins</strong> added to your wallet!</li>
-                        </ol>
-                    </div>
-                </section>
-
-                <!-- Wallet Section -->
-                <section id="wallet-section" class="section">
-                    <div class="wallet-balance-card">
-                        <div style="color: #aaa; font-size: 0.9em;">Current Wallet Balance</div>
-                        <div id="wallet-balance-display" style="font-size: 2em; font-weight: 700; color: #ff4655; margin-top: 8px;">0.00</div>
-                    </div>
-
-                    <div class="wallet-panel">
-                        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">💰 Add Money (1 Rupee = 1 Coin)</h3>
-                        <p style="color: #888; font-size: 0.85em; margin-bottom: 12px; text-align: center;">
-                            Select an amount to pay via UPI (GPay, PhonePe, Paytm)
-                        </p>
-
-                        <!-- Updated Professional Pre-defined blocks grid -->
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px;">
-                            <button onclick="initiateUpiPayment(10)" class="wallet-block-btn">₹10<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 10</span></button>
-                            <button onclick="initiateUpiPayment(15)" class="wallet-block-btn">₹15<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 15</span></button>
-                            <button onclick="initiateUpiPayment(20)" class="wallet-block-btn">₹20<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 20</span></button>
-                            <button onclick="initiateUpiPayment(25)" class="wallet-block-btn">₹25<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 25</span></button>
-                            <button onclick="initiateUpiPayment(30)" class="wallet-block-btn">₹30<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 30</span></button>
-                            <button onclick="initiateUpiPayment(35)" class="wallet-block-btn">₹35<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 35</span></button>
-                            <button onclick="initiateUpiPayment(40)" class="wallet-block-btn">₹40<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 40</span></button>
-                            <button onclick="initiateUpiPayment(50)" class="wallet-block-btn">₹50<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 50</span></button>
-                            <button onclick="initiateUpiPayment(60)" class="wallet-block-btn">₹60<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 60</span></button>
-                            <button onclick="initiateUpiPayment(70)" class="wallet-block-btn">₹70<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 70</span></button>
-                            <button onclick="initiateUpiPayment(80)" class="wallet-block-btn">₹80<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 80</span></button>
-                            <button onclick="initiateUpiPayment(100)" class="wallet-block-btn">₹100<br><span style="font-size:0.75em;color:#ffc700;"><i class="fas fa-coins"></i> 100</span></button>
-                        </div>
-
-                        <div style="text-align: center; color: #555; font-size: 0.72em; margin-top: 15px;">
-                            <i class="fas fa-shield-alt"></i> Payments are 100% secure. Coins will be credited automatically.
-                        </div>
-                    </div>
-
-                    <div class="wallet-panel">
-                        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
-                        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
-                            <p style="color: #888; text-align: center;">Loading transactions...</p>
-                        </div>
-                    </div>
-
-                    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
-                        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
-                        <div class="form-group">
-                            <label>Amount</label>
-                            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
-                        </div>
-                        <div class="form-group">
-                            <label>UPI ID</label>
-                            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
-                        </div>
-                        <button id="withdraw-btn" style="width: 100%;" onclick="requestWithdrawal()">Request Withdrawal</button>
-                        <div style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Withdrawals are processed within 24 hours to your UPI ID</div>
-                    </div>
-                </section>
+    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
+        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
+        <div class="form-group">
+            <label>Amount</label>
+            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
+        </div>
+        <div class="form-group">
+            <label>UPI ID</label>
+            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
+        </div>
+        <button id="withdraw-btn" style="width: 100%;" onclick="requestWithdrawal()">Request Withdrawal</button>
+        <div style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Withdrawals are processed within 24 hours to your UPI ID</div>
+    </div>
+</section>
 
                 <!-- Profile Section -->
                 <section id="profile-section" class="section">
@@ -3315,6 +3225,7 @@
         let walletTransactions = [];
         let currentUserData = {};
         const BACKEND_BASE_URL = "https://techno-esports-backend.onrender.com";
+        const RAZORPAY_KEY_ID = "rzp_test_Shhq282Z5gAh0M";
         
         // Timer variables
         let activeTimers = new Map();
@@ -5562,7 +5473,7 @@ function startPaymentPolling(refNumber) {
                 showToast('Insufficient Balance', 'error');
                 const walletNav = document.querySelector('.nav-item[data-section="wallet-section"]');
                 showSection('wallet-section', walletNav);
-                // Redirect user to wallet to add exactly 10, 15, 20 etc. No custom amount parameter needed.
+                addMoneyToWallet(Math.max(10, Math.min(10000, entryFee - walletBalance)));
                 return;
             }
 
@@ -5885,6 +5796,48 @@ function startPaymentPolling(refNumber) {
             }
         }, 3000);
         
+        // ===== COIN CALCULATION WITH PAISE LOGIC =====
+function calculateCoins(amount) {
+    // 1 rupee = 1 coin
+    // < 50 paise → floor (keep same number)
+    // >= 50 paise → ceil (bonus 1 coin)
+    const num = Number(amount);
+    if (isNaN(num) || num <= 0) return 0;
+    // Get the fractional part (paise)
+    const fractional = num - Math.floor(num);
+    if (fractional >= 0.50) {
+        return Math.ceil(num);  // round up
+    } else {
+        return Math.floor(num); // round down
+    }
+}
+
+// Update coin preview when custom amount changes
+document.addEventListener('DOMContentLoaded', function() {
+    const customInput = document.getElementById('wallet-custom-amount');
+    if (customInput) {
+        customInput.addEventListener('input', function() {
+            const val = parseFloat(this.value);
+            const preview = document.getElementById('custom-coin-preview');
+            if (preview) {
+                if (!isNaN(val) && val > 0) {
+                    const coins = calculateCoins(val);
+                    preview.textContent = `₹${val.toFixed(2)} → ${coins} coins`;
+                    if (val < 10 || val > 10000) {
+                        preview.textContent += ' (min ₹10, max ₹10000)';
+                        preview.style.color = '#d72638';
+                    } else {
+                        preview.style.color = '#ffc700';
+                    }
+                } else {
+                    preview.textContent = 'Enter amount to see coins';
+                    preview.style.color = '#666';
+                }
+            }
+        });
+    }
+});
+
     </script>
 </body>
 </html>
