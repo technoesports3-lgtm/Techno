@@ -2958,117 +2958,139 @@
                     <h3>TECHNO E-SPORTS</h3>
                     <p>Gaming Tournaments</p>
                 </div>
-
-<!-- Wallet Section -->
-<section id="wallet-section" class="section">
-    <div class="wallet-balance-card">
-        <div style="color:#aaa;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">🪙 Total Coins</div>
-<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
-    <div id="wallet-balance-display" style="font-size:2.4em;font-weight:800;color:#ff4655;">0</div>
-    <div style="color:#ff4655;font-size:1.1em;font-weight:700;">Coins</div>
-</div>
-<div style="color:#555;font-size:0.75em;margin-top:6px;">1 Coin = ₹1 Tournament Entry Fee</div>
-
-    <div class="wallet-panel">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <h3 style="margin:0;">🪙 Buy Coins</h3>
-        <div style="color:#555;font-size:0.75em;">1 Coin = ₹1</div>
-    </div>
-
-    <div style="background:rgba(255,199,0,0.07);border:1px solid rgba(255,199,0,0.2);
-                border-radius:10px;padding:10px 12px;margin-bottom:14px;
-                display:flex;align-items:center;gap:8px;">
-        <div style="font-size:1.1em;">💡</div>
-        <div style="color:#aaa;font-size:0.78em;line-height:1.5;">
-            Paise ≥ 50 unte <span style="color:#26a269;font-weight:700;">+1 Bonus Coin</span> free!
-            &nbsp;|&nbsp; ₹10.60 pay → <span style="color:#ff4655;font-weight:700;">11 Coins</span>
-        </div>
-    </div>
-
-    <div id="coin-packages-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-        <!-- JS renders packages here -->
-    </div>
-</div>
-
-        <!-- Pre-defined blocks grid -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
-            <!-- 10 to 50 -->
-            <button onclick="addMoneyToWallet(10)" class="wallet-block-btn">₹10<br><span style="font-size:0.75em;color:#ffc700;">= 10 coins</span></button>
-            <button onclick="addMoneyToWallet(15)" class="wallet-block-btn">₹15<br><span style="font-size:0.75em;color:#ffc700;">= 15 coins</span></button>
-            <button onclick="addMoneyToWallet(20)" class="wallet-block-btn">₹20<br><span style="font-size:0.75em;color:#ffc700;">= 20 coins</span></button>
-            <button onclick="addMoneyToWallet(25)" class="wallet-block-btn">₹25<br><span style="font-size:0.75em;color:#ffc700;">= 25 coins</span></button>
-            <button onclick="addMoneyToWallet(30)" class="wallet-block-btn">₹30<br><span style="font-size:0.75em;color:#ffc700;">= 30 coins</span></button>
-            <button onclick="addMoneyToWallet(35)" class="wallet-block-btn">₹35<br><span style="font-size:0.75em;color:#ffc700;">= 35 coins</span></button>
-            <button onclick="addMoneyToWallet(40)" class="wallet-block-btn">₹40<br><span style="font-size:0.75em;color:#ffc700;">= 40 coins</span></button>
-            <button onclick="addMoneyToWallet(45)" class="wallet-block-btn">₹45<br><span style="font-size:0.75em;color:#ffc700;">= 45 coins</span></button>
-            <button onclick="addMoneyToWallet(50)" class="wallet-block-btn">₹50<br><span style="font-size:0.75em;color:#ffc700;">= 50 coins</span></button>
-            <button onclick="addMoneyToWallet(55)" class="wallet-block-btn">₹55<br><span style="font-size:0.75em;color:#ffc700;">= 55 coins</span></button>
-            <button onclick="addMoneyToWallet(60)" class="wallet-block-btn">₹60<br><span style="font-size:0.75em;color:#ffc700;">= 60 coins</span></button>
-            <button onclick="addMoneyToWallet(65)" class="wallet-block-btn">₹65<br><span style="font-size:0.75em;color:#ffc700;">= 65 coins</span></button>
-            <button onclick="addMoneyToWallet(70)" class="wallet-block-btn">₹70<br><span style="font-size:0.75em;color:#ffc700;">= 70 coins</span></button>
-            <button onclick="addMoneyToWallet(80)" class="wallet-block-btn">₹80<br><span style="font-size:0.75em;color:#ffc700;">= 80 coins</span></button>
-            <button onclick="addMoneyToWallet(90)" class="wallet-block-btn">₹90<br><span style="font-size:0.75em;color:#ffc700;">= 90 coins</span></button>
-            <button onclick="addMoneyToWallet(100)" class="wallet-block-btn">₹100<br><span style="font-size:0.75em;color:#ffc700;">= 100 coins</span></button>
-            <button onclick="addMoneyToWallet(150)" class="wallet-block-btn">₹150<br><span style="font-size:0.75em;color:#ffc700;">= 150 coins</span></button>
-            <button onclick="addMoneyToWallet(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
-        </div>
-
-        <!-- Custom amount with paise logic (Optional) -->
-        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; margin-top: 6px; border: 1px dashed #444;">
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <div style="flex: 2; min-width: 140px;">
-                    <label style="color: #888; font-size: 0.8em;">Other Amount (₹10 - ₹10000)</label>
-                    <input type="number" id="wallet-custom-amount" 
-                           placeholder="e.g. 10.60 → 11 coins" 
-                           min="10" max="10000" step="0.01"
-                           style="padding: 10px 12px; margin: 4px 0; border: 2px solid rgba(255,70,85,0.2); border-radius: 8px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
-                </div>
-                <div style="flex: 1; min-width: 100px; display: flex; gap: 6px;">
-                    <button onclick="addCustomMoneyToWallet()" 
-                            style="background: linear-gradient(135deg, #002970, #0052cc); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
-                        <i class="fas fa-credit-card"></i> Pay
-                    </button>
-                    <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value)" 
-                            style="background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
-                        <i class="fas fa-mobile-alt"></i> UPI
-                    </button>
-                </div>
+                <a class="sidebar-menu-item" onclick="showContent('contact')">
+                    <span class="menu-icon-symbol"><i class="fas fa-envelope"></i></span> Contact Us
+                </a>
+                <a class="sidebar-menu-item" onclick="showContent('terms')">
+                    <span class="menu-icon-symbol"><i class="fas fa-file-contract"></i></span> T&C
+                </a>
+                <a class="sidebar-menu-item" onclick="showContent('privacy')">
+                    <span class="menu-icon-symbol"><i class="fas fa-user-secret"></i></span> Privacy Policy
+                </a>
+                <a class="sidebar-menu-item" onclick="showLogoutConfirmation()">
+                    <span class="menu-icon-symbol"><i class="fas fa-sign-out-alt"></i></span> Logout
+                </a>
             </div>
-            <div style="color: #666; font-size: 0.7em; margin-top: 6px; text-align: center;">
-                <i class="fas fa-info-circle"></i> 
-                <span id="custom-coin-preview">Enter amount to see coins</span>
-            </div>
-        </div>
+            <div class="sidebar-overlay" onclick="toggleSidebar(false)"></div>
 
-        <div style="text-align: center; color: #555; font-size: 0.72em; margin-top: 10px;">
-            Razorpay = instant credit &nbsp;|&nbsp; UPI = auto credit after payment
-        </div>
-    </div>
+            <div id="content-area">
 
-    <div class="wallet-panel">
-        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
-        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
-            <p style="color: #888; text-align: center;">Loading transactions...</p>
-        </div>
-    </div>
+                <!-- 1. HOME/TOURNAMENTS SECTION -->
+                <section id="home-section" class="section">
+                    <div class="tournament-tabs">
+                        <div class="tournament-tab active" onclick="switchTournamentTab('solo')">Solo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
+                    </div>
+                    <div id="solo-tournaments"></div>
+                    <div id="duo-tournaments" style="display: none;"></div>
+                    <div id="squad-tournaments" style="display: none;"></div>
+                </section>
 
-    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
-        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
-        <div class="form-group">
-            <label>Amount</label>
-            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
-        </div>
-        <div class="form-group">
-            <label>UPI ID</label>
-            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
-        </div>
-        <button id="withdraw-btn" style="width: 100%;" onclick="requestWithdrawal()">Request Withdrawal</button>
-        <div style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Withdrawals are processed within 24 hours to your UPI ID</div>
-    </div>
-</section>
+                <!-- 2. WALLET SECTION -->
+                <section id="wallet-section" class="section" style="display: none;">
+                    <div class="wallet-balance-card">
+                        <div style="color:#aaa;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">🪙 Total Coins</div>
+                        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
+                            <div id="wallet-balance-display" style="font-size:2.4em;font-weight:800;color:#ff4655;">0</div>
+                            <div style="color:#ff4655;font-size:1.1em;font-weight:700;">Coins</div>
+                        </div>
+                        <div style="color:#555;font-size:0.75em;margin-top:6px;">1 Coin = ₹1 Tournament Entry Fee</div>
+                    </div>
 
-                <!-- Profile Section -->
-                <section id="profile-section" class="section">
+                    <div class="wallet-panel">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                            <h3 style="margin:0;">🪙 Buy Coins</h3>
+                            <div style="color:#555;font-size:0.75em;">1 Coin = ₹1</div>
+                        </div>
+
+                        <div style="background:rgba(255,199,0,0.07);border:1px solid rgba(255,199,0,0.2); border-radius:10px;padding:10px 12px;margin-bottom:14px; display:flex;align-items:center;gap:8px;">
+                            <div style="font-size:1.1em;">💡</div>
+                            <div style="color:#aaa;font-size:0.78em;line-height:1.5;">
+                                Paise ≥ 50 unte <span style="color:#26a269;font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:#ff4655;font-weight:700;">11 Coins</span>
+                            </div>
+                        </div>
+
+                        <div id="coin-packages-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; margin-top: 14px;">
+                            <button onclick="addMoneyToWallet(10)" class="wallet-block-btn">₹10<br><span style="font-size:0.75em;color:#ffc700;">= 10 coins</span></button>
+                            <button onclick="addMoneyToWallet(15)" class="wallet-block-btn">₹15<br><span style="font-size:0.75em;color:#ffc700;">= 15 coins</span></button>
+                            <button onclick="addMoneyToWallet(20)" class="wallet-block-btn">₹20<br><span style="font-size:0.75em;color:#ffc700;">= 20 coins</span></button>
+                            <button onclick="addMoneyToWallet(25)" class="wallet-block-btn">₹25<br><span style="font-size:0.75em;color:#ffc700;">= 25 coins</span></button>
+                            <button onclick="addMoneyToWallet(50)" class="wallet-block-btn">₹50<br><span style="font-size:0.75em;color:#ffc700;">= 50 coins</span></button>
+                            <button onclick="addMoneyToWallet(100)" class="wallet-block-btn">₹100<br><span style="font-size:0.75em;color:#ffc700;">= 100 coins</span></button>
+                            <button onclick="addMoneyToWallet(150)" class="wallet-block-btn">₹150<br><span style="font-size:0.75em;color:#ffc700;">= 150 coins</span></button>
+                            <button onclick="addMoneyToWallet(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
+                        </div>
+
+                        <!-- Custom amount -->
+                        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; margin-top: 6px; border: 1px dashed #444;">
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <div style="flex: 2; min-width: 140px;">
+                                    <label style="color: #888; font-size: 0.8em;">Other Amount (₹10 - ₹10000)</label>
+                                    <input type="number" id="wallet-custom-amount" placeholder="e.g. 10.60 → 11 coins" min="10" max="10000" step="0.01" style="padding: 10px 12px; margin: 4px 0; border: 2px solid rgba(255,70,85,0.2); border-radius: 8px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
+                                </div>
+                                <div style="flex: 1; min-width: 100px; display: flex; gap: 6px;">
+                                    <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value)" style="background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1; height: 42px; margin-top: 20px;">
+                                        <i class="fas fa-mobile-alt"></i> UPI Pay
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="color: #666; font-size: 0.7em; margin-top: 6px; text-align: center;">
+                                <i class="fas fa-info-circle"></i> <span id="custom-coin-preview">Enter amount to see coins</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wallet-panel">
+                        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
+                        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
+                            <p style="color: #888; text-align: center;">Loading transactions...</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
+                        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
+                        </div>
+                        <div class="form-group">
+                            <label>UPI ID</label>
+                            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
+                        </div>
+                        <button id="withdraw-btn" style="width: 100%; background: linear-gradient(135deg, #ff4655, #d91a2a); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold;" onclick="requestWithdrawal()">Request Withdrawal</button>
+                    </div>
+                </section>
+
+                <!-- 3. REFERRAL SECTION -->
+                <section id="referral-section" class="section" style="display: none;">
+                    <div class="referral-card">
+                        <h3 style="margin-top:0; color:#ff4655;">Refer & Earn</h3>
+                        <p style="color:#aaa; font-size:0.9em;">Share your code and earn coins!</p>
+                        <div class="referral-code-row">
+                            <div id="referral-code-display">Loading...</div>
+                            <button class="referral-copy-btn" onclick="copyReferralCode()"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <button class="auth-button share-referral-btn" onclick="shareReferralLink()" style="margin-top:10px;">
+                            <i class="fas fa-share-alt"></i> Share Link
+                        </button>
+                    </div>
+                    <div class="referral-stats-grid">
+                        <div class="referral-stat-card">
+                            <div style="color:#aaa; font-size:0.8em;">Total Referrals</div>
+                            <div id="referral-count-display" style="font-size:1.5em; font-weight:bold; color:#fff;">0</div>
+                        </div>
+                        <div class="referral-stat-card">
+                            <div style="color:#aaa; font-size:0.8em;">Earned Coins</div>
+                            <div id="referral-earnings-display" style="font-size:1.5em; font-weight:bold; color:#ffc700;">0</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. PROFILE SECTION -->
+                <section id="profile-section" class="section" style="display: none;">
                     <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px;">
                         <h3 style="margin-top: 0; color: #ff4655;">User Profile</h3>
                         <div style="display: grid; gap: 8px;">
@@ -3082,7 +3104,27 @@
                     </div>
                 </section>
 
-            </div>
+                <!-- 5. CONTACT SECTION -->
+                <section id="contact-section" class="section" style="display: none;">
+                     <div class="contact-info-container" style="margin-top: 20px;">
+                         <div class="contact-info-item">
+                             <div class="contact-label"><i class="fas fa-envelope"></i> Email Support</div>
+                             <div class="contact-value">
+                                 <span class="contact-text" id="contact-email-text">Loading...</span>
+                                 <button class="contact-action-btn" id="copy-email-btn" onclick="copyContactEmail()">Copy</button>
+                             </div>
+                         </div>
+                         <div class="contact-info-item">
+                             <div class="contact-label"><i class="fab fa-instagram"></i> Instagram</div>
+                             <div class="contact-value" id="instagram-btn">
+                                 <span class="contact-text" id="instagram-text">Loading...</span>
+                                 <button class="contact-action-btn instagram" onclick="openInstagram()">Follow</button>
+                             </div>
+                         </div>
+                     </div>
+                </section>
+
+            </div> <!-- END OF CONTENT AREA -->
 
             <footer class="nav-bar">
                 <div class="nav-item active" data-section="home-section" onclick="showSection('home-section', this)">
