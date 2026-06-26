@@ -3007,7 +3007,7 @@
                         <div style="background:rgba(255,199,0,0.07);border:1px solid rgba(255,199,0,0.2); border-radius:10px;padding:10px 12px;margin-bottom:14px; display:flex;align-items:center;gap:8px;">
                             <div style="font-size:1.1em;">💡</div>
                             <div style="color:#aaa;font-size:0.78em;line-height:1.5;">
-                                Paise ≥ 50 unte <span style="color:#26a269;font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:#ff4655;font-weight:700;">11 Coins</span>
+                                Paise ≥ 50 <span style="color:#26a269;font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:#ff4655;font-weight:700;">11 Coins</span>
                             </div>
                         </div>
 
@@ -4157,7 +4157,7 @@ function showUpiPaymentModal(data) {
     <div style="color:#ffc700;font-size:2em;font-weight:800;">${data.coins} 🪙 Coins</div>
     <div style="color:#555;font-size:0.7em;margin:6px 0 4px;">Pay Exactly</div>
     <div style="color:#fff;font-size:1.8em;font-weight:800;">₹${data.amount}</div>
-    <div style="color:#ff4655;font-size:0.7em;margin-top:4px;">⚠️ Exact amount pay cheyyi — paise kuda same ga undali!</div>
+    <div style="color:#ff4655;font-size:0.7em;margin-top:4px;">⚠️pay exact amount along with paise</div>
 </div>
       <div style="padding:20px; text-align:center; border-bottom:1px solid #1a1a1a;">
         <div style="color:#aaa; font-size:0.78em; margin-bottom:12px;">Scan QR with any UPI app</div>
@@ -4701,8 +4701,7 @@ function startPaymentPolling(refNumber) {
                     showToast("App configuration not found. Using default settings.", 'info');
                 }
             } catch (error) {
-                console.error("Error loading app config:", error);
-                showToast("Error loading app configuration. Using default settings.", 'error');
+                console.error("")
             }
         }
 
