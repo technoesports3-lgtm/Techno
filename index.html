@@ -4084,31 +4084,7 @@ function renderCoinPackages() {
             return data;
         }
 
-        async function initiateUpiPayment(amount) {
-  const user = auth.currentUser;
-  if (!user) { showToast('Please login first', 'error'); return; }
-  amount = Number(amount);
-  if (!amount || amount < 10 || amount > 10000) {
-    showToast('Enter amount between 10-10000', 'error');
-    return;
-  }
-  try {
-    showToast('Creating payment...', 'info');
-    const response = await fetch(
-      'https://techno-esports-backend.onrender.com/api/payment/create-upi-order',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.uid, amount })
-      }
-    );
-    const data = await response.json();
-    if (!data.success) { showToast(data.message || 'Failed', 'error'); return; }
-    showUpiPaymentModal(data);
-  } catch (error) {
-    showToast('Error: ' + error.message, 'error');
-  }
-}
+        
 
 function showUpiPaymentModal(data) {
   const existingModal = document.getElementById('upi-payment-modal');
