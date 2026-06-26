@@ -2700,63 +2700,6 @@
             0%, 100% { opacity: 1; text-shadow: 0 0 0 rgba(255, 70, 85, 0); }
             50% { opacity: 0.8; text-shadow: 0 0 10px rgba(255, 70, 85, 0.35); }
         }
-
-        /* Wallet Block Buttons - Professional UI */
-.wallet-block-btn {
-    background: rgba(255, 255, 255, 0.04);
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 10px 6px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    text-align: center;
-    line-height: 1.3;
-    min-height: 52px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.wallet-block-btn:hover {
-    border-color: #ff4655;
-    background: rgba(255, 70, 85, 0.08);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(255, 70, 85, 0.15);
-}
-
-.wallet-block-btn:active {
-    transform: scale(0.96);
-    transition-duration: 0.05s;
-}
-
-.wallet-block-btn span {
-    display: block;
-    margin-top: 2px;
-}
-
-#custom-coin-preview {
-    color: #ffc700;
-    font-weight: 500;
-}
-
-/* Responsive: 3 columns on small screens */
-@media (max-width: 480px) {
-    .wallet-block-btn {
-        font-size: 0.78em;
-        padding: 8px 4px;
-        min-height: 44px;
-        border-radius: 8px;
-    }
-    .wallet-block-btn span {
-        font-size: 0.7em !important;
-    }
-}
-
     </style>
 </head>
 
@@ -2959,95 +2902,216 @@
                     <p>Gaming Tournaments</p>
                 </div>
 
-<!-- Wallet Section -->
-<section id="wallet-section" class="section">
-    <div class="wallet-balance-card">
-        <div style="color: #aaa; font-size: 0.9em;">Current Wallet Balance</div>
-        <div id="wallet-balance-display" style="font-size: 2em; font-weight: 700; color: #ff4655; margin-top: 8px;">0.00</div>
-    </div>
-
-    <div class="wallet-panel">
-        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">💰 Add Money — Choose Amount</h3>
-        <p style="color: #888; font-size: 0.85em; margin-bottom: 12px;">1 Rupee = 1 Coin &nbsp;•&nbsp; 
-            <span style="color: #ffc700;">Paise bonus: ≥50 paise → +1 extra coin</span>
-        </p>
-
-        <!-- Pre-defined blocks grid -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px;">
-            <!-- 10 to 50 -->
-            <button onclick="addMoneyToWallet(10)" class="wallet-block-btn">₹10<br><span style="font-size:0.75em;color:#ffc700;">= 10 coins</span></button>
-            <button onclick="addMoneyToWallet(15)" class="wallet-block-btn">₹15<br><span style="font-size:0.75em;color:#ffc700;">= 15 coins</span></button>
-            <button onclick="addMoneyToWallet(20)" class="wallet-block-btn">₹20<br><span style="font-size:0.75em;color:#ffc700;">= 20 coins</span></button>
-            <button onclick="addMoneyToWallet(25)" class="wallet-block-btn">₹25<br><span style="font-size:0.75em;color:#ffc700;">= 25 coins</span></button>
-            <button onclick="addMoneyToWallet(30)" class="wallet-block-btn">₹30<br><span style="font-size:0.75em;color:#ffc700;">= 30 coins</span></button>
-            <button onclick="addMoneyToWallet(35)" class="wallet-block-btn">₹35<br><span style="font-size:0.75em;color:#ffc700;">= 35 coins</span></button>
-            <button onclick="addMoneyToWallet(40)" class="wallet-block-btn">₹40<br><span style="font-size:0.75em;color:#ffc700;">= 40 coins</span></button>
-            <button onclick="addMoneyToWallet(45)" class="wallet-block-btn">₹45<br><span style="font-size:0.75em;color:#ffc700;">= 45 coins</span></button>
-            <button onclick="addMoneyToWallet(50)" class="wallet-block-btn">₹50<br><span style="font-size:0.75em;color:#ffc700;">= 50 coins</span></button>
-            <button onclick="addMoneyToWallet(55)" class="wallet-block-btn">₹55<br><span style="font-size:0.75em;color:#ffc700;">= 55 coins</span></button>
-            <button onclick="addMoneyToWallet(60)" class="wallet-block-btn">₹60<br><span style="font-size:0.75em;color:#ffc700;">= 60 coins</span></button>
-            <button onclick="addMoneyToWallet(65)" class="wallet-block-btn">₹65<br><span style="font-size:0.75em;color:#ffc700;">= 65 coins</span></button>
-            <button onclick="addMoneyToWallet(70)" class="wallet-block-btn">₹70<br><span style="font-size:0.75em;color:#ffc700;">= 70 coins</span></button>
-            <button onclick="addMoneyToWallet(80)" class="wallet-block-btn">₹80<br><span style="font-size:0.75em;color:#ffc700;">= 80 coins</span></button>
-            <button onclick="addMoneyToWallet(90)" class="wallet-block-btn">₹90<br><span style="font-size:0.75em;color:#ffc700;">= 90 coins</span></button>
-            <button onclick="addMoneyToWallet(100)" class="wallet-block-btn">₹100<br><span style="font-size:0.75em;color:#ffc700;">= 100 coins</span></button>
-            <button onclick="addMoneyToWallet(150)" class="wallet-block-btn">₹150<br><span style="font-size:0.75em;color:#ffc700;">= 150 coins</span></button>
-            <button onclick="addMoneyToWallet(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
-        </div>
-
-        <!-- Custom amount with paise logic (Optional) -->
-        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; margin-top: 6px; border: 1px dashed #444;">
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <div style="flex: 2; min-width: 140px;">
-                    <label style="color: #888; font-size: 0.8em;">Other Amount (₹10 - ₹10000)</label>
-                    <input type="number" id="wallet-custom-amount" 
-                           placeholder="e.g. 10.60 → 11 coins" 
-                           min="10" max="10000" step="0.01"
-                           style="padding: 10px 12px; margin: 4px 0; border: 2px solid rgba(255,70,85,0.2); border-radius: 8px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
+                <div class="sidebar-menu-item" onclick="showContent('terms')">
+                    <span class="menu-icon-symbol"><i class="fas fa-file-alt"></i></span> Terms & Conditions
                 </div>
-                <div style="flex: 1; min-width: 100px; display: flex; gap: 6px;">
-                    <button onclick="addCustomMoneyToWallet()" 
-                            style="background: linear-gradient(135deg, #002970, #0052cc); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
-                        <i class="fas fa-credit-card"></i> Pay
-                    </button>
-                    <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value)" 
-                            style="background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1;">
-                        <i class="fas fa-mobile-alt"></i> UPI
-                    </button>
+                <div class="sidebar-menu-item" onclick="showContent('contact')">
+                    <span class="menu-icon-symbol"><i class="fas fa-headset"></i></span> Contact Us
+                </div>
+                <div class="sidebar-menu-item" onclick="showContent('privacy')">
+                    <span class="menu-icon-symbol"><i class="fas fa-shield-alt"></i></span> Privacy Policy
+                </div>
+                <div class="sidebar-menu-item" onclick="showLogoutConfirmation()">
+                    <span class="menu-icon-symbol"><i class="fas fa-sign-out-alt"></i></span> Logout
                 </div>
             </div>
-            <div style="color: #666; font-size: 0.7em; margin-top: 6px; text-align: center;">
-                <i class="fas fa-info-circle"></i> 
-                <span id="custom-coin-preview">Enter amount to see coins</span>
-            </div>
-        </div>
+            <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-        <div style="text-align: center; color: #555; font-size: 0.72em; margin-top: 10px;">
-            Razorpay = instant credit &nbsp;|&nbsp; UPI = auto credit after payment
-        </div>
-    </div>
+            <div id="content-area">
+                <!-- Home/Tournaments Section -->
+                <section id="home-section" class="section">
+                    <div class="tournament-tabs">
+                        <div class="tournament-tab active" onclick="switchTournamentTab('solo')">Solo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
+                    </div>
 
-    <div class="wallet-panel">
-        <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
-        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
-            <p style="color: #888; text-align: center;">Loading transactions...</p>
-        </div>
-    </div>
+                    <div id="tournaments-container">
+                        <div id="solo-tournaments">
+                            <p style="text-align: center; color: #888; padding: 30px;">Loading solo tournaments...</p>
+                        </div>
+                        <div id="duo-tournaments" style="display: none;">
+                            <p style="text-align: center; color: #888; padding: 30px;">Loading duo tournaments...</p>
+                        </div>
+                        <div id="squad-tournaments" style="display: none;">
+                            <p style="text-align: center; color: #888; padding: 30px;">Loading squad tournaments...</p>
+                        </div>
+                    </div>
+                </section>
 
-    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
-        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
-        <div class="form-group">
-            <label>Amount</label>
-            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
-        </div>
-        <div class="form-group">
-            <label>UPI ID</label>
-            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
-        </div>
-        <button id="withdraw-btn" style="width: 100%;" onclick="requestWithdrawal()">Request Withdrawal</button>
-        <div style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Withdrawals are processed within 24 hours to your UPI ID</div>
-    </div>
-</section>
+                <!-- Contact Section -->
+                <section id="contact-section" class="section contact-section">
+                    <div class="contact-header">
+                        <h2>Contact Us</h2>
+                        <p>Get in touch with our team for any queries or support</p>
+                    </div>
+                    
+                    <div class="contact-info-container" id="contact-info-container">
+                        <div class="contact-info-item">
+                            <div class="contact-label">
+                                <i class="fab fa-instagram"></i>
+                                <span>Instagram</span>
+                            </div>
+                            <div class="contact-value">
+                                <div class="contact-text" id="instagram-text">Loading Instagram...</div>
+                                <button class="contact-action-btn instagram" id="instagram-btn" onclick="openInstagram()">
+                                    <i class="fab fa-instagram"></i> Follow
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-label">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email Address</span>
+                            </div>
+                            <div class="contact-value">
+                                <div class="contact-text" id="contact-email-text">Loading email...</div>
+                                <button class="contact-action-btn" id="copy-email-btn" onclick="copyContactEmail()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-container">
+                        <div class="contact-info-item">
+                            <div class="contact-label">
+                                <i class="fas fa-headset"></i>
+                                <span>Support</span>
+                            </div>
+                            <div class="contact-value">
+                                <div class="contact-text">For tournament-related queries, please contact us via Instagram or Email.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <div class="contact-label">
+                                <i class="fas fa-clock"></i>
+                                <span>Response Time</span>
+                            </div>
+                            <div class="contact-value">
+                                <div class="contact-text">We typically respond within 24 hours during business days.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-icons">
+                        <a href="#" class="social-icon instagram" id="social-instagram" onclick="openInstagram()">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon email" id="social-email" onclick="openEmail()">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Wallet Section -->
+                <section id="wallet-section" class="section">
+                    <div class="wallet-balance-card">
+                        <div style="color: #aaa; font-size: 0.9em;">Current Wallet Balance</div>
+                        <div id="wallet-balance-display" style="font-size: 2em; font-weight: 700; color: #ff4655; margin-top: 8px;">0.00</div>
+                    </div>
+
+                    <div class="wallet-panel">
+                        <h3 style="margin-top: 0;">Add Money</h3>
+
+                        <div class="wallet-quick-grid">
+                            <button onclick="initiateUropayPayment(50)">₹50</button>
+                            <button onclick="initiateUropayPayment(100)">₹100</button>
+                            <button onclick="initiateUropayPayment(200)">₹200</button>
+                            <button onclick="initiateUropayPayment(500)">₹500</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Custom Amount (₹10 - ₹10000)</label>
+                            <input type="number" id="wallet-custom-amount" 
+                                   placeholder="Enter amount" min="10" max="10000">
+                        </div>
+
+                        <!-- Two payment method buttons side by side -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; 
+                                    gap: 10px; margin-top: 10px;">
+                            
+                            <button onclick="addCustomMoneyToWallet()" 
+                                    style="background: linear-gradient(135deg, #002970, #0052cc);
+                                           color: white; border: none; padding: 12px 8px;
+                                           border-radius: 8px; font-weight: 700; font-size: 0.85em;
+                                           cursor: pointer; display: flex; flex-direction: column;
+                                           align-items: center; gap: 4px;">
+                                <i class="fas fa-credit-card" style="font-size: 1.2em;"></i>
+                                <span>Razorpay</span>
+                                <span style="font-size: 0.75em; opacity: 0.8;">Card / Net Banking</span>
+                            </button>
+
+                            <button onclick="initiateUropayPayment(document.getElementById('wallet-custom-amount')?.value || 0)" 
+                                    style="background: linear-gradient(135deg, #6a0dad, #9b30ff);
+                                           color: white; border: none; padding: 12px 8px;
+                                           border-radius: 8px; font-weight: 700; font-size: 0.85em;
+                                           cursor: pointer; display: flex; flex-direction: column;
+                                           align-items: center; gap: 4px;">
+                                <i class="fas fa-mobile-alt" style="font-size: 1.2em;"></i>
+                                <span>UPI Pay</span>
+                                <span style="font-size: 0.75em; opacity: 0.8;">GPay / PhonePe / Paytm</span>
+                            </button>
+
+                        </div>
+
+                        <div style="text-align: center; color: #555; font-size: 0.78em; 
+                                    margin-top: 8px;">
+                            Razorpay = instant credit &nbsp;|&nbsp; 
+                            UPI = auto credit after payment
+                        </div>
+                    </div>
+
+                    <div class="wallet-panel">
+                        <h3 style="margin-top: 0;">Transaction History</h3>
+                        <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
+                            <p style="color: #888; text-align: center;">Loading transactions...</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
+                        <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">WITHDRAW FUNDS</h3>
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input type="number" id="withdraw-amount" min="50" placeholder="Minimum 50">
+                        </div>
+                        <div class="form-group">
+                            <label>UPI ID</label>
+                            <input type="text" id="withdraw-upi" placeholder="Enter your UPI ID example: name@upi">
+                        </div>
+                        <button id="withdraw-btn" style="width: 100%;" onclick="requestWithdrawal()">Request Withdrawal</button>
+                        <div style="color: #aaa; font-size: 0.85em; margin-top: 10px;">Withdrawals are processed within 24 hours to your UPI ID</div>
+                    </div>
+                </section>
+
+                <!-- Referral Section -->
+                <section id="referral-section" class="section">
+                    <div class="referral-card">
+                        <h3 style="margin-top: 0;">Your Referral Code</h3>
+                        <div class="referral-code-row">
+                            <div id="referral-code-display">Generating...</div>
+                            <button class="referral-copy-btn" onclick="copyReferralCode()" title="Copy Referral Code"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="referral-stats-grid">
+                        <div class="referral-stat-card">
+                            <div style="color: #aaa; font-size: 0.85em;">Total Referrals</div>
+                            <div id="referral-count-display" style="font-size: 1.4em; font-weight: 700; color: #ff4655;">0</div>
+                        </div>
+                        <div class="referral-stat-card">
+                            <div style="color: #aaa; font-size: 0.85em;">Referral Earnings</div>
+                            <div id="referral-earnings-display" style="font-size: 1.4em; font-weight: 700; color: #ff4655;">0</div>
+                        </div>
+                    </div>
+
+                    <div class="referral-card">
+                        <h3 style="margin-top: 0;">Share Referral Link</h3>
+                        <button class="share-referral-btn" onclick="shareReferralLink()">Copy Referral Link</button>
+                    </div>
+                </section>
 
                 <!-- Profile Section -->
                 <section id="profile-section" class="section">
@@ -3997,149 +4061,397 @@
         }
 
         async function initiateUpiPayment(amount) {
-  const user = auth.currentUser;
-  if (!user) { showToast('Please login first', 'error'); return; }
-  amount = Number(amount);
-  if (!amount || amount < 10 || amount > 10000) {
-    showToast('Enter amount between 10-10000', 'error');
-    return;
-  }
-  try {
-    showToast('Creating payment...', 'info');
-    const response = await fetch(
-      'https://techno-esports-backend.onrender.com/api/payment/create-upi-order',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.uid, amount })
-      }
-    );
-    const data = await response.json();
-    if (!data.success) { showToast(data.message || 'Failed', 'error'); return; }
-    showUpiPaymentModal(data);
-  } catch (error) {
-    showToast('Error: ' + error.message, 'error');
-  }
-}
+          const user = auth.currentUser;
+          if (!user) { showToast('Please login first', 'error'); return; }
+          amount = Number(amount);
+          if (!amount || amount < 10 || amount > 10000) {
+            showToast('Enter amount between 10-10000', 'error');
+            return;
+          }
+          try {
+            showToast('Creating payment...', 'info');
+            const response = await fetch(
+              'https://techno-esports-backend.onrender.com/api/payment/create-upi-order',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.uid, amount })
+              }
+            );
+            const data = await response.json();
+            if (!data.success) { showToast(data.message || 'Failed', 'error'); return; }
+            showUpiPaymentModal(data);
+          } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+          }
+        }
 
-function showUpiPaymentModal(data) {
-  const existingModal = document.getElementById('upi-payment-modal');
-  if (existingModal) existingModal.remove();
+        async function initiateUropayPayment(amount) {
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('Please login first', 'error');
+                return;
+            }
+            amount = Number(amount);
+            if (!amount || amount < 10 || amount > 10000) {
+                showToast('Enter amount between 10-10000', 'error');
+                return;
+            }
+            try {
+                showToast('Creating payment order...', 'info');
+                const response = await fetch(`https://techno-esports-backend.onrender.com/api/payments/initiate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.uid, amount })
+                });
+                const data = await response.json();
+                if (!data.success) {
+                    showToast(data.message || 'Failed to create order', 'error');
+                    return;
+                }
+                showBharatPePaymentModal(data);
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
 
-  const modal = document.createElement('div');
-  modal.id = 'upi-payment-modal';
-  modal.style.cssText = `
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.92); z-index:9999;
-    display:flex; align-items:center; justify-content:center;
-    backdrop-filter:blur(8px); padding:16px; box-sizing:border-box;
-  `;
+        function showBharatPePaymentModal(paymentData) {
+            // Remove any existing modals
+            const existingModal = document.getElementById('bharatpe-payment-modal');
+            if (existingModal) existingModal.remove();
 
-  modal.innerHTML = `
-    <div style="background:#111; border-radius:20px; padding:0;
-                width:100%; max-width:360px; border:1px solid #222;
-                overflow:hidden; max-height:92vh; overflow-y:auto;">
-      <div style="background:#161616; padding:18px 20px;
-                  display:flex; justify-content:space-between; align-items:center;
-                  border-bottom:1px solid #222;">
-        <div style="color:#fff; font-weight:700;">Complete Payment</div>
-        <button onclick="document.getElementById('upi-payment-modal').remove();"
-                style="background:#222; border:none; color:#888; width:32px; height:32px;
-                       border-radius:50%; cursor:pointer; font-size:1.1em;">✕</button>
-      </div>
-      <div style="padding:20px; text-align:center; border-bottom:1px solid #1a1a1a;">
-        <div style="color:#888; font-size:0.78em;">Amount Due</div>
-        <div style="color:#fff; font-size:2.4em; font-weight:800;">₹${data.amount}</div>
-      </div>
-      <div style="padding:20px; text-align:center; border-bottom:1px solid #1a1a1a;">
-        <div style="color:#aaa; font-size:0.78em; margin-bottom:12px;">Scan QR with any UPI app</div>
-        <div style="background:#fff; border-radius:12px; padding:14px; display:inline-block;">
-          <img src="${data.qrCodeUrl}" alt="UPI QR" style="width:170px; height:170px;">
-        </div>
-        <div style="color:#555; font-size:0.7em; margin-top:10px;">Valid for 10 minutes only</div>
-      </div>
-      <div style="margin:0 16px; margin-top:16px; background:#1a1400; border:1px solid #3a3000;
-                  border-radius:12px; padding:14px; text-align:center;">
-        <div style="color:#f0a500; font-size:0.72em; font-weight:600;">Add in Payment Remarks</div>
-        <div style="color:#fff; font-size:1.6em; font-weight:800; letter-spacing:4px;">${data.refNumber}</div>
-      </div>
-      <div style="padding:16px;">
-        <div style="color:#666; font-size:0.72em; text-align:center; margin-bottom:12px;">Or pay directly with</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-          <a href="${data.gpayLink}" style="text-decoration:none;">
-            <div style="background:#161616; border:1px solid #222; border-radius:12px; padding:12px 8px; text-align:center;">
-              <div style="color:#4285F4; font-weight:700;">GPay</div>
-            </div>
-          </a>
-          <a href="${data.phonepeLink}" style="text-decoration:none;">
-            <div style="background:#161616; border:1px solid #222; border-radius:12px; padding:12px 8px; text-align:center;">
-              <div style="color:#5f259f; font-weight:700;">PhonePe</div>
-            </div>
-          </a>
-          <a href="${data.upiLink}" style="text-decoration:none;">
-            <div style="background:#161616; border:1px solid #222; border-radius:12px; padding:12px 8px; text-align:center;">
-              <div style="color:#00529C; font-weight:700;">BHIM/UPI</div>
-            </div>
-          </a>
-        </div>
-      </div>
-      <div style="padding:0 16px 20px;">
-        <button id="check-status-btn"
-                onclick="startPaymentPolling('${data.refNumber}'); this.innerHTML='Checking payment status...'; this.disabled=true; this.style.background='#1a1a1a'; this.style.color='#666';"
-                style="width:100%; background:linear-gradient(135deg,#ff4655,#d91a2a);
-                       border:none; color:#fff; padding:14px; border-radius:12px;
-                       font-weight:700; cursor:pointer; font-size:0.9em;">
-          I've Paid — Verify Payment
-        </button>
-        <div style="text-align:center; color:#444; font-size:0.7em; margin-top:8px;">
-          Payment will be verified automatically within seconds
-        </div>
-      </div>
-    </div>
-  `;
+            const modal = document.createElement('div');
+            modal.id = 'bharatpe-payment-modal';
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.95); z-index: 9999;
+                display: flex; align-items: center; justify-content: center;
+                backdrop-filter: blur(8px); padding: 16px; box-sizing: border-box;
+            `;
 
-  document.body.appendChild(modal);
-  startPaymentPolling(data.refNumber);
-}
+            const orderId = paymentData.orderId;
+            const amount = paymentData.amount;
+            const upiId = paymentData.upiId;
+            const qrCodeUrl = paymentData.qrCodeUrl;
+            const gpayLink = paymentData.gpayLink || '';
+            const phonepeLink = paymentData.phonepeLink || '';
+            const upiLink = paymentData.upiLink || '';
 
-function startPaymentPolling(refNumber) {
-  if (!refNumber) return;
-  let attempts = 0;
-  const maxAttempts = 60;
+            modal.innerHTML = `
+                <style>
+                    @keyframes bharatpePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.8; } }
+                    @keyframes bharatpeScan { 0% { top: 0; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { top: calc(100% - 3px); opacity: 0; } }
+                    @keyframes bharatpeSlideIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+                    @keyframes bharatpeGlow { 0%, 100% { box-shadow: 0 0 5px rgba(255, 70, 85, 0.3); } 50% { box-shadow: 0 0 20px rgba(255, 70, 85, 0.6); } }
+                    @keyframes bharatpeFadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+                    .bharatpe-app-card:hover { transform: translateY(-3px) !important; border-color: #444 !important; background: #1e1e1e !important; }
+                    .bharatpe-app-card { transition: all 0.25s ease !important; }
+                    .copy-btn { position: relative; overflow: hidden; cursor: pointer; }
+                    .copy-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: bharatpeShimmer 2.5s infinite; }
+                    @keyframes bharatpeShimmer { 0% { left: -100%; } 100% { left: 100%; } }
+                    .copied-toast { position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 12px 20px; border-radius: 8px; z-index: 10000; animation: bharatpeSlideIn 0.3s ease-out; }
+                </style>
+                <div style="background: #111; border-radius: 20px; padding: 0;
+                            width: 100%; max-width: 360px; border: 1px solid #222;
+                            overflow: hidden; max-height: 92vh; overflow-y: auto;
+                            animation: bharatpeSlideIn 0.4s ease-out;">
 
-  const pollInterval = setInterval(async () => {
-    attempts++;
-    try {
-      const res = await fetch(
-        `https://techno-esports-backend.onrender.com/api/payment/check-upi-payment/${encodeURIComponent(refNumber)}`
-      );
-      const data = await res.json();
+                    <!-- Header -->
+                    <div style="background: #161616; padding: 18px 20px;
+                                display: flex; justify-content: space-between; align-items: center;
+                                border-bottom: 1px solid #222;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #ff4655, #d91a2a);
+                                        border-radius: 10px; display: flex; align-items: center; justify-content: center;
+                                        animation: bharatpePulse 2s ease-in-out infinite;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div style="color: #fff; font-weight: 700; font-size: 1em;">BharatPe Payment</div>
+                                <div style="color: #888; font-size: 0.75em; margin-top: 2px;">Secure UPI Payment</div>
+                            </div>
+                        </div>
+                        <button onclick="document.getElementById('bharatpe-payment-modal').remove();"
+                                style="background: #222; border: none; color: #888; width: 32px; height: 32px;
+                                       border-radius: 50%; cursor: pointer; font-size: 1.1em; display: flex;
+                                       align-items: center; justify-content: center; transition: all 0.2s;"
+                                onmouseover="this.style.background='#333';this.style.color='#fff'"
+                                onmouseout="this.style.background='#222';this.style.color='#888'">✕</button>
+                    </div>
 
-      if (data.status === 'completed') {
-        clearInterval(pollInterval);
-        const modal = document.getElementById('upi-payment-modal');
-        if (modal) modal.remove();
-        showToast('Payment successful! Wallet credited.', 'success');
-        await fetchWalletBalance();
-        await fetchWalletTransactions();
-        return;
-      }
-      if (data.status === 'expired') {
-        clearInterval(pollInterval);
-        const modal = document.getElementById('upi-payment-modal');
-        if (modal) modal.remove();
-        showToast('Session expired. Please try again.', 'error');
-        return;
-      }
-    } catch (e) {
-      console.log('Poll attempt', attempts, ':', e.message);
-    }
-    if (attempts >= maxAttempts) {
-      clearInterval(pollInterval);
-      showToast('Not confirmed. Contact support: ' + refNumber, 'info');
-    }
-  }, 5000);
-}
+                    <!-- Amount -->
+                    <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1a1a1a;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.1s both;">
+                        <div style="color: #888; font-size: 0.78em; letter-spacing: 0.5px;
+                                    text-transform: uppercase; margin-bottom: 6px;">Amount Due</div>
+                        <div style="color: #fff; font-size: 2.4em; font-weight: 800; letter-spacing: -1px;">
+                            ₹${amount}
+                        </div>
+                        <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+                                    background: #1a2a1a; border: 1px solid #2a4a2a;
+                                    border-radius: 20px; padding: 4px 12px;">
+                            <div style="width: 6px; height: 6px; background: #4CAF50; border-radius: 50%;"></div>
+                            <span style="color: #4CAF50; font-size: 0.72em; font-weight: 600;">Secured by BharatPe</span>
+                        </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div style="padding: 20px; text-align: center; border-bottom: 1px solid #1a1a1a;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.2s both;">
+                        <div style="color: #aaa; font-size: 0.78em; margin-bottom: 12px; letter-spacing: 0.3px;
+                                    display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                            Scan QR with any UPI app
+                        </div>
+                        <div style="background: #fff; border-radius: 12px; padding: 14px;
+                                    display: inline-block; box-shadow: 0 0 0 1px #333;
+                                    position: relative; overflow: hidden;">
+                            <img src="${qrCodeUrl}" alt="BharatPe QR" 
+                                 style="width: 170px; height: 170px; display: block; border-radius: 6px;">
+                            <!-- Animated scan line -->
+                            <div style="position: absolute; left: 14px; right: 14px; height: 3px;
+                                        background: linear-gradient(90deg, transparent, #ff4655, transparent);
+                                        border-radius: 2px; animation: bharatpeScan 2.5s ease-in-out infinite;"></div>
+                        </div>
+                        <div style="color: #555; font-size: 0.7em; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Valid for 10 minutes only
+                        </div>
+                    </div>
+
+                    <!-- Order Remark (Reference Number) -->
+                    <div style="margin: 0 16px; margin-top: 16px;
+                                background: #1a1400; border: 1px solid #3a3000;
+                                border-radius: 12px; padding: 14px; text-align: center;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.3s both, bharatpeGlow 3s ease-in-out infinite;">
+                        <div style="color: #f0a500; font-size: 0.72em; font-weight: 600;
+                                    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
+                                    display: flex; align-items: center; justify-content: center; gap: 5px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            Add this in Payment Remarks
+                        </div>
+                        <div style="color: #fff; font-size: 1.6em; font-weight: 800;
+                                    font-family: 'Courier New', monospace; letter-spacing: 4px; margin-bottom: 10px;">
+                            ${orderId}
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('${orderId}', 'Order remark copied!')"
+                                style="background: #2a2a00; border: 1px solid #444; color: #f0a500; width: 100%; padding: 8px 12px;
+                                       border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600;
+                                       transition: all 0.2s;">
+                            📋 Copy Remark
+                        </button>
+                        <div style="color: #888; font-size: 0.7em; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Add this as the payment note/remark
+                        </div>
+                    </div>
+
+                    <!-- UPI ID -->
+                    <div style="margin: 16px; margin-top: 16px;
+                                background: #1a1a2e; border: 1px solid #2a3a4a;
+                                border-radius: 12px; padding: 14px; text-align: center;
+                                animation: bharatpeFadeIn 0.5s ease-out 0.35s both;">
+                        <div style="color: #4a9eff; font-size: 0.72em; font-weight: 600;
+                                    text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+                            UPI ID
+                        </div>
+                        <div style="color: #fff; font-size: 1.2em; font-weight: 600;
+                                    font-family: 'Courier New', monospace; margin-bottom: 10px;
+                                    word-break: break-all;">
+                            ${upiId}
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('${upiId}', 'UPI ID copied!')"
+                                style="background: #1a2a3e; border: 1px solid #2a4a6a; color: #4a9eff; width: 100%; padding: 8px 12px;
+                                       border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600;
+                                       transition: all 0.2s;">
+                            📋 Copy UPI ID
+                        </button>
+                    </div>
+
+                    <!-- UPI Apps -->
+                    <div style="padding: 16px; animation: bharatpeFadeIn 0.5s ease-out 0.4s both;">
+                        <div style="color: #666; font-size: 0.72em; text-align: center;
+                                    margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Or pay directly with
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+
+                            ${gpayLink ? `
+                            <a href="${gpayLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 80 32" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <text x="0" y="24" font-family="Arial" font-weight="800" font-size="26" fill="#4285F4">G</text>
+                                        <text x="20" y="24" font-family="Arial" font-weight="400" font-size="20" fill="#4285F4">Pay</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">Google Pay</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                            ${phonepeLink ? `
+                            <a href="${phonepeLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <rect width="40" height="24" rx="4" fill="#5f259f"/>
+                                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="11" fill="white">Pe</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">PhonePe</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                            ${upiLink ? `
+                            <a href="${upiLink}" style="text-decoration: none;">
+                                <div class="bharatpe-app-card" style="background: #161616; border: 1px solid #222; border-radius: 12px;
+                                            padding: 12px 8px; text-align: center; cursor: pointer;">
+                                    <svg width="40" height="24" viewBox="0 0 40 24" style="margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto;">
+                                        <rect width="40" height="24" rx="4" fill="#00529C"/>
+                                        <text x="50%" y="17" text-anchor="middle" font-family="Arial" font-weight="800" font-size="10" fill="white">BHIM</text>
+                                    </svg>
+                                    <div style="color: #aaa; font-size: 0.7em; font-weight: 600;">BHIM / UPI</div>
+                                </div>
+                            </a>
+                            ` : ''}
+
+                        </div>
+                    </div>
+
+                    <!-- Waiting for Payment -->
+                    <div style="padding: 16px 20px 20px; animation: bharatpeFadeIn 0.5s ease-out 0.5s both;">
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: inline-block; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ff4655, #d91a2a); display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" style="animation: bharatpePulse 1.5s ease-in-out infinite;">
+                                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div style="color: #fff; font-size: 1.1em; font-weight: 700; margin-bottom: 8px;">
+                                Waiting for payment confirmation...
+                            </div>
+                            <div style="color: #aaa; font-size: 0.85em; line-height: 1.6;">
+                                Payment will be automatically confirmed once
+                                <br/>we detect the UPI credit.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            startBharatPePolling(orderId);
+        }
+
+        function startBharatPePolling(orderId) {
+            if (!orderId) return;
+            let attempts = 0;
+            const maxAttempts = 60; // 5 minutes (60 * 5 sec)
+
+            const pollInterval = setInterval(async () => {
+                attempts++;
+                try {
+                    const res = await fetch(`https://techno-esports-backend.onrender.com/api/payments/check/${orderId}`);
+                    const data = await res.json();
+
+                    if (data.status === 'completed') {
+                        clearInterval(pollInterval);
+                        const modal = document.getElementById('bharatpe-payment-modal');
+                        if (modal) modal.remove();
+                        showToast('Payment successful! Wallet credited.', 'success');
+                        await fetchWalletBalance();
+                        await fetchWalletTransactions();
+                        return;
+                    }
+                    if (data.status === 'expired' || data.status === 'error') {
+                        clearInterval(pollInterval);
+                        const modal = document.getElementById('bharatpe-payment-modal');
+                        if (modal) modal.remove();
+                        showToast(data.message || 'Payment session expired or failed. Please try again.', 'error');
+                        return;
+                    }
+                } catch (e) {
+                    console.log('BharatPe poll attempt', attempts, ':', e.message);
+                }
+                if (attempts >= maxAttempts) {
+                    clearInterval(pollInterval);
+                    showToast('Payment confirmation timeout. Please contact support with order ID: ' + orderId, 'info');
+                }
+            }, 5000);
+        }
+
+        function copyToClipboard(text, successMessage) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'copied-toast';
+                toast.textContent = successMessage;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            }).catch(err => {
+                showToast('Failed to copy', 'error');
+            });
+        }
+
+        // DEPRECATED: Old showUpiPaymentModal function - replaced with showBharatPePaymentModal
+        /*
+        function showUpiPaymentModal(data) {
+          // This function has been replaced by showBharatPePaymentModal
+        }
+        */
+
+        // DEPRECATED: Old startPaymentPolling function - replaced with startBharatPePolling
+        /*
+        function startPaymentPolling(uroPayOrderId) {
+          // This function has been replaced by startBharatPePolling
+        }
+        */
+
+        // DEPRECATED: Old showNiceUPIPaymentModal function - replaced with showBharatPePaymentModal
+        /*
+        function showNiceUPIPaymentModal(data) {
+          // This function has been replaced by showBharatPePaymentModal
+        }
+        */
+
+        // DEPRECATED: Old startNiceUPIPolling function - replaced with startBharatPePolling
+        /*
+        function startNiceUPIPolling(ourOrderId) {
+          // This function has been replaced by startBharatPePolling
+        }
+        */
+
+        // DEPRECATED: Old showUpiModal function - replaced with showBharatPePaymentModal
+        /*
+        function showUpiModal(data) {
+          // This function has been replaced by showBharatPePaymentModal
+        }
+        */
+
+
+
+        // DEPRECATED: Old closeUpiModal function - replaced with inline close button in BharatPe modal
+        /*
+        function closeUpiModal() {
+          // This function has been replaced by inline close button in showBharatPePaymentModal
+        }
+        */
+
+
 
         async function requestWithdrawal() {
             const userId = getCurrentUserId();
@@ -5795,49 +6107,6 @@ function startPaymentPolling(refNumber) {
                 }
             }
         }, 3000);
-        
-        // ===== COIN CALCULATION WITH PAISE LOGIC =====
-function calculateCoins(amount) {
-    // 1 rupee = 1 coin
-    // < 50 paise → floor (keep same number)
-    // >= 50 paise → ceil (bonus 1 coin)
-    const num = Number(amount);
-    if (isNaN(num) || num <= 0) return 0;
-    // Get the fractional part (paise)
-    const fractional = num - Math.floor(num);
-    if (fractional >= 0.50) {
-        return Math.ceil(num);  // round up
-    } else {
-        return Math.floor(num); // round down
-    }
-}
-
-// Update coin preview when custom amount changes
-document.addEventListener('DOMContentLoaded', function() {
-    const customInput = document.getElementById('wallet-custom-amount');
-    if (customInput) {
-        customInput.addEventListener('input', function() {
-            const val = parseFloat(this.value);
-            const preview = document.getElementById('custom-coin-preview');
-            if (preview) {
-                if (!isNaN(val) && val > 0) {
-                    const coins = calculateCoins(val);
-                    preview.textContent = `₹${val.toFixed(2)} → ${coins} coins`;
-                    if (val < 10 || val > 10000) {
-                        preview.textContent += ' (min ₹10, max ₹10000)';
-                        preview.style.color = '#d72638';
-                    } else {
-                        preview.style.color = '#ffc700';
-                    }
-                } else {
-                    preview.textContent = 'Enter amount to see coins';
-                    preview.style.color = '#666';
-                }
-            }
-        });
-    }
-});
-
     </script>
 </body>
 </html>
