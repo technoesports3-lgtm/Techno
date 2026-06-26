@@ -3024,25 +3024,8 @@
                             <button onclick="addMoneyToWallet(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
                         </div>
 
-                        <!-- Custom amount -->
-                        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; margin-top: 6px; border: 1px dashed #444;">
-                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                                <div style="flex: 2; min-width: 140px;">
-                                    <label style="color: #888; font-size: 0.8em;">Other Amount (₹10 - ₹10000)</label>
-                                    <input type="number" id="wallet-custom-amount" placeholder="e.g. 10.60 → 11 coins" min="10" max="10000" step="0.01" style="padding: 10px 12px; margin: 4px 0; border: 2px solid rgba(255,70,85,0.2); border-radius: 8px; width: 100%; background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
-                                </div>
-                                <div style="flex: 1; min-width: 100px; display: flex; gap: 6px;">
-                                    <button onclick="initiateUpiPayment(document.getElementById('wallet-custom-amount')?.value)" style="background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75em; cursor: pointer; flex:1; height: 42px; margin-top: 20px;">
-                                        <i class="fas fa-mobile-alt"></i> UPI Pay
-                                    </button>
-                                </div>
-                            </div>
-                            <div style="color: #666; font-size: 0.7em; margin-top: 6px; text-align: center;">
-                                <i class="fas fa-info-circle"></i> <span id="custom-coin-preview">Enter amount to see coins</span>
-                            </div>
-                        </div>
-                    </div>
-
+                       
+                    
                     <div class="wallet-panel">
                         <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
                         <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
@@ -4860,8 +4843,8 @@ function startPaymentPolling(refNumber) {
                 renderTournaments();
 
             } catch (error) {
-                console.error("Error loading tournaments:", error);
-                showToast("Error loading tournaments. Please refresh.", 'error');
+                console.error(":", );
+                showToast(".", '');
             }
         }
 
