@@ -2939,7 +2939,35 @@
             <div class="loading-text">TECHNO E-SPORTS</div>
             <div class="loading-spinner-large"></div>
         </div>
+        <!-- Loading Screen ayipoyina tharvatha idi pettali -->
 
+        <!-- IN-APP AD MODAL (FULL SCREEN AD) START -->
+        <div id="in-app-ad-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:#000; z-index:9999999; flex-direction:column;">
+            
+            <!-- Ad Header (Timer & Close Button) -->
+            <div style="height: 50px; background-color: #111; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; border-bottom: 2px solid #333;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-ad" style="color: #666;"></i>
+                    <span style="color: #aaa; font-size: 0.85em;">Sponsored</span>
+                </div>
+                
+                <!-- Timer Text -->
+                <div id="ad-timer-text" style="color: #ffc700; font-weight: bold; font-size: 0.9em; background: rgba(255, 199, 0, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255, 199, 0, 0.3);">
+                    Reward in 10s...
+                </div>
+                
+                <!-- Close Button (Initially Hidden) -->
+                <button id="ad-close-btn" onclick="closeAdModal()" style="display: none; background: rgba(255, 70, 85, 0.2); border: 1px solid #ff4655; color: #ff4655; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2em; align-items: center; justify-content: center; transition: all 0.3s;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Ad Content (Iframe) -->
+            <!-- sandbox properties prevent the ad from hacking/redirecting your main app -->
+            <iframe id="ad-iframe" src="" style="flex: 1; width: 100%; height: 100%; border: none; background: #fff;" sandbox="allow-scripts allow-popups allow-forms allow-same-origin"></iframe>
+        
+        </div>
+        <!-- IN-APP AD MODAL END -->
         <div id="main-app" style="display: none;">
 
             <header class="app-header">
@@ -5986,77 +6014,69 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        let adCountdownTimer = null; // Timer ni control cheyadaniki
+
         function startAd() {
             const btn = document.getElementById('watch-ad-btn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Ad...';
 
-            // 1. NEE ADSTERRA DIRECT LINK IKKADA UNDI
+            // 1. ADSTERRA DIRECT LINK
             const adsterraLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9'; 
-            
-            // 2. Kotha tab lo ad open avthundi
-            window.open(adsterraLink, '_blank');
 
-            // 3. Timer (10 Seconds)
-            setTimeout(() => {
-                adsWatchedCount++;
-                updateAdUI();
+            // 2. DOM Elements 
+            const adModal = document.getElementById('in-app-ad-modal');
+            const adIframe = document.getElementById('ad-iframe');
+            const timerText = document.getElementById('ad-timer-text');
+            const closeBtn = document.getElementById('ad-close-btn');
+
+            // 3. UI Setup for new Ad
+            closeBtn.style.display = 'none'; // X button hide chestham
+            timerText.style.display = 'block'; // Timer chupistham
+            timerText.innerHTML = 'Reward in 10s...';
+            
+            
+            adIframe.src = adsterraLink;
+            
+        
+            adModal.style.display = 'flex';
+
+            // 6. Start 10 seconds Countdown
+            let timeLeft = 10;
+            adCountdownTimer = setInterval(() => {
+                timeLeft--;
                 
-                if(adsWatchedCount < ADS_NEEDED) {
-                    showToast(`Great! Watch ${ADS_NEEDED - adsWatchedCount} more ads to get 1 Coin.`, 'info');
+                if (timeLeft > 0) {
+                    timerText.innerHTML = `Reward in ${timeLeft}s...`;
+                } else {
+                    // Timer ayipoyindi!
+                    clearInterval(adCountdownTimer);
+                    timerText.style.display = 'none'; // Timer hide
+                    closeBtn.style.display = 'flex';  // X button on
                 }
-                
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Ad Now';
-            }, 10000); // 10 seconds wait time
+            }, 1000); // Prathi 1 sec ki run avthundi
         }
 
-        async function claimAdReward() {
-            if (adsWatchedCount < ADS_NEEDED) return;
+        // Idi user 'X' button nokkinappudu run avthundi
+        function closeAdModal() {
+            const adModal = document.getElementById('in-app-ad-modal');
+            const adIframe = document.getElementById('ad-iframe');
+            const btn = document.getElementById('watch-ad-btn');
+
+            // Modal hide chesi, iframe link clear chestham
+            adModal.style.display = 'none';
+            adIframe.src = ''; 
             
-            const claimBtn = document.getElementById('claim-ad-btn');
-            const userId = getCurrentUserId(); 
+            // Background lo count penchutham
+            adsWatchedCount++;
+            updateAdUI();
             
-            if (!userId) {
-                showToast('Please login to claim your reward.', 'error');
-                return;
+            if(adsWatchedCount < ADS_NEEDED) {
+                showToast(`Great! Watch ${ADS_NEEDED - adsWatchedCount} more ads to get 1 Coin.`, 'info');
             }
-
-            claimBtn.disabled = true;
-            claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
-
-            try {
-                showToast('Processing your reward...', 'info');
-                
-                const response = await fetch(`${BACKEND_BASE_URL}/api/wallet/claim-ad-reward`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: userId })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok || !data.success) {
-                    throw new Error(data.message || 'Failed to claim reward');
-                }
-
-                showToast('🎉 Congratulations! 1 Coin added to your wallet!', 'success');
-                
-                adsWatchedCount = 0; 
-                
-                currentUserData.lastAdRewardDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }).split(',')[0];
-                currentUserData.adClaimsToday = data.claimsToday;
-                
-                checkAdStatus(); 
-                fetchWalletBalance(); 
-                fetchWalletTransactions();
-
-            } catch (error) {
-                showToast(error.message, 'error');
-            } finally {
-                claimBtn.disabled = false;
-                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 1 Coin';
-            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Ad Now';
         }
 
     </script>
