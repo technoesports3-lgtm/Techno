@@ -2997,7 +2997,35 @@
                         </div>
                         <div style="color:#555;font-size:0.75em;margin-top:6px;">1 Coin = ₹1 Tournament Entry Fee</div>
                     </div>
+                <!-- NEW WATCH ADS & EARN SECTION START -->
+                    <div class="wallet-panel" style="background: linear-gradient(135deg, #1a0b2e 0%, #0d001a 100%); border-color: #6a0dad; box-shadow: 0 4px 15px rgba(106, 13, 173, 0.2);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <h3 style="margin:0; color: #b366ff;"><i class="fas fa-tv"></i> Watch & Earn</h3>
+                            <div id="ad-badge-text" style="background: rgba(179, 102, 255, 0.2); color:#b366ff; padding: 4px 8px; border-radius: 12px; font-size:0.75em; font-weight:bold; border: 1px solid rgba(179, 102, 255, 0.4);">
+                                Loading...
+                            </div>
+                        </div>
+                        <p id="ad-desc-text" style="color:#aaa; font-size:0.8em; margin-top:0; margin-bottom: 15px;">Loading rules...</p>
+                        
+                        <!-- Progress Bar -->
+                        <div style="background: rgba(0,0,0,0.5); border-radius: 10px; height: 14px; width: 100%; margin-bottom: 8px; overflow: hidden; border: 1px solid #333;">
+                            <div id="ad-progress-bar" style="background: linear-gradient(90deg, #6a0dad, #b366ff); width: 0%; height: 100%; transition: width 0.4s ease-in-out; border-radius: 10px;"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; color:#888; font-size:0.75em; margin-bottom: 15px;">
+                            <span id="ad-progress-text">0 / X Ads Watched</span>
+                            <span style="color: #2ec27e;"><i class="fas fa-gift"></i> Reward: 1 Coin</span>
+                        </div>
 
+                        <!-- Buttons -->
+                        <button id="watch-ad-btn" onclick="startAd()" style="width: 100%; background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; transition: transform 0.2s;">
+                            <i class="fas fa-play-circle"></i> Watch Ad Now
+                        </button>
+
+                        <button id="claim-ad-btn" onclick="claimAdReward()" style="width: 100%; background: linear-gradient(135deg, #26a269, #2ec27e); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: none; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 0 15px rgba(38, 162, 105, 0.4); animation: pulse 1.5s infinite;">
+                            <i class="fas fa-gift"></i> Claim 1 Coin
+                        </button>
+                    </div>
+                    <!-- NEW WATCH ADS & EARN SECTION END -->
                     <div class="wallet-panel">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
                             <h3 style="margin:0;">🪙 Buy Coins</h3>
@@ -4281,6 +4309,10 @@ function startPaymentPolling(refNumber) {
                 if (phoneEl) phoneEl.textContent = phone;
                 if (tournamentCountEl) tournamentCountEl.textContent = String(tournamentsParticipated);
                 if (referralCodeEl) referralCodeEl.textContent = referralCode;
+                
+                // ADD THIS LINE
+                checkAdStatus();
+
             } catch (error) {
                 console.error('Profile data error:', error);
                 showToast('Unable to load profile data.', 'error');
@@ -5904,6 +5936,128 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+       // ==========================================
+        // WATCH & EARN (SMART ADS LOGIC)
+        // ==========================================
+        let adsWatchedCount = 0;
+        let ADS_NEEDED = 3; // Default 3
+
+        function checkAdStatus() {
+            if (!currentUserData) return;
+            
+            const today = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }).split(',')[0];
+            
+            if (currentUserData.lastAdRewardDate === today && currentUserData.adClaimsToday >= 1) {
+                ADS_NEEDED = 15; // Grind mode (Unlimited)
+                document.getElementById('ad-badge-text').innerHTML = "15 Ads = 1 🪙";
+                document.getElementById('ad-badge-text').style.color = "#ffc700";
+                document.getElementById('ad-badge-text').style.borderColor = "rgba(255, 199, 0, 0.4)";
+                document.getElementById('ad-desc-text').innerHTML = "Unlimited Grind: Watch 15 video ads completely to claim 1 free coin!";
+            } else {
+                ADS_NEEDED = 3; // Daily Bonus mode
+                document.getElementById('ad-badge-text').innerHTML = "Daily Bonus: 3 Ads = 1 🪙";
+                document.getElementById('ad-badge-text').style.color = "#b366ff";
+                document.getElementById('ad-badge-text').style.borderColor = "rgba(179, 102, 255, 0.4)";
+                document.getElementById('ad-desc-text').innerHTML = "Watch 3 video ads completely to claim your Daily free coin!";
+            }
+            
+            updateAdUI();
+        }
+
+        function updateAdUI() {
+            const progressBar = document.getElementById('ad-progress-bar');
+            const progressText = document.getElementById('ad-progress-text');
+            const watchBtn = document.getElementById('watch-ad-btn');
+            const claimBtn = document.getElementById('claim-ad-btn');
+
+            let percentage = (adsWatchedCount / ADS_NEEDED) * 100;
+            if (percentage > 100) percentage = 100;
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.innerHTML = `<b>${adsWatchedCount} / ${ADS_NEEDED}</b> Ads Watched`;
+
+            if (adsWatchedCount >= ADS_NEEDED) {
+                watchBtn.style.display = 'none';
+                claimBtn.style.display = 'flex';
+            } else {
+                watchBtn.style.display = 'flex';
+                claimBtn.style.display = 'none';
+            }
+        }
+
+        function startAd() {
+            const btn = document.getElementById('watch-ad-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Ad...';
+
+            // 1. NEE ADSTERRA DIRECT LINK IKKADA UNDI
+            const adsterraLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9'; 
+            
+            // 2. Kotha tab lo ad open avthundi
+            window.open(adsterraLink, '_blank');
+
+            // 3. Timer (10 Seconds)
+            setTimeout(() => {
+                adsWatchedCount++;
+                updateAdUI();
+                
+                if(adsWatchedCount < ADS_NEEDED) {
+                    showToast(`Great! Watch ${ADS_NEEDED - adsWatchedCount} more ads to get 1 Coin.`, 'info');
+                }
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Ad Now';
+            }, 10000); // 10 seconds wait time
+        }
+
+        async function claimAdReward() {
+            if (adsWatchedCount < ADS_NEEDED) return;
+            
+            const claimBtn = document.getElementById('claim-ad-btn');
+            const userId = getCurrentUserId(); 
+            
+            if (!userId) {
+                showToast('Please login to claim your reward.', 'error');
+                return;
+            }
+
+            claimBtn.disabled = true;
+            claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
+
+            try {
+                showToast('Processing your reward...', 'info');
+                
+                const response = await fetch(`${BACKEND_BASE_URL}/api/wallet/claim-ad-reward`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to claim reward');
+                }
+
+                showToast('🎉 Congratulations! 1 Coin added to your wallet!', 'success');
+                
+                adsWatchedCount = 0; 
+                
+                currentUserData.lastAdRewardDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }).split(',')[0];
+                currentUserData.adClaimsToday = data.claimsToday;
+                
+                checkAdStatus(); 
+                fetchWalletBalance(); 
+                fetchWalletTransactions();
+
+            } catch (error) {
+                showToast(error.message, 'error');
+            } finally {
+                claimBtn.disabled = false;
+                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 1 Coin';
+            }
+        }
 
     </script>
 </body>
