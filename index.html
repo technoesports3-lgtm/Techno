@@ -4142,7 +4142,47 @@ function renderCoinPackages() {
             }
             return data;
         }
+        // ==========================================
+        // UPI PAYMENT INITIATION (MISSING FUNCTION ADDED)
+        // ==========================================
+        async function initiateUpiPayment(amount) {
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('Please login first', 'error');
+                return;
+            }
 
+            amount = Number(amount);
+            if (!amount || amount < 10 || amount > 10000) {
+                showToast('Enter amount between ₹10 and ₹10000', 'error');
+                return;
+            }
+
+            try {
+                showToast('Generating Payment QR...', 'info');
+                
+                // Backend API call to create order
+                const response = await fetch(`${BACKEND_BASE_URL}/api/payment/create-upi-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.uid, amount: amount })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    showToast(data.message || 'Payment creation failed', 'error');
+                    return;
+                }
+
+                // Call the modal function to show QR code
+                showUpiPaymentModal(data);
+
+            } catch (error) {
+                console.error('Payment Error:', error);
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
         
 
 function showUpiPaymentModal(data) {
