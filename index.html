@@ -3010,6 +3010,8 @@
 
                 <!-- 2. WALLET SECTION -->
                 <section id="wallet-section" class="section" style="display: none;">
+                    
+                    <!-- Wallet Balance Card -->
                     <div class="wallet-balance-card">
                         <div style="color:#aaa;font-size:0.85em;text-transform:uppercase;letter-spacing:1px;">🪙 Total Coins</div>
                         <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
@@ -3018,7 +3020,8 @@
                         </div>
                         <div style="color:#555;font-size:0.75em;margin-top:6px;">1 Coin = ₹1 Tournament Entry Fee</div>
                     </div>
-                <!-- NEW WATCH ADS & EARN SECTION START -->
+
+                    <!-- NEW WATCH ADS & EARN SECTION START -->
                     <div class="wallet-panel" style="background: linear-gradient(135deg, #1a0b2e 0%, #0d001a 100%); border-color: #6a0dad; box-shadow: 0 4px 15px rgba(106, 13, 173, 0.2); width: 100%; box-sizing: border-box;">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                             <h3 style="margin:0; color: #b366ff;"><i class="fas fa-tv"></i> Watch & Earn</h3>
@@ -3039,7 +3042,6 @@
 
                         <!-- Buttons (FIXED CSS - NO PULSE BUG) -->
                         <div style="display: block; width: 100%; margin-top: 15px;">
-                            
                             <button id="watch-ad-btn" onclick="startAd()" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #6a0dad, #9b30ff); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 16px;">
                                 <i class="fas fa-play-circle"></i> Watch Ad Now
                             </button>
@@ -3047,9 +3049,11 @@
                             <button id="claim-ad-btn" onclick="claimAdReward()" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #26a269, #2ec27e); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; display: none; justify-content: center; align-items: center; gap: 8px; font-size: 16px; box-shadow: 0 0 15px rgba(38, 162, 105, 0.6);">
                                 <i class="fas fa-gift"></i> CLAIM 1 COIN NOW
                             </button>
-
                         </div>
+                    </div>
                     <!-- NEW WATCH ADS & EARN SECTION END -->
+
+                    <!-- BUY COINS SECTION START -->
                     <div class="wallet-panel">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
                             <h3 style="margin:0;">🪙 Buy Coins</h3>
@@ -3076,9 +3080,10 @@
                             <button onclick="initiateUpiPayment(150)" class="wallet-block-btn">₹150<br><span style="font-size:0.75em;color:#ffc700;">= 150 coins</span></button>
                             <button onclick="initiateUpiPayment(200)" class="wallet-block-btn">₹200<br><span style="font-size:0.75em;color:#ffc700;">= 200 coins</span></button>
                         </div>
+                    </div> <!-- MISSING DIV FIXED HERE -->
+                    <!-- BUY COINS SECTION END -->
 
-                       
-                    
+                    <!-- TRANSACTION HISTORY -->
                     <div class="wallet-panel">
                         <h3 style="margin-top: 0; border-left: 4px solid #ff4655; padding-left: 10px;">📊 Transaction History</h3>
                         <div id="wallet-transactions-list" style="max-height: 320px; overflow-y: auto;">
@@ -3086,6 +3091,7 @@
                         </div>
                     </div>
 
+                    <!-- WITHDRAW FUNDS -->
                     <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px; margin-top: 14px;">
                         <h3 style="margin: 0 0 12px; border-left: 4px solid #ff4655; padding-left: 10px;">💳 WITHDRAW FUNDS</h3>
                         <div class="form-group">
