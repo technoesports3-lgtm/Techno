@@ -41,10 +41,10 @@
         }
 
         :root {
-            --primary: #e31b2e;
-            --primary-dark: #b81222;
-            --primary-light: #ff4d5e;
-            --primary-gradient: linear-gradient(135deg, #e31b2e 0%, #b81222 100%);
+            --primary: #1a6fb5;
+            --primary-dark: #0f4b7a;
+            --primary-light: #4a8fc9;
+            --primary-gradient: linear-gradient(135deg, #1a6fb5 0%, #0f4b7a 100%);
             --bg: #f4f6f9;
             --card-bg: #ffffff;
             --text-primary: #121826;
@@ -57,6 +57,9 @@
             --radius-sm: 10px;
             --transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --btn-grad-1: linear-gradient(135deg, #1a6fb5, #4a8fc9);
+            --btn-grad-2: linear-gradient(135deg, #e31b2e, #b81222);
+            --btn-grad-3: linear-gradient(135deg, #1e8e4a, #157a3e);
         }
 
         html,
@@ -180,7 +183,7 @@
             font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
-            box-shadow: 0 4px 16px rgba(227, 27, 46, 0.25);
+            box-shadow: 0 4px 16px rgba(26, 111, 181, 0.25);
             letter-spacing: 0.3px;
             display: inline-flex;
             align-items: center;
@@ -192,7 +195,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(227, 27, 46, 0.30);
+            box-shadow: 0 8px 28px rgba(26, 111, 181, 0.30);
         }
 
         .btn-primary:disabled {
@@ -241,7 +244,7 @@
         }
 
         .btn-outline:hover {
-            background: rgba(227, 27, 46, 0.06);
+            background: rgba(26, 111, 181, 0.06);
             transform: translateY(-1px);
         }
 
@@ -302,7 +305,7 @@
         textarea:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 4px rgba(227, 27, 46, 0.08);
+            box-shadow: 0 0 0 4px rgba(26, 111, 181, 0.08);
             background: #ffffff;
         }
 
@@ -341,7 +344,7 @@
 
         .toggle-password:hover {
             color: var(--primary);
-            background: rgba(227, 27, 46, 0.06);
+            background: rgba(26, 111, 181, 0.06);
         }
 
         .readonly-field {
@@ -368,35 +371,40 @@
         }
 
         .loading-logo {
-            width: 100px;
-            height: 100px;
+            width: 130px;
+            height: 130px;
             margin-bottom: 20px;
             border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 44px;
-            color: #fff;
-            box-shadow: 0 12px 40px rgba(227, 27, 46, 0.25);
+            overflow: hidden;
+            border: 4px solid rgba(26, 111, 181, 0.10);
+            box-shadow: 0 12px 40px rgba(26, 111, 181, 0.15);
             animation: pulseLogo 1.8s ease-in-out infinite;
+            background: #ffffff;
+            padding: 8px;
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
         @keyframes pulseLogo {
             0%,
             100% {
                 transform: scale(1);
-                box-shadow: 0 12px 40px rgba(227, 27, 46, 0.25);
+                box-shadow: 0 12px 40px rgba(26, 111, 181, 0.15);
             }
             50% {
                 transform: scale(1.04);
-                box-shadow: 0 16px 56px rgba(227, 27, 46, 0.35);
+                box-shadow: 0 16px 56px rgba(26, 111, 181, 0.25);
             }
         }
 
         .loading-text {
             font-size: 1.3rem;
-            color: var(--primary);
+            color: #1a6fb5;
             font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -406,9 +414,9 @@
         .loading-spinner-large {
             width: 36px;
             height: 36px;
-            border: 3px solid rgba(227, 27, 46, 0.10);
+            border: 3px solid rgba(26, 111, 181, 0.10);
             border-radius: 50%;
-            border-top-color: var(--primary);
+            border-top-color: #1a6fb5;
             animation: spin 0.9s linear infinite;
         }
 
@@ -471,8 +479,8 @@
         }
 
         .auth-logo-wrap {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 12px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.12);
@@ -482,7 +490,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            padding: 6px;
+            padding: 8px;
         }
 
         .auth-logo-wrap img {
@@ -490,6 +498,7 @@
             height: 100%;
             object-fit: contain;
             border-radius: 50%;
+            background: #fff;
         }
 
         .auth-slogan {
@@ -570,7 +579,7 @@
 
         .auth-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(227, 27, 46, 0.30);
+            box-shadow: 0 8px 28px rgba(26, 111, 181, 0.30);
         }
 
         .auth-button:disabled {
@@ -607,7 +616,7 @@
         .google-signin-btn:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(227, 27, 46, 0.08);
+            box-shadow: 0 4px 20px rgba(26, 111, 181, 0.08);
         }
 
         .google-signin-btn i {
@@ -732,7 +741,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            height: 64px;
+            height: 68px;
             box-shadow: 0 1px 8px rgba(0, 0, 0, 0.02);
         }
 
@@ -743,25 +752,27 @@
         }
 
         .header-logo {
-            width: 38px;
-            height: 38px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid rgba(227, 27, 46, 0.12);
+            border: 2px solid rgba(26, 111, 181, 0.12);
             flex-shrink: 0;
             background: #fff;
+            padding: 3px;
         }
 
         .header-logo img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
         .app-name {
-            font-size: 1.0rem;
+            font-size: 1.1rem;
             font-weight: 800;
-            color: var(--primary);
+            color: #1a6fb5;
             letter-spacing: 0.5px;
         }
 
@@ -780,8 +791,8 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(227, 27, 46, 0.06);
-            border: 1px solid rgba(227, 27, 46, 0.10);
+            background: rgba(26, 111, 181, 0.06);
+            border: 1px solid rgba(26, 111, 181, 0.10);
             border-radius: 20px;
             padding: 4px 14px 4px 10px;
             color: var(--primary);
@@ -792,7 +803,7 @@
         }
 
         .header-wallet-chip:hover {
-            background: rgba(227, 27, 46, 0.10);
+            background: rgba(26, 111, 181, 0.10);
         }
 
         .header-wallet-chip i {
@@ -815,38 +826,9 @@
         }
 
         .refresh-button:hover {
-            background: rgba(227, 27, 46, 0.04);
+            background: rgba(26, 111, 181, 0.04);
             border-color: var(--primary);
             color: var(--primary);
-        }
-
-        .header-avatar-small {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            font-size: 14px;
-            border: 2px solid rgba(227, 27, 46, 0.12);
-            cursor: pointer;
-            transition: all var(--transition);
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .header-avatar-small img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .header-avatar-small:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(227, 27, 46, 0.15);
         }
 
         /* =============================================================
@@ -881,7 +863,7 @@
         .tournament-tab.active {
             color: #fff;
             background: var(--primary-gradient);
-            box-shadow: 0 4px 16px rgba(227, 27, 46, 0.20);
+            box-shadow: 0 4px 16px rgba(26, 111, 181, 0.20);
         }
 
         .tournament-tab:hover:not(.active) {
@@ -956,18 +938,20 @@
         }
 
         .tournament-badge .badge-logo {
-            width: 18px;
-            height: 18px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
             background: #fff;
+            padding: 2px;
         }
 
         .tournament-badge .badge-logo img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 50%;
         }
 
         .tournament-status {
@@ -1041,7 +1025,7 @@
             color: var(--primary);
             font-weight: 800;
             font-size: 0.95rem;
-            background: rgba(227, 27, 46, 0.06);
+            background: rgba(26, 111, 181, 0.06);
             padding: 2px 12px;
             border-radius: 999px;
         }
@@ -1139,12 +1123,12 @@
         }
 
         .details-btn {
-            background: #f0f2f6;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
+            background: #e8edf5;
+            color: #1a4a7a;
+            border: 1px solid #d0dce8;
         }
         .details-btn:hover {
-            background: #e6e9ef;
+            background: #d4e0ed;
             transform: translateY(-1px);
         }
 
@@ -1159,7 +1143,7 @@
         }
 
         .join-btn {
-            background: var(--primary-gradient);
+            background: var(--btn-grad-2);
             color: #fff;
             box-shadow: 0 2px 12px rgba(227, 27, 46, 0.15);
             font-weight: 700;
@@ -1226,7 +1210,112 @@
         }
 
         /* =============================================================
-                   MODALS – Clean
+                   FULL PAGE SECTIONS – Details, Privacy, Terms, Help
+                   ============================================================= */
+        .full-page-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 5000;
+            overflow-y: auto;
+            padding: 0;
+            display: none;
+            animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .full-page-section .full-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            min-height: 64px;
+        }
+
+        .full-page-section .full-page-header .page-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .full-page-section .full-page-header .page-title i {
+            color: var(--primary);
+        }
+
+        .full-page-section .full-page-header .close-page-btn {
+            background: #f0f2f6;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 300;
+        }
+
+        .full-page-section .full-page-header .close-page-btn:hover {
+            background: rgba(215, 38, 56, 0.08);
+            color: #d72638;
+            transform: rotate(90deg);
+        }
+
+        .full-page-section .full-page-body {
+            padding: 20px 24px;
+            max-width: 720px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+        }
+
+        .full-page-section .full-page-body .content-block {
+            background: #ffffff;
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .full-page-section .full-page-body .content-block h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .full-page-section .full-page-body .content-block p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .full-page-section .full-page-body .content-block ul {
+            padding-left: 24px;
+            margin-bottom: 12px;
+        }
+
+        .full-page-section .full-page-body .content-block ul li {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* =============================================================
+                   MODALS – Clean (kept for other modals)
                    ============================================================= */
         .modal {
             display: none;
@@ -1382,9 +1471,9 @@
 
         .wallet-block-btn:hover {
             border-color: var(--primary);
-            background: rgba(227, 27, 46, 0.04);
+            background: rgba(26, 111, 181, 0.04);
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(227, 27, 46, 0.06);
+            box-shadow: 0 4px 16px rgba(26, 111, 181, 0.06);
         }
 
         .wallet-block-btn span {
@@ -1439,7 +1528,7 @@
             padding: 14px;
             border: 2px dashed var(--primary) !important;
             border-radius: var(--radius-sm);
-            background: rgba(227, 27, 46, 0.02) !important;
+            background: rgba(26, 111, 181, 0.02) !important;
             color: var(--text-primary);
             font-family: 'Courier New', monospace;
             font-size: 1.1rem;
@@ -1468,7 +1557,7 @@
         .referral-copy-btn:hover {
             border-color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(227, 27, 46, 0.08);
+            box-shadow: 0 4px 16px rgba(26, 111, 181, 0.08);
         }
 
         .referral-stats-grid {
@@ -1520,7 +1609,7 @@
         }
 
         .share-referral-btn:hover {
-            background: rgba(227, 27, 46, 0.04);
+            background: rgba(26, 111, 181, 0.04);
             transform: translateY(-2px);
         }
 
@@ -1544,8 +1633,8 @@
         }
 
         .profile-cover .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.12);
             border: 3px solid rgba(255, 255, 255, 0.30);
@@ -1553,17 +1642,18 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 12px;
-            font-size: 34px;
-            color: #fff;
+            overflow: hidden;
             backdrop-filter: blur(4px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
+            padding: 6px;
         }
 
         .profile-cover .profile-avatar img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #fff;
         }
 
         .profile-cover .profile-name {
@@ -1693,7 +1783,7 @@
         }
 
         /* =============================================================
-                   NAV BAR – Clean
+                   NAV BAR – Clean (BAL removed)
                    ============================================================= */
         .nav-bar {
             display: flex;
@@ -1759,16 +1849,6 @@
             letter-spacing: 0.6px;
             line-height: 1.2;
             font-weight: 700;
-        }
-
-        .nav-balance-value {
-            font-size: 0.70rem;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-
-        .nav-balance-item .nav-label {
-            color: var(--text-muted);
         }
 
         /* =============================================================
@@ -1977,7 +2057,7 @@
 
         .update-link-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(227, 27, 46, 0.25);
+            box-shadow: 0 8px 28px rgba(26, 111, 181, 0.25);
         }
 
         /* =============================================================
@@ -2148,14 +2228,14 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 8px 32px rgba(227, 27, 46, 0.30);
+            box-shadow: 0 8px 32px rgba(26, 111, 181, 0.30);
             cursor: pointer;
             transition: all var(--transition);
         }
 
         #get-started-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(227, 27, 46, 0.40);
+            box-shadow: 0 12px 40px rgba(26, 111, 181, 0.40);
         }
 
         /* =============================================================
@@ -2280,8 +2360,8 @@
                 padding: 24px 20px 20px;
             }
             .auth-logo-wrap {
-                width: 68px;
-                height: 68px;
+                width: 80px;
+                height: 80px;
             }
             .auth-slogan {
                 font-size: 1.0rem;
@@ -2307,9 +2387,8 @@
                 padding: 24px 16px 16px;
             }
             .profile-cover .profile-avatar {
-                width: 64px;
-                height: 64px;
-                font-size: 28px;
+                width: 76px;
+                height: 76px;
             }
             .profile-menu-item {
                 padding: 12px 14px;
@@ -2321,6 +2400,12 @@
             }
             .wallet-balance-card .balance-amount {
                 font-size: 2.2rem;
+            }
+            .full-page-section .full-page-body {
+                padding: 16px 16px;
+            }
+            .full-page-section .full-page-body .content-block {
+                padding: 16px 18px;
             }
         }
 
@@ -2339,8 +2424,8 @@
                 padding: 20px 16px 18px;
             }
             .auth-logo-wrap {
-                width: 60px;
-                height: 60px;
+                width: 72px;
+                height: 72px;
             }
             .auth-slogan {
                 font-size: 0.85rem;
@@ -2402,6 +2487,10 @@
             .profile-cover .profile-name {
                 font-size: 1.0rem;
             }
+            .profile-cover .profile-avatar {
+                width: 64px;
+                height: 64px;
+            }
             .profile-menu-item {
                 padding: 10px 12px;
                 gap: 10px;
@@ -2414,17 +2503,12 @@
             .profile-menu-item .menu-text {
                 font-size: 0.80rem;
             }
-            .header-avatar-small {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-            }
             .app-name {
-                font-size: 0.85rem;
+                font-size: 0.90rem;
             }
             .header-logo {
-                width: 30px;
-                height: 30px;
+                width: 36px;
+                height: 36px;
             }
             .wallet-balance-card .balance-amount {
                 font-size: 1.8rem;
@@ -2436,6 +2520,16 @@
             .referral-stats-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
+            }
+            .full-page-section .full-page-body {
+                padding: 12px 14px;
+            }
+            .full-page-section .full-page-body .content-block {
+                padding: 14px 14px;
+                font-size: 0.90rem;
+            }
+            .full-page-section .full-page-header .page-title {
+                font-size: 0.95rem;
             }
         }
 
@@ -2496,7 +2590,7 @@
 
         .file-upload-container:hover {
             border-color: var(--primary);
-            background: rgba(227, 27, 46, 0.02);
+            background: rgba(26, 111, 181, 0.02);
         }
 
         .file-upload-icon {
@@ -2569,7 +2663,7 @@
         <video id="intro-video" style="width:100%; max-width:450px; height:100vh; object-fit:cover; display:none;" playsinline webkit-playsinline>
             <source src="https://technoesports3-lgtm.github.io/lv_0_20260404091656.mp4" type="video/mp4">
         </video>
-        <button id="get-started-btn" style="background:linear-gradient(135deg, #e31b2e 0%, #b81222 100%); color:#fff; border:none; padding:16px 50px; border-radius:30px; font-size:1.1rem; font-weight:800; text-transform:uppercase; letter-spacing:2px; box-shadow:0 8px 32px rgba(227,27,46,0.30); cursor:pointer;">
+        <button id="get-started-btn" style="background:linear-gradient(135deg, #1a6fb5 0%, #0f4b7a 100%); color:#fff; border:none; padding:16px 50px; border-radius:30px; font-size:1.1rem; font-weight:800; text-transform:uppercase; letter-spacing:2px; box-shadow:0 8px 32px rgba(26,111,181,0.30); cursor:pointer;">
             GET STARTED
         </button>
     </div>
@@ -2733,7 +2827,7 @@
         ============================================================= -->
         <div id="loading-screen">
             <div class="loading-logo">
-                <i class="fas fa-gamepad"></i>
+                <img src="https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png" alt="TECHNO E-SPORTS">
             </div>
             <div class="loading-text">TECHNO E-SPORTS</div>
             <div class="loading-spinner-large"></div>
@@ -2773,9 +2867,6 @@
                     <div class="refresh-button" onclick="refreshPage()" title="Refresh">
                         <i class="fas fa-redo-alt"></i>
                     </div>
-                    <div class="header-avatar-small" onclick="showSection('profile-section', document.querySelector('.nav-item[data-section=\'profile-section\']'))" title="Profile">
-                        <i class="fas fa-user"></i>
-                    </div>
                 </div>
             </header>
 
@@ -2797,21 +2888,21 @@
                 <!-- 2. WALLET -->
                 <section id="wallet-section" class="section" style="display:none;">
                     <div class="wallet-balance-card">
-                        <div class="balance-icon">🪙</div>
+                        <div class="balance-icon"><i class="fas fa-coins"></i></div>
                         <div class="balance-label">Total Coins</div>
                         <div class="balance-amount"><span id="wallet-balance-display">0</span></div>
                     </div>
 
                     <!-- Watch & Earn -->
-                    <div class="wallet-panel" style="background:linear-gradient(135deg, #f8f0ff 0%, #fafbfc 100%); border-color:#d0c0e8;">
-                        <div class="panel-title" style="color:#6a0dad;">
+                    <div class="wallet-panel" style="background:linear-gradient(135deg, #f0f6ff 0%, #fafbfc 100%); border-color:#b8cce0;">
+                        <div class="panel-title" style="color:#1a4a7a;">
                             <i class="fas fa-tv"></i> Watch & Earn
-                            <span id="ad-badge-text" style="margin-left:auto; background:rgba(106,13,173,0.08); color:#6a0dad; padding:2px 10px; border-radius:12px; font-size:0.65rem; font-weight:700; border:1px solid rgba(106,13,173,0.12);">Loading...</span>
+                            <span id="ad-badge-text" style="margin-left:auto; background:rgba(26,111,181,0.08); color:#1a4a7a; padding:2px 10px; border-radius:12px; font-size:0.65rem; font-weight:700; border:1px solid rgba(26,111,181,0.12);">Loading...</span>
                         </div>
                         <p id="ad-desc-text" style="color:var(--text-secondary); font-size:0.82rem; margin:0 0 12px;">Loading rules...</p>
 
                         <div style="background:rgba(0,0,0,0.04); border-radius:8px; height:10px; width:100%; margin-bottom:6px; overflow:hidden; border:1px solid var(--border);">
-                            <div id="ad-progress-bar" style="background:linear-gradient(90deg, #6a0dad, #b366ff); width:0%; height:100%; transition:width 0.4s ease-in-out; border-radius:8px;"></div>
+                            <div id="ad-progress-bar" style="background:linear-gradient(90deg, #1a6fb5, #4a8fc9); width:0%; height:100%; transition:width 0.4s ease-in-out; border-radius:8px;"></div>
                         </div>
                         <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.70rem; margin-bottom:12px;">
                             <span id="ad-progress-text">0 / X Ads Watched</span>
@@ -2819,7 +2910,7 @@
                         </div>
 
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button id="watch-ad-btn" onclick="startAd()" class="btn-primary" style="flex:1; padding:12px; font-size:0.90rem; background:linear-gradient(135deg, #6a0dad, #9b30ff);">
+                            <button id="watch-ad-btn" onclick="startAd()" class="btn-primary" style="flex:1; padding:12px; font-size:0.90rem; background:linear-gradient(135deg, #1a6fb5, #4a8fc9);">
                                 <i class="fas fa-play-circle"></i> Watch Ad Now
                             </button>
                             <button id="claim-ad-btn" onclick="claimAdReward()" style="display:none; flex:1; padding:12px; font-size:0.90rem; background:linear-gradient(135deg, #1e8e4a, #157a3e); color:#fff; border:none; border-radius:var(--radius-sm); font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(30,142,74,0.20);">
@@ -2832,21 +2923,21 @@
                     <div class="wallet-panel">
                         <div class="panel-title"><i class="fas fa-shopping-cart"></i> Buy Coins</div>
                         <div style="background:rgba(255,199,0,0.04); border:1px solid rgba(255,199,0,0.10); border-radius:var(--radius-sm); padding:8px 12px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-                            <span style="font-size:1.1rem;">💡</span>
+                            <span style="font-size:1.1rem;"><i class="fas fa-lightbulb" style="color:#ffc700;"></i></span>
                             <span style="color:var(--text-secondary); font-size:0.75rem; line-height:1.4;">
                                 Paise ≥ 50 <span style="color:#1e8e4a; font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:var(--primary); font-weight:700;">11 Coins</span>
                             </span>
                         </div>
                         <div id="coin-packages-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;"></div>
                         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:12px;">
-                            <button onclick="initiateUpiPayment(10)" class="wallet-block-btn">₹10<br><span>= 10 coins</span></button>
-                            <button onclick="initiateUpiPayment(15)" class="wallet-block-btn">₹15<br><span>= 15 coins</span></button>
-                            <button onclick="initiateUpiPayment(20)" class="wallet-block-btn">₹20<br><span>= 20 coins</span></button>
-                            <button onclick="initiateUpiPayment(25)" class="wallet-block-btn">₹25<br><span>= 25 coins</span></button>
-                            <button onclick="initiateUpiPayment(50)" class="wallet-block-btn">₹50<br><span>= 50 coins</span></button>
-                            <button onclick="initiateUpiPayment(100)" class="wallet-block-btn">₹100<br><span>= 100 coins</span></button>
-                            <button onclick="initiateUpiPayment(150)" class="wallet-block-btn">₹150<br><span>= 150 coins</span></button>
-                            <button onclick="initiateUpiPayment(200)" class="wallet-block-btn">₹200<br><span>= 200 coins</span></button>
+                            <button onclick="initiateUpiPayment(10)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>10<br><span>= 10 coins</span></button>
+                            <button onclick="initiateUpiPayment(15)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>15<br><span>= 15 coins</span></button>
+                            <button onclick="initiateUpiPayment(20)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>20<br><span>= 20 coins</span></button>
+                            <button onclick="initiateUpiPayment(25)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>25<br><span>= 25 coins</span></button>
+                            <button onclick="initiateUpiPayment(50)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>50<br><span>= 50 coins</span></button>
+                            <button onclick="initiateUpiPayment(100)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>100<br><span>= 100 coins</span></button>
+                            <button onclick="initiateUpiPayment(150)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>150<br><span>= 150 coins</span></button>
+                            <button onclick="initiateUpiPayment(200)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>200<br><span>= 200 coins</span></button>
                         </div>
                     </div>
 
@@ -2879,7 +2970,7 @@
                 <section id="referral-section" class="section" style="display:none;">
                     <div class="referral-card">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
-                            <span style="font-size:1.6rem;">🎁</span>
+                            <span style="font-size:1.6rem;"><i class="fas fa-gift" style="color:var(--primary);"></i></span>
                             <div>
                                 <h3 style="margin:0; color:var(--primary); font-size:1.1rem;">Refer & Earn</h3>
                                 <p style="color:var(--text-secondary); font-size:0.85rem; margin:0;">Share your code and earn coins!</p>
@@ -2911,7 +3002,7 @@
                     <div class="profile-card">
                         <div class="profile-cover">
                             <div class="profile-avatar">
-                                <i class="fas fa-user"></i>
+                                <img src="https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png" alt="TECHNO E-SPORTS">
                             </div>
                             <div class="profile-name" id="profile-username-display">-</div>
                             <div class="profile-email" id="profile-email-display">-</div>
@@ -2919,19 +3010,19 @@
                         <div class="profile-body">
                             <div class="profile-info-grid">
                                 <div class="profile-info-item">
-                                    <span class="label">📱 Phone</span>
+                                    <span class="label"><i class="fas fa-mobile-alt"></i> Phone</span>
                                     <span class="value" id="profile-phone">-</span>
                                 </div>
                                 <div class="profile-info-item">
-                                    <span class="label">🪙 Wallet</span>
+                                    <span class="label"><i class="fas fa-coins"></i> Wallet</span>
                                     <span class="value highlight" id="profile-wallet-balance">0 Coins</span>
                                 </div>
                                 <div class="profile-info-item">
-                                    <span class="label">🎮 Referral Code</span>
+                                    <span class="label"><i class="fas fa-gift"></i> Referral Code</span>
                                     <span class="value" id="profile-referral-code">-</span>
                                 </div>
                                 <div class="profile-info-item">
-                                    <span class="label">🏆 Tournaments</span>
+                                    <span class="label"><i class="fas fa-trophy"></i> Tournaments</span>
                                     <span class="value" id="profile-tournaments-count">0</span>
                                 </div>
                             </div>
@@ -2940,19 +3031,19 @@
 
                     <div class="profile-menu-list">
 
-                        <div class="profile-menu-item" onclick="showPrivacyPolicy()">
+                        <div class="profile-menu-item" onclick="openPrivacyPage()">
                             <div class="menu-icon privacy"><i class="fas fa-user-secret"></i></div>
                             <span class="menu-text">Privacy Policy</span>
                             <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
                         </div>
 
-                        <div class="profile-menu-item" onclick="showTermsConditions()">
+                        <div class="profile-menu-item" onclick="openTermsPage()">
                             <div class="menu-icon terms"><i class="fas fa-file-contract"></i></div>
                             <span class="menu-text">Terms &amp; Conditions</span>
                             <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
                         </div>
 
-                        <div class="profile-menu-item" onclick="showHelpSupport()">
+                        <div class="profile-menu-item" onclick="openHelpPage()">
                             <div class="menu-icon help"><i class="fas fa-life-ring"></i></div>
                             <span class="menu-text">Help &amp; Support</span>
                             <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
@@ -2978,7 +3069,7 @@
 
                 </section>
 
-                <!-- 5. CONTACT (Help & Support) -->
+                <!-- 5. CONTACT (Help & Support) – kept for backward compatibility -->
                 <section id="contact-section" class="section" style="display:none;">
                     <div class="contact-info-container" style="margin-top:0;">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
@@ -3009,7 +3100,7 @@
 
             </div> <!-- end content-area -->
 
-            <!-- NAV BAR -->
+            <!-- NAV BAR (BAL removed) -->
             <footer class="nav-bar">
                 <div class="nav-item active" data-section="home-section" onclick="showSection('home-section', this)">
                     <span class="nav-icon"><i class="fas fa-gamepad"></i></span>
@@ -3027,26 +3118,99 @@
                     <span class="nav-icon"><i class="fas fa-user"></i></span>
                     <div class="nav-label">Profile</div>
                 </div>
-                <div class="nav-item nav-balance-item" style="pointer-events:none;">
-                    <span class="nav-icon"><i class="fas fa-coins"></i></span>
-                    <div class="nav-label">BAL</div>
-                    <div class="nav-balance-value"><span id="wallet-balance-nav">0</span></div>
-                </div>
             </footer>
         </div>
 
         <!-- =============================================================
-        MODALS
+        FULL PAGE SECTIONS
         ============================================================= -->
 
-        <!-- Tournament Details -->
-        <div id="tournament-details-modal" class="modal">
-            <div class="modal-content">
-                <button class="close-button" onclick="closeModal('tournament-details-modal')">&times;</button>
-                <h3 id="tournament-details-title" style="font-size:1.2rem; color:var(--text-primary);">Tournament Details</h3>
-                <div id="tournament-details-content"></div>
+        <!-- TOURNAMENT DETAILS FULL PAGE -->
+        <div id="tournament-details-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-info-circle"></i> <span id="details-page-title">Tournament Details</span></div>
+                <button class="close-page-btn" onclick="closeDetailsPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="details-page-body">
+                <!-- populated dynamically -->
             </div>
         </div>
+
+        <!-- PRIVACY POLICY FULL PAGE -->
+        <div id="privacy-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-user-secret"></i> Privacy Policy</div>
+                <button class="close-page-btn" onclick="closePrivacyPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="privacy-page-body">
+                <div class="content-block">
+                    <h4>Information We Collect</h4>
+                    <p>We collect minimal personal information including your name, email address, phone number, and in-game IDs solely for tournament registration and communication purposes.</p>
+                    <h4>How We Use Your Data</h4>
+                    <p>Your data is used exclusively for:</p>
+                    <ul>
+                        <li>Tournament registration and management</li>
+                        <li>Communication regarding tournament updates</li>
+                        <li>Wallet and transaction management</li>
+                        <li>Referral tracking and rewards</li>
+                    </ul>
+                    <h4>Data Security</h4>
+                    <p>We implement industry-standard security measures to protect your data. Your information is not shared with third parties without your explicit consent.</p>
+                    <h4>Your Rights</h4>
+                    <p>You have the right to access, modify, or delete your personal data at any time. Contact us for any privacy concerns.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMS & CONDITIONS FULL PAGE -->
+        <div id="terms-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-file-contract"></i> Terms &amp; Conditions</div>
+                <button class="close-page-btn" onclick="closeTermsPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="terms-page-body">
+                <div class="content-block">
+                    <h4>1. Tournament Participation</h4>
+                    <p>All tournament registrations are final. Players must have sufficient wallet balance to join paid tournaments. Entry fees are non-refundable once registered.</p>
+                    <h4>2. Fair Play</h4>
+                    <p>Players must follow the rules of each tournament. Any form of cheating, hacking, or misconduct will result in immediate disqualification and potential account ban.</p>
+                    <h4>3. Prizes and Rewards</h4>
+                    <p>Prizes are distributed as per the tournament guidelines. The admin's decision regarding prize distribution is final and binding.</p>
+                    <h4>4. Account Responsibility</h4>
+                    <p>Users are responsible for maintaining the security of their accounts. Any activity under your account is your responsibility.</p>
+                    <h4>5. Termination</h4>
+                    <p>We reserve the right to terminate accounts that violate these terms or engage in any harmful activity towards other players or the platform.</p>
+                    <h4>6. Changes to Terms</h4>
+                    <p>We may update these terms from time to time. Continued use of the platform constitutes acceptance of the updated terms.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HELP & SUPPORT FULL PAGE -->
+        <div id="help-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-life-ring"></i> Help &amp; Support</div>
+                <button class="close-page-btn" onclick="closeHelpPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="help-page-body">
+                <div class="content-block">
+                    <h4>How can we help you?</h4>
+                    <p>Welcome to TECHNO E-SPORTS Support. Here are some common topics:</p>
+                    <ul>
+                        <li><strong>Account Issues:</strong> For login, registration, or profile-related issues, please contact us via email.</li>
+                        <li><strong>Tournament Registration:</strong> If you face issues joining a tournament, check your wallet balance and ensure the tournament is still open.</li>
+                        <li><strong>Wallet &amp; Payments:</strong> For transaction issues, coin purchases, or withdrawal queries, reach out to our support team.</li>
+                        <li><strong>Technical Support:</strong> For app bugs, feature requests, or technical difficulties, we're here to assist.</li>
+                    </ul>
+                    <p style="margin-top:12px;"><strong>Response Time:</strong> We aim to respond within 24-48 hours.</p>
+                    <p style="margin-top:8px;"><strong>Email:</strong> <span id="help-email-text" style="color:var(--primary);font-weight:700;">Loading...</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =============================================================
+        MODALS (kept for other modals)
+        ============================================================= -->
 
         <!-- Players -->
         <div id="players-modal" class="modal">
@@ -3222,22 +3386,22 @@
             const grid = document.getElementById('coin-packages-grid');
             if (!grid) return;
             grid.innerHTML = COIN_PACKAGES.map(pkg => `
-                    <div onclick="initiateUpiPayment(${pkg.price})"
-                         style="background:#f5f7fa; border:1px solid ${pkg.best ? '#ffc700' : pkg.popular ? 'var(--primary)' : 'var(--border)'};
-                                border-radius:var(--radius-sm); padding:10px 4px; text-align:center; cursor:pointer;
-                                position:relative; overflow:hidden; transition:all var(--transition);"
-                         onmouseover="this.style.background='#ffffff'; this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-hover)'"
-                         onmouseout="this.style.background='#f5f7fa'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                        ${pkg.best ? `<div style="position:absolute;top:0;left:0;right:0;background:#ffc700;color:#121826;font-size:0.50rem;font-weight:800;padding:2px;letter-spacing:1px;">BEST</div>` : ''}
-                        ${pkg.popular && !pkg.best ? `<div style="position:absolute;top:0;left:0;right:0;background:var(--primary);color:#fff;font-size:0.50rem;font-weight:800;padding:2px;letter-spacing:1px;">HOT</div>` : ''}
-                        <div style="font-size:1.2rem;margin:${pkg.best || pkg.popular ? '8px 0 2px' : '2px 0 2px'};">🪙</div>
-                        <div style="color:var(--text-primary);font-size:0.90rem;font-weight:800;line-height:1;">${pkg.coins}</div>
-                        <div style="color:var(--text-muted);font-size:0.55rem;margin-bottom:4px;">coins</div>
-                        <div style="background:var(--primary-gradient);color:#fff;border-radius:6px;padding:3px 2px;font-size:0.68rem;font-weight:700;">
-                            ₹${pkg.price}
+                        <div onclick="initiateUpiPayment(${pkg.price})"
+                             style="background:#f5f7fa; border:1px solid ${pkg.best ? '#ffc700' : pkg.popular ? 'var(--primary)' : 'var(--border)'};
+                                    border-radius:var(--radius-sm); padding:10px 4px; text-align:center; cursor:pointer;
+                                    position:relative; overflow:hidden; transition:all var(--transition);"
+                             onmouseover="this.style.background='#ffffff'; this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-hover)'"
+                             onmouseout="this.style.background='#f5f7fa'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            ${pkg.best ? `<div style="position:absolute;top:0;left:0;right:0;background:#ffc700;color:#121826;font-size:0.50rem;font-weight:800;padding:2px;letter-spacing:1px;">BEST</div>` : ''}
+                            ${pkg.popular && !pkg.best ? `<div style="position:absolute;top:0;left:0;right:0;background:var(--primary);color:#fff;font-size:0.50rem;font-weight:800;padding:2px;letter-spacing:1px;">HOT</div>` : ''}
+                            <div style="font-size:1.2rem;margin:${pkg.best || pkg.popular ? '8px 0 2px' : '2px 0 2px'};"><i class="fas fa-coins" style="color:var(--primary);"></i></div>
+                            <div style="color:var(--text-primary);font-size:0.90rem;font-weight:800;line-height:1;">${pkg.coins}</div>
+                            <div style="color:var(--text-muted);font-size:0.55rem;margin-bottom:4px;">coins</div>
+                            <div style="background:var(--primary-gradient);color:#fff;border-radius:6px;padding:3px 2px;font-size:0.68rem;font-weight:700;">
+                                <i class="fas fa-rupee-sign"></i> ${pkg.price}
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('');
         }
 
         // ─── TOAST ───
@@ -3548,7 +3712,7 @@
 
         function updateWalletUI() {
             const bal = Math.floor(Number(walletBalance || 0));
-            ['wallet-balance-nav', 'wallet-balance-display'].forEach(id => {
+            ['wallet-balance-display'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = bal;
             });
@@ -3585,7 +3749,7 @@
             } catch (e) {
                 console.error('Wallet transactions error:', e);
                 if (container) container.innerHTML =
-                '<p style="color:#d72638;text-align:center;">Failed to load transactions.</p>';
+                    '<p style="color:#d72638;text-align:center;">Failed to load transactions.</p>';
             }
         }
 
@@ -3604,17 +3768,17 @@
                 const dateText = tx.createdAt || tx.date || tx.timestamp ? new Date(tx.createdAt || tx.date || tx
                     .timestamp).toLocaleString() : 'N/A';
                 return `
-                        <div class="wallet-tx-item ${isCredit ? 'credit' : 'debit'}">
-                            <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
-                                <div style="color:var(--text-primary);font-weight:600;">${tx.description || 'Wallet transaction'}</div>
-                                <div style="color:${color};font-weight:700;">${sign}${amount}</div>
+                            <div class="wallet-tx-item ${isCredit ? 'credit' : 'debit'}">
+                                <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
+                                    <div style="color:var(--text-primary);font-weight:600;">${tx.description || 'Wallet transaction'}</div>
+                                    <div style="color:${color};font-weight:700;">${sign}${amount}</div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;color:var(--text-muted);font-size:0.78rem;margin-top:4px;">
+                                    <span>${isCredit ? 'Credit' : 'Debit'}</span>
+                                    <span>${dateText}</span>
+                                </div>
                             </div>
-                            <div style="display:flex;justify-content:space-between;color:var(--text-muted);font-size:0.78rem;margin-top:4px;">
-                                <span>${isCredit ? 'Credit' : 'Debit'}</span>
-                                <span>${dateText}</span>
-                            </div>
-                        </div>
-                    `;
+                        `;
             }).join('');
         }
 
@@ -3706,7 +3870,7 @@
             if (!user) return showToast('Please login first', 'error');
             amount = Number(amount);
             if (!amount || amount < 10 || amount > 10000) return showToast('Enter amount between ₹10 and ₹10000',
-            'error');
+                'error');
             try {
                 showToast('Generating Payment QR...', 'info');
                 const r = await fetch(`${BACKEND_BASE_URL}/api/payment/create-upi-order`, {
@@ -3729,45 +3893,45 @@
             modal.style.cssText =
                 `position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);padding:16px;box-sizing:border-box;`;
             modal.innerHTML = `
-                    <div style="background:#ffffff;border-radius:var(--radius);padding:0;width:100%;max-width:360px;border:1px solid var(--border);overflow:hidden;max-height:92vh;overflow-y:auto;">
-                        <div style="background:#f5f7fa;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);">
-                            <div style="color:var(--text-primary);font-weight:700;">Complete Payment</div>
-                            <button onclick="document.getElementById('upi-payment-modal').remove();" style="background:var(--border);border:none;color:var(--text-muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;">✕</button>
-                        </div>
-                        <div style="padding:16px 20px;text-align:center;border-bottom:1px solid var(--border);">
-                            <div style="color:var(--text-muted);font-size:0.70rem;margin-bottom:4px;">You Will Receive</div>
-                            <div style="color:#ffc700;font-size:2rem;font-weight:900;">${data.coins} 🪙 Coins</div>
-                            <div style="color:var(--text-muted);font-size:0.65rem;margin:6px 0 4px;">Pay Exactly</div>
-                            <div style="color:var(--text-primary);font-size:1.8rem;font-weight:900;">₹${data.amount}</div>
-                            <div style="color:var(--primary);font-size:0.65rem;margin-top:4px;">⚠️ pay exact amount along with paise</div>
-                        </div>
-                        <div style="padding:20px;text-align:center;border-bottom:1px solid var(--border);">
-                            <div style="color:var(--text-muted);font-size:0.72rem;margin-bottom:10px;">Scan QR with any UPI app</div>
-                            <div style="background:#ffffff;border-radius:var(--radius-sm);padding:12px;display:inline-block;border:1px solid var(--border);">
-                                <img src="${data.qrCodeUrl}" alt="UPI QR" style="width:160px;height:160px;background:#ffffff;border-radius:8px;">
+                        <div style="background:#ffffff;border-radius:var(--radius);padding:0;width:100%;max-width:360px;border:1px solid var(--border);overflow:hidden;max-height:92vh;overflow-y:auto;">
+                            <div style="background:#f5f7fa;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);">
+                                <div style="color:var(--text-primary);font-weight:700;">Complete Payment</div>
+                                <button onclick="document.getElementById('upi-payment-modal').remove();" style="background:var(--border);border:none;color:var(--text-muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;">✕</button>
                             </div>
-                            <div style="color:var(--text-muted);font-size:0.65rem;margin-top:8px;">Valid for 10 minutes only</div>
-                        </div>
-                        <div style="margin:0 16px;margin-top:14px;background:#fdf8e8;border:1px solid #f5e6b0;border-radius:var(--radius-sm);padding:12px;text-align:center;">
-                            <div style="color:#b8860b;font-size:0.68rem;font-weight:600;">Add in Payment Remarks</div>
-                            <div style="color:var(--text-primary);font-size:1.4rem;font-weight:800;letter-spacing:4px;">${data.refNumber}</div>
-                        </div>
-                        <div style="padding:16px;">
-                            <div style="color:var(--text-muted);font-size:0.68rem;text-align:center;margin-bottom:10px;">Or pay directly with</div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-                                <a href="${data.gpayLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#4285F4;font-weight:700;font-size:0.85rem;">GPay</div></a>
-                                <a href="${data.phonepeLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#5f259f;font-weight:700;font-size:0.85rem;">PhonePe</div></a>
-                                <a href="${data.upiLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#00529C;font-weight:700;font-size:0.85rem;">BHIM/UPI</div></a>
+                            <div style="padding:16px 20px;text-align:center;border-bottom:1px solid var(--border);">
+                                <div style="color:var(--text-muted);font-size:0.70rem;margin-bottom:4px;">You Will Receive</div>
+                                <div style="color:#ffc700;font-size:2rem;font-weight:900;">${data.coins} <i class="fas fa-coins" style="font-size:1.6rem;"></i> Coins</div>
+                                <div style="color:var(--text-muted);font-size:0.65rem;margin:6px 0 4px;">Pay Exactly</div>
+                                <div style="color:var(--text-primary);font-size:1.8rem;font-weight:900;"><i class="fas fa-rupee-sign"></i> ${data.amount}</div>
+                                <div style="color:var(--primary);font-size:0.65rem;margin-top:4px;">⚠️ pay exact amount along with paise</div>
+                            </div>
+                            <div style="padding:20px;text-align:center;border-bottom:1px solid var(--border);">
+                                <div style="color:var(--text-muted);font-size:0.72rem;margin-bottom:10px;">Scan QR with any UPI app</div>
+                                <div style="background:#ffffff;border-radius:var(--radius-sm);padding:12px;display:inline-block;border:1px solid var(--border);">
+                                    <img src="${data.qrCodeUrl}" alt="UPI QR" style="width:160px;height:160px;background:#ffffff;border-radius:8px;">
+                                </div>
+                                <div style="color:var(--text-muted);font-size:0.65rem;margin-top:8px;">Valid for 10 minutes only</div>
+                            </div>
+                            <div style="margin:0 16px;margin-top:14px;background:#fdf8e8;border:1px solid #f5e6b0;border-radius:var(--radius-sm);padding:12px;text-align:center;">
+                                <div style="color:#b8860b;font-size:0.68rem;font-weight:600;">Add in Payment Remarks</div>
+                                <div style="color:var(--text-primary);font-size:1.4rem;font-weight:800;letter-spacing:4px;">${data.refNumber}</div>
+                            </div>
+                            <div style="padding:16px;">
+                                <div style="color:var(--text-muted);font-size:0.68rem;text-align:center;margin-bottom:10px;">Or pay directly with</div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                                    <a href="${data.gpayLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#4285F4;font-weight:700;font-size:0.85rem;"><i class="fab fa-google-pay"></i> GPay</div></a>
+                                    <a href="${data.phonepeLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#5f259f;font-weight:700;font-size:0.85rem;"><i class="fas fa-mobile-alt"></i> PhonePe</div></a>
+                                    <a href="${data.upiLink}" style="text-decoration:none;"><div style="background:#f5f7fa;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;color:#00529C;font-weight:700;font-size:0.85rem;"><i class="fas fa-qrcode"></i> BHIM/UPI</div></a>
+                                </div>
+                            </div>
+                            <div style="padding:0 16px 20px;">
+                                <button id="check-status-btn" onclick="startPaymentPolling('${data.refNumber}');this.innerHTML='Checking...';this.disabled=true;this.style.background='#f0f2f6';this.style.color='#7a8293';" style="width:100%;background:var(--primary-gradient);border:none;color:#fff;padding:14px;border-radius:var(--radius-sm);font-weight:700;cursor:pointer;font-size:0.90rem;">
+                                    <i class="fas fa-check"></i> I've Paid — Verify Payment
+                                </button>
+                                <div style="text-align:center;color:var(--text-muted);font-size:0.65rem;margin-top:6px;">Payment will be verified automatically within seconds</div>
                             </div>
                         </div>
-                        <div style="padding:0 16px 20px;">
-                            <button id="check-status-btn" onclick="startPaymentPolling('${data.refNumber}');this.innerHTML='Checking...';this.disabled=true;this.style.background='#f0f2f6';this.style.color='#7a8293';" style="width:100%;background:var(--primary-gradient);border:none;color:#fff;padding:14px;border-radius:var(--radius-sm);font-weight:700;cursor:pointer;font-size:0.90rem;">
-                                I've Paid — Verify Payment
-                            </button>
-                            <div style="text-align:center;color:var(--text-muted);font-size:0.65rem;margin-top:6px;">Payment will be verified automatically within seconds</div>
-                        </div>
-                    </div>
-                `;
+                    `;
             document.body.appendChild(modal);
             startPaymentPolling(data.refNumber);
         }
@@ -4021,39 +4185,38 @@
                 '';
 
             card.innerHTML = `
-                    <div class="tournament-banner-wrap">
-                        <img src="${tournament.imageUrl || 'https://via.placeholder.com/400x140?text=Tournament'}" alt="${tournament.title}" class="tournament-banner">
-                        <div class="tournament-banner-overlay">
-                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                <div class="tournament-badge">
-                                    <span class="badge-logo"><img src="${LOGO_URL}" alt="TECHNO"></span>
-                                    TECHNO
+                        <div class="tournament-banner-wrap">
+                            <img src="${tournament.imageUrl || 'https://via.placeholder.com/400x140?text=Tournament'}" alt="${tournament.title}" class="tournament-banner">
+                            <div class="tournament-banner-overlay">
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                    <div class="tournament-badge">
+                                        <span class="badge-logo"><img src="${LOGO_URL}" alt="TECHNO"></span>
+                                    </div>
+                                    <div class="tournament-title">${tournament.title}</div>
                                 </div>
-                                <div class="tournament-title">${tournament.title}</div>
+                                <div class="tournament-status ${statusClass}">${tournamentStatus}</div>
                             </div>
-                            <div class="tournament-status ${statusClass}">${tournamentStatus}</div>
                         </div>
-                    </div>
-                    <div class="tournament-content">
-                        <div class="tournament-info-row">
-                            <span class="tournament-date"><i class="far fa-calendar-alt"></i> ${tDate} • ${tTime}</span>
-                            <span class="tournament-price">${entryFee}</span>
+                        <div class="tournament-content">
+                            <div class="tournament-info-row">
+                                <span class="tournament-date"><i class="far fa-calendar-alt"></i> ${tDate} • ${tTime}</span>
+                                <span class="tournament-price"><i class="fas fa-coins"></i> ${entryFee}</span>
+                            </div>
+                            ${regTimerHTML}
+                            ${startTimerHTML}
+                            <div class="tournament-stats">
+                                <div class="stat-item"><div class="stat-value">${maxP}</div><div class="stat-label">Max ${tournament.category === 'solo' ? 'Players' : tournament.category === 'duo' ? 'Teams' : 'Squads'}</div></div>
+                                <div class="stat-item"><div class="stat-value">${currentP}</div><div class="stat-label">Registered</div></div>
+                                <div class="stat-item"><div class="stat-value">${displayVal}</div><div class="stat-label">${displayLabel}</div></div>
+                            </div>
+                            <div class="tournament-actions">
+                                <button class="action-btn details-btn" onclick="showTournamentDetails('${tournament.id}')"><i class="fas fa-info-circle"></i> Details</button>
+                                <button class="action-btn players-btn" onclick="showTournamentPlayers('${tournament.id}')"><i class="fas fa-users"></i> Players</button>
+                                ${showJoin && !registrationEnded ? `<button class="action-btn join-btn" onclick="registerForTournament('${tournament.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-gamepad"></i> Join</button>` : ''}
+                            </div>
+                            ${showCreds ? `<button class="view-credentials-btn" onclick="showTournamentCredentials('${tournament.id}')"><i class="fas fa-key"></i> View ID & Password</button>` : ''}
                         </div>
-                        ${regTimerHTML}
-                        ${startTimerHTML}
-                        <div class="tournament-stats">
-                            <div class="stat-item"><div class="stat-value">${maxP}</div><div class="stat-label">Max ${tournament.category === 'solo' ? 'Players' : tournament.category === 'duo' ? 'Teams' : 'Squads'}</div></div>
-                            <div class="stat-item"><div class="stat-value">${currentP}</div><div class="stat-label">Registered</div></div>
-                            <div class="stat-item"><div class="stat-value">${displayVal}</div><div class="stat-label">${displayLabel}</div></div>
-                        </div>
-                        <div class="tournament-actions">
-                            <button class="action-btn details-btn" onclick="showTournamentDetails('${tournament.id}')"><i class="fas fa-info-circle"></i> Details</button>
-                            <button class="action-btn players-btn" onclick="showTournamentPlayers('${tournament.id}')"><i class="fas fa-users"></i> Players</button>
-                            ${showJoin && !registrationEnded ? `<button class="action-btn join-btn" onclick="registerForTournament('${tournament.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-gamepad"></i> Join</button>` : ''}
-                        </div>
-                        ${showCreds ? `<button class="view-credentials-btn" onclick="showTournamentCredentials('${tournament.id}')"><i class="fas fa-key"></i> View ID & Password</button>` : ''}
-                    </div>
-                `;
+                    `;
 
             if (tournament.registrationEndTime) setTimeout(() => startTournamentTimer(tournament), 100);
             if (tournament.conductingDate && tournament.conductingTime && !tournamentStarted) setTimeout(() =>
@@ -4062,12 +4225,14 @@
             return card;
         }
 
+        // ─── TOURNAMENT DETAILS FULL PAGE ───
         function showTournamentDetails(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
             selectedTournament = t;
-            const modal = document.getElementById('tournament-details-modal');
-            document.getElementById('tournament-details-title').textContent = t.title;
+            const page = document.getElementById('tournament-details-page');
+            document.getElementById('details-page-title').textContent = t.title;
+
             let tTime = t.conductingTime || 'TBA';
             if (tTime !== 'TBA' && tTime.includes(':')) {
                 const [h, m] = tTime.split(':');
@@ -4087,12 +4252,12 @@
                         minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
                         seconds = Math.floor((diff % (1000 * 60)) / 1000);
                     timerHTML = `
-                            <div style="background:rgba(227,27,46,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(227,27,46,0.08);">
-                                <div style="color:var(--primary);font-weight:700;margin-bottom:4px;font-size:0.85rem;"><i class="fas fa-clock"></i> Registration Ends In</div>
-                                <div style="font-family:monospace;font-size:1.1rem;text-align:center;color:var(--text-primary);">${String(hours).padStart(2,'0')}hr ${String(minutes).padStart(2,'0')}min ${String(seconds).padStart(2,'0')}s</div>
-                                <div style="color:var(--text-muted);font-size:0.75rem;text-align:center;margin-top:4px;">Registration closes on: ${end.toLocaleString()}</div>
-                            </div>
-                        `;
+                                <div style="background:rgba(26,111,181,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(26,111,181,0.08);">
+                                    <div style="color:var(--primary);font-weight:700;margin-bottom:4px;font-size:0.85rem;"><i class="fas fa-clock"></i> Registration Ends In</div>
+                                    <div style="font-family:monospace;font-size:1.1rem;text-align:center;color:var(--text-primary);">${String(hours).padStart(2,'0')}hr ${String(minutes).padStart(2,'0')}min ${String(seconds).padStart(2,'0')}s</div>
+                                    <div style="color:var(--text-muted);font-size:0.75rem;text-align:center;margin-top:4px;">Registration closes on: ${end.toLocaleString()}</div>
+                                </div>
+                            `;
                 } else {
                     timerHTML =
                         `<div style="background:rgba(215,38,56,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(215,38,56,0.08);"><div style="color:#d72638;font-weight:700;text-align:center;"><i class="fas fa-exclamation-circle"></i> Registration Closed</div></div>`;
@@ -4110,45 +4275,80 @@
                         mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
                         secs = Math.floor((diff % (1000 * 60)) / 1000);
                     startTimerHTML = `
-                            <div style="background:rgba(255,199,0,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(255,199,0,0.08);">
-                                <div style="color:#b8860b;font-weight:700;margin-bottom:4px;font-size:0.85rem;"><i class="fas fa-hourglass-start"></i> Tournament Starts In</div>
-                                <div style="font-family:monospace;font-size:1.1rem;text-align:center;color:var(--text-primary);">${String(hrs).padStart(2,'0')}hr ${String(mins).padStart(2,'0')}min ${String(secs).padStart(2,'0')}s</div>
-                                <div style="color:var(--text-muted);font-size:0.75rem;text-align:center;margin-top:4px;">Tournament starts on: ${d.toLocaleString()}</div>
-                            </div>
-                        `;
+                                <div style="background:rgba(255,199,0,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(255,199,0,0.08);">
+                                    <div style="color:#b8860b;font-weight:700;margin-bottom:4px;font-size:0.85rem;"><i class="fas fa-hourglass-start"></i> Tournament Starts In</div>
+                                    <div style="font-family:monospace;font-size:1.1rem;text-align:center;color:var(--text-primary);">${String(hrs).padStart(2,'0')}hr ${String(mins).padStart(2,'0')}min ${String(secs).padStart(2,'0')}s</div>
+                                    <div style="color:var(--text-muted);font-size:0.75rem;text-align:center;margin-top:4px;">Tournament starts on: ${d.toLocaleString()}</div>
+                                </div>
+                            `;
                 } else if (d <= new Date()) {
                     startTimerHTML =
                         `<div style="background:rgba(227,27,46,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(227,27,46,0.08);"><div style="color:var(--primary);font-weight:700;text-align:center;"><i class="fas fa-play-circle"></i> Tournament In Progress</div><div style="color:var(--text-muted);font-size:0.75rem;text-align:center;margin-top:4px;">Started on: ${d.toLocaleString()}</div></div>`;
                 }
             }
 
-            document.getElementById('tournament-details-content').innerHTML = `
-                    <div style="text-align:center;margin-bottom:12px;"><img src="${t.imageUrl || 'https://via.placeholder.com/400x200?text=Tournament+Banner'}" alt="${t.title}" style="width:100%;border-radius:var(--radius-sm);margin-bottom:10px;"></div>
-                    ${timerHTML}
-                    ${startTimerHTML}
-                    <div style="background:#f5f7fa;padding:14px;border-radius:var(--radius-sm);margin-bottom:14px;">
-                        <h4 style="color:var(--primary);margin-top:0;font-size:0.90rem;">Tournament Information</h4>
-                        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Date</div><div style="color:var(--text-primary);font-weight:700;font-size:0.90rem;">${tDate}</div></div>
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Time</div><div style="color:var(--text-primary);font-weight:700;font-size:0.90rem;">${tTime}</div></div>
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Category</div><div style="color:var(--text-primary);font-weight:700;text-transform:capitalize;font-size:0.90rem;">${t.category}</div></div>
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Entry Fee</div><div style="color:var(--primary);font-weight:700;font-size:0.90rem;">${t.entryFee || 0}</div></div>
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Max ${t.category === 'solo' ? 'Players' : t.category === 'duo' ? 'Teams' : 'Squads'}</div><div style="color:var(--text-primary);font-weight:700;font-size:0.90rem;">${t.maxParticipants || 0}</div></div>
-                            <div><div style="color:var(--text-muted);font-size:0.75rem;">Registered</div><div style="color:var(--text-primary);font-weight:700;font-size:0.90rem;">${t.participants || 0}</div></div>
+            document.getElementById('details-page-body').innerHTML = `
+                        <div style="text-align:center;margin-bottom:16px;">
+                            <img src="${t.imageUrl || 'https://via.placeholder.com/400x200?text=Tournament+Banner'}" alt="${t.title}" style="width:100%;border-radius:var(--radius-sm);max-height:220px;object-fit:cover;">
                         </div>
-                    </div>
-                    <div style="background:#f5f7fa;padding:14px;border-radius:var(--radius-sm);margin-bottom:14px;">
-                        <h4 style="color:var(--primary);margin-top:0;font-size:0.90rem;">${t.category === 'solo' ? 'Per Kill' : 'Prizes'}</h4>
-                        <div style="color:var(--text-primary);line-height:1.5;font-size:0.90rem;white-space:pre-line;">${t.category === 'solo' ? (t.perKill || 'N/A') : (t.prizes || 'N/A')}</div>
-                    </div>
-                    <div style="background:#f5f7fa;padding:14px;border-radius:var(--radius-sm);">
-                        <h4 style="color:var(--primary);margin-top:0;font-size:0.90rem;">Details</h4>
-                        <div style="color:var(--text-secondary);line-height:1.5;white-space:pre-line;font-size:0.90rem;">${t.details || 'No details provided.'}</div>
-                    </div>
-                `;
-            modal.style.display = 'block';
+                        ${timerHTML}
+                        ${startTimerHTML}
+                        <div class="content-block">
+                            <h4><i class="fas fa-info-circle" style="color:var(--primary);"></i> Tournament Information</h4>
+                            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px;">
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Date</div><div style="color:var(--text-primary);font-weight:700;font-size:0.95rem;">${tDate}</div></div>
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Time</div><div style="color:var(--text-primary);font-weight:700;font-size:0.95rem;">${tTime}</div></div>
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Category</div><div style="color:var(--text-primary);font-weight:700;text-transform:capitalize;font-size:0.95rem;">${t.category}</div></div>
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Entry Fee</div><div style="color:var(--primary);font-weight:700;font-size:0.95rem;"><i class="fas fa-coins"></i> ${t.entryFee || 0}</div></div>
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Max ${t.category === 'solo' ? 'Players' : t.category === 'duo' ? 'Teams' : 'Squads'}</div><div style="color:var(--text-primary);font-weight:700;font-size:0.95rem;">${t.maxParticipants || 0}</div></div>
+                                <div><div style="color:var(--text-muted);font-size:0.75rem;">Registered</div><div style="color:var(--text-primary);font-weight:700;font-size:0.95rem;">${t.participants || 0}</div></div>
+                            </div>
+                        </div>
+                        <div class="content-block">
+                            <h4><i class="fas fa-trophy" style="color:var(--primary);"></i> ${t.category === 'solo' ? 'Per Kill' : 'Prizes'}</h4>
+                            <div style="color:var(--text-primary);line-height:1.6;white-space:pre-line;font-size:0.95rem;">${t.category === 'solo' ? (t.perKill || 'N/A') : (t.prizes || 'N/A')}</div>
+                        </div>
+                        <div class="content-block">
+                            <h4><i class="fas fa-file-alt" style="color:var(--primary);"></i> Details</h4>
+                            <div style="color:var(--text-secondary);line-height:1.7;white-space:pre-line;font-size:0.95rem;">${t.details || 'No details provided.'}</div>
+                        </div>
+                    `;
+            page.style.display = 'block';
         }
 
+        function closeDetailsPage() {
+            document.getElementById('tournament-details-page').style.display = 'none';
+        }
+
+        // ─── PRIVACY, TERMS, HELP FULL PAGES ───
+        function openPrivacyPage() {
+            document.getElementById('privacy-page').style.display = 'block';
+        }
+
+        function closePrivacyPage() {
+            document.getElementById('privacy-page').style.display = 'none';
+        }
+
+        function openTermsPage() {
+            document.getElementById('terms-page').style.display = 'block';
+        }
+
+        function closeTermsPage() {
+            document.getElementById('terms-page').style.display = 'none';
+        }
+
+        function openHelpPage() {
+            const emailEl = document.getElementById('help-email-text');
+            if (appConfig.contactEmail) emailEl.textContent = appConfig.contactEmail;
+            else emailEl.textContent = 'Loading...';
+            document.getElementById('help-page').style.display = 'block';
+        }
+
+        function closeHelpPage() {
+            document.getElementById('help-page').style.display = 'none';
+        }
+
+        // ─── PLAYERS MODAL ───
         function showTournamentPlayers(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -4177,16 +4377,16 @@
                             'background:#f5f7fa;padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:6px;border:1px solid var(--border);';
                         if (selectedTournament.category === 'solo') {
                             div.innerHTML = `
-                                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                                        <div><div style="font-weight:700;color:var(--text-primary);font-size:0.90rem;">${reg.playerDetails?.[0]?.name || 'Player'}</div><div style="color:var(--text-muted);font-size:0.80rem;">FF ID: ${reg.playerDetails?.[0]?.freeFireId || 'N/A'}</div></div>
-                                        <div style="color:var(--primary);font-weight:700;font-size:0.90rem;">#${i + 1}</div>
-                                    </div>
-                                `;
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div><div style="font-weight:700;color:var(--text-primary);font-size:0.90rem;">${reg.playerDetails?.[0]?.name || 'Player'}</div><div style="color:var(--text-muted);font-size:0.80rem;">FF ID: ${reg.playerDetails?.[0]?.freeFireId || 'N/A'}</div></div>
+                                            <div style="color:var(--primary);font-weight:700;font-size:0.90rem;">#${i + 1}</div>
+                                        </div>
+                                    `;
                         } else {
                             div.innerHTML = `
-                                    <div style="margin-bottom:4px;"><div style="font-weight:700;color:var(--text-primary);margin-bottom:2px;font-size:0.90rem;">${reg.teamName || 'Unknown Team'}</div></div>
-                                    <div style="color:var(--text-muted);font-size:0.80rem;">Registered on: ${reg.registeredAt?.toDate ? new Date(reg.registeredAt.toDate()).toLocaleDateString() : 'N/A'}</div>
-                                `;
+                                        <div style="margin-bottom:4px;"><div style="font-weight:700;color:var(--text-primary);margin-bottom:2px;font-size:0.90rem;">${reg.teamName || 'Unknown Team'}</div></div>
+                                        <div style="color:var(--text-muted);font-size:0.80rem;">Registered on: ${reg.registeredAt?.toDate ? new Date(reg.registeredAt.toDate()).toLocaleDateString() : 'N/A'}</div>
+                                    `;
                         }
                         content.appendChild(div);
                     });
@@ -4196,6 +4396,7 @@
                 showToast('Error loading registration data.', 'error'); }
         }
 
+        // ─── REGISTRATION ───
         function registerForTournament(tournamentId) {
             if (!currentUser) return showToast("Please login to register.", 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
@@ -4228,17 +4429,17 @@
             }
 
             details.innerHTML = `
-                    <div style="background:rgba(227,27,46,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(227,27,46,0.08);">
-                        <div style="font-weight:700;color:var(--primary);margin-bottom:4px;font-size:0.95rem;">${t.title}</div>
-                        <div style="color:var(--text-muted);font-size:0.80rem;">${t.category.toUpperCase()} • ${t.entryFee || 0} Entry Fee</div>
-                    </div>
-                    ${timerHTML}
-                `;
+                        <div style="background:rgba(26,111,181,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(26,111,181,0.08);">
+                            <div style="font-weight:700;color:var(--primary);margin-bottom:4px;font-size:0.95rem;">${t.title}</div>
+                            <div style="color:var(--text-muted);font-size:0.80rem;">${t.category.toUpperCase()} • <i class="fas fa-coins"></i> ${t.entryFee || 0} Entry Fee</div>
+                        </div>
+                        ${timerHTML}
+                    `;
 
             let formHTML = `
-                    <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Email</label><input type="email" id="register-email" value="${currentUser.email || ''}" readonly class="readonly-field"><small style="color:var(--text-muted);font-size:0.75rem;">Account email (cannot be changed)</small></div>
-                    <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Mobile Number</label><input type="tel" id="register-mobile" placeholder="Enter your mobile number" required></div>
-                `;
+                        <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Email</label><input type="email" id="register-email" value="${currentUser.email || ''}" readonly class="readonly-field"><small style="color:var(--text-muted);font-size:0.75rem;">Account email (cannot be changed)</small></div>
+                        <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Mobile Number</label><input type="tel" id="register-mobile" placeholder="Enter your mobile number" required></div>
+                    `;
 
             if (t.category === 'duo' || t.category === 'squad') {
                 formHTML +=
@@ -4248,21 +4449,21 @@
             const playerCount = t.category === 'solo' ? 1 : t.category === 'duo' ? 2 : 4;
             for (let i = 1; i <= playerCount; i++) {
                 formHTML += `
-                        <div class="player-details-section">
-                            <h4>Player ${i} Details</h4>
-                            <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire Name</label><input type="text" id="player${i}-name" placeholder="Enter Exact In-Game Name" required></div>
-                            <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire ID</label><input type="text" id="player${i}-id" placeholder="Player ${i} Free Fire ID" required pattern="[0-9]*" title="Enter numbers only"><small style="color:var(--text-muted);font-size:0.75rem;">Enter Player ${i} Free Fire ID (numeric only)</small></div>
-                        </div>
-                    `;
+                            <div class="player-details-section">
+                                <h4><i class="fas fa-user"></i> Player ${i} Details</h4>
+                                <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire Name</label><input type="text" id="player${i}-name" placeholder="Enter Exact In-Game Name" required></div>
+                                <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire ID</label><input type="text" id="player${i}-id" placeholder="Player ${i} Free Fire ID" required pattern="[0-9]*" title="Enter numbers only"><small style="color:var(--text-muted);font-size:0.75rem;">Enter Player ${i} Free Fire ID (numeric only)</small></div>
+                            </div>
+                        `;
             }
 
             formHTML += `
-                    <div style="text-align:center;margin:14px 0;">
-                        <button class="btn-primary" onclick="proceedToPayment()" style="width:100%;" id="submit-registration-btn">
-                            <i class="fas fa-arrow-right"></i> Join Tournament (${t.entryFee || 0})
-                        </button>
-                    </div>
-                `;
+                        <div style="text-align:center;margin:14px 0;">
+                            <button class="btn-primary" onclick="proceedToPayment()" style="width:100%;" id="submit-registration-btn">
+                                <i class="fas fa-arrow-right"></i> Join Tournament (<i class="fas fa-coins"></i> ${t.entryFee || 0})
+                            </button>
+                        </div>
+                    `;
 
             form.innerHTML = formHTML;
             modal.style.display = 'block';
@@ -4325,7 +4526,7 @@
                 const id = document.getElementById(`player${i}-id`).value.trim();
                 if (!id) { showToast(`Please enter Free Fire ID for Player ${i}`, 'error'); return; }
                 playerDetails.push({ name: document.getElementById(`player${i}-name`).value.trim(), freeFireId: id,
-                level: 0 });
+                    level: 0 });
             }
             try {
                 const btn = document.getElementById('submit-registration-btn');
@@ -4376,7 +4577,7 @@
                 document.getElementById('success-modal').style.display = 'block';
                 document.querySelector('#success-modal p').textContent = 'You have joined the tournament!';
                 await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
-                fetchProfileData()]);
+                    fetchProfileData()]);
             } catch (e) {
                 console.error("Submit registration error:", e);
                 showToast("Registration failed. Please try again.", 'error');
@@ -4400,25 +4601,25 @@
             }
             if (t.showCredentials === false) {
                 content.innerHTML = `
-                        <div style="text-align:center;padding:30px 15px;">
-                            <i class="fas fa-lock" style="font-size:48px;color:var(--primary);margin-bottom:14px;"></i>
-                            <h3 style="color:var(--text-primary);">Credentials Hidden</h3>
-                            <p style="color:var(--text-secondary);">The tournament ID and password are currently hidden by the administrator.</p>
-                            <p style="color:var(--text-muted);font-size:0.85rem;">Please check back later or contact support.</p>
-                        </div>
-                    `;
+                            <div style="text-align:center;padding:30px 15px;">
+                                <i class="fas fa-lock" style="font-size:48px;color:var(--primary);margin-bottom:14px;"></i>
+                                <h3 style="color:var(--text-primary);">Credentials Hidden</h3>
+                                <p style="color:var(--text-secondary);">The tournament ID and password are currently hidden by the administrator.</p>
+                                <p style="color:var(--text-muted);font-size:0.85rem;">Please check back later or contact support.</p>
+                            </div>
+                        `;
             } else {
                 content.innerHTML = `
-                        <div class="credentials-box">
-                            <div style="margin-bottom:12px;color:#1e8e4a;font-size:0.85rem;"><i class="fas fa-check-circle"></i> You are approved for this tournament</div>
-                            <div class="credential-item"><div class="credential-label">Tournament ID</div><div class="credential-value">${t.tournamentId}</div></div>
-                            <div class="credential-item"><div class="credential-label">Password</div><div class="credential-value">${t.tournamentPassword}</div></div>
-                        </div>
-                        <div style="color:var(--text-muted);font-size:0.80rem;text-align:center;margin-top:12px;"><i class="fas fa-info-circle"></i> These credentials are for registered players only. Do not share.</div>
-                        <div style="background:rgba(255,199,0,0.04);border:1px solid rgba(255,199,0,0.10);border-radius:var(--radius-sm);padding:10px;margin-top:12px;">
-                            <p style="color:#b8860b;font-size:0.80rem;margin:0;"><i class="fas fa-exclamation-triangle"></i> Keep these credentials safe and use them only during the tournament.</p>
-                        </div>
-                    `;
+                            <div class="credentials-box">
+                                <div style="margin-bottom:12px;color:#1e8e4a;font-size:0.85rem;"><i class="fas fa-check-circle"></i> You are approved for this tournament</div>
+                                <div class="credential-item"><div class="credential-label">Tournament ID</div><div class="credential-value">${t.tournamentId}</div></div>
+                                <div class="credential-item"><div class="credential-label">Password</div><div class="credential-value">${t.tournamentPassword}</div></div>
+                            </div>
+                            <div style="color:var(--text-muted);font-size:0.80rem;text-align:center;margin-top:12px;"><i class="fas fa-info-circle"></i> These credentials are for registered players only. Do not share.</div>
+                            <div style="background:rgba(255,199,0,0.04);border:1px solid rgba(255,199,0,0.10);border-radius:var(--radius-sm);padding:10px;margin-top:12px;">
+                                <p style="color:#b8860b;font-size:0.80rem;margin:0;"><i class="fas fa-exclamation-triangle"></i> Keep these credentials safe and use them only during the tournament.</p>
+                            </div>
+                        `;
             }
             modal.style.display = 'block';
         }
@@ -4440,26 +4641,25 @@
             else if (sectionId === 'profile-section') fetchProfileData();
         }
 
-        // ─── PROFILE MENU ACTIONS ───
-        function showPrivacyPolicy() {
-            const text = appConfig.privacyPolicy ||
-                'Privacy Policy:\n\nWe do not store your personal data. Your information is used only for tournament registration and communication. We do not share your data with third parties.';
-            alert('📄 Privacy Policy\n\n' + text);
-        }
-
-        function showTermsConditions() {
-            const text = appConfig.termsAndConditions ||
-                'Terms & Conditions:\n\n1. All tournament registrations are final.\n2. Entry fees are non-refundable.\n3. Players must follow the tournament rules.\n4. Any misconduct will result in disqualification.\n5. The admin\'s decision is final.';
-            alert('📄 Terms & Conditions\n\n' + text);
-        }
-
-        function showHelpSupport() {
-            const contactSection = document.getElementById('contact-section');
-            if (contactSection) {
-                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-                contactSection.style.display = 'block';
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                updateContactInfo();
+        // ─── REFRESH BUTTON ───
+        function refreshPage() {
+            showToast('Refreshing data...', 'info');
+            const uid = getCurrentUserId();
+            if (uid) {
+                Promise.all([
+                    loadTournaments(),
+                    fetchWalletBalance(),
+                    fetchWalletTransactions(),
+                    fetchReferralData(),
+                    fetchProfileData(),
+                    checkAdStatus()
+                ]).then(() => {
+                    showToast('Data refreshed successfully!', 'success');
+                }).catch(() => {
+                    showToast('Some data failed to refresh.', 'error');
+                });
+            } else {
+                showToast('Please login to refresh data.', 'info');
             }
         }
 
@@ -4543,7 +4743,7 @@
                                 document.getElementById('rejection-reason').textContent =
                                     `Your registration for ${reg.tournamentTitle || 'the tournament'} has been rejected.`;
                                 const details = document.getElementById(
-                                'rejection-details-container');
+                                    'rejection-details-container');
                                 details.innerHTML = reg.rejectionMessage ?
                                     `<div class="rejection-details-box"><span class="rejection-reason-label">Reason:</span><div class="rejection-reason-text">${reg.rejectionMessage}</div></div>` :
                                     '';
@@ -4641,16 +4841,16 @@
             const today = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }).split(',')[0];
             if (currentUserData.lastAdRewardDate === today && currentUserData.adClaimsToday >= 1) {
                 ADS_NEEDED = 15;
-                document.getElementById('ad-badge-text').innerHTML = "15 Ads = 1 🪙";
+                document.getElementById('ad-badge-text').innerHTML = "15 Ads = 1 <i class='fas fa-coins'></i>";
                 document.getElementById('ad-badge-text').style.color = "#b8860b";
                 document.getElementById('ad-badge-text').style.borderColor = "rgba(184,134,11,0.3)";
                 document.getElementById('ad-desc-text').innerHTML =
                     "Unlimited Grind: Watch 15 video ads completely to claim 1 free coin!";
             } else {
                 ADS_NEEDED = 3;
-                document.getElementById('ad-badge-text').innerHTML = "Daily Bonus: 3 Ads = 1 🪙";
-                document.getElementById('ad-badge-text').style.color = "#6a0dad";
-                document.getElementById('ad-badge-text').style.borderColor = "rgba(106,13,173,0.2)";
+                document.getElementById('ad-badge-text').innerHTML = "Daily Bonus: 3 Ads = 1 <i class='fas fa-coins'></i>";
+                document.getElementById('ad-badge-text').style.color = "#1a4a7a";
+                document.getElementById('ad-badge-text').style.borderColor = "rgba(26,111,181,0.2)";
                 document.getElementById('ad-desc-text').innerHTML =
                     "Watch 3 video ads completely to claim your Daily free coin!";
             }
@@ -4813,6 +5013,13 @@
         console.log('✅ TECHNO E-SPORTS UI redesigned with logo integration.');
         console.log('✅ Professional clean design applied.');
         console.log('✅ Logo used in header, auth, tournament badges, and more.');
+        console.log('✅ All emojis replaced with Font Awesome icons.');
+        console.log('✅ Profile avatar removed from header, logo used in profile.');
+        console.log('✅ "BAL" removed from nav bar.');
+        console.log('✅ Tournament details in full page with X button.');
+        console.log('✅ Privacy, Terms, Help in full pages.');
+        console.log('✅ Refresh button fixed.');
+        console.log('✅ "TECHNO E-SPORTS" color changed to blue.');
     </script>
 </body>
 
