@@ -1324,6 +1324,104 @@
             border-bottom: none;
         }
 
+        /* Template & Auto-Repeat Cards */
+        .template-card,
+        .auto-repeat-card {
+            background: rgba(40, 40, 40, 0.8);
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .template-card:hover,
+        .auto-repeat-card:hover {
+            border-color: #ff4655;
+            transform: translateX(5px);
+        }
+
+        .template-card .template-info,
+        .auto-repeat-card .auto-repeat-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .template-card .template-info img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+
+        .template-card .template-info .template-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .template-card .template-info .template-details .template-title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .template-card .template-info .template-details .template-meta {
+            color: #aaa;
+            font-size: 0.85em;
+        }
+
+        .template-card .template-actions,
+        .auto-repeat-card .auto-repeat-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #d72638 0%, #ff4655 100%);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b01e2e 0%, #d91a2a 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #26a269 0%, #2ec27e 100%);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #1e8b57 0%, #26a269 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc700 0%, #f5a623 100%);
+            color: #1a1a1a;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e6b300 0%, #d99a1a 100%);
+        }
+
+        .badge-category {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(255, 70, 85, 0.2);
+            color: #ff4655;
+            border: 1px solid rgba(255, 70, 85, 0.25);
+        }
+
         @media (max-width: 1024px) {
             .form-row {
                 flex-direction: column;
@@ -1386,6 +1484,16 @@
             }
             .staff-details {
                 grid-template-columns: 1fr 1fr;
+            }
+            .template-card,
+            .auto-repeat-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .template-card .template-info,
+            .auto-repeat-card .auto-repeat-info {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
@@ -1532,6 +1640,7 @@
                     <a href="#" onclick="showSection('withdrawals-section')"><i class="fas fa-money-bill-wave"></i> Withdrawals</a>
                     <a href="#" onclick="showSection('prize-distribution-section')"><i class="fas fa-trophy"></i> Prize Distribution</a>
                     <a href="#" onclick="showSection('match-results-section')"><i class="fas fa-list-check"></i> Match Results</a>
+                    <a href="#" onclick="showSection('automations-section')"><i class="fas fa-robot"></i> Automations &amp; Templates</a>
                     <a href="#" onclick="showSection('app-config-section')"><i class="fas fa-cog"></i> App Configuration</a>
                     <a href="#" onclick="showSection('app-update-section')"><i class="fas fa-sync-alt"></i> App Update</a>
                 </div>
@@ -1668,7 +1777,7 @@
                             <input type="text" id="staff-role" placeholder="e.g., Tournament Manager, Support Staff" required>
                         </div>
 
-                        <!-- === NEW STAFF ACCESS CONTROL FIELDS === -->
+                        <!-- Staff Access Control Fields -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Shift Start Time</label>
@@ -1683,7 +1792,6 @@
                             <label>Daily Prize Limit (₹)</label>
                             <input type="number" id="staff-daily-limit" placeholder="e.g., 5000" min="0" required>
                         </div>
-                        <!-- === END NEW FIELDS === -->
 
                         <div class="form-group">
                             <label>Permissions</label>
@@ -1705,7 +1813,6 @@
                     <div class="content-card">
                         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
                             <h4 style="margin:0;">All Staff Members</h4>
-                            <!-- Clean 7-Day Old Logs Button -->
                             <button onclick="cleanOldStaffLogs()" style="background:linear-gradient(135deg,#d72638 0%,#ff4655 100%);">
                                 <i class="fas fa-broom"></i> Clean 7-Day Old Logs
                             </button>
@@ -2045,6 +2152,29 @@
                         <button onclick="distributePrizes()" style="width:100%;margin-top:12px;">
                             <i class="fas fa-check-circle"></i> Confirm & Distribute
                         </button>
+                    </div>
+                </section>
+
+                <!-- AUTOMATIONS & TEMPLATES -->
+                <section id="automations-section" class="section">
+                    <h2><i class="fas fa-robot"></i> Automations &amp; Templates</h2>
+
+                    <!-- Part A: Saved Templates -->
+                    <div class="content-card">
+                        <h4><i class="fas fa-save"></i> Saved Templates</h4>
+                        <p style="color:#aaa;margin-bottom:20px;">All saved tournament templates. Click "Delete Template" to remove a template from Firestore.</p>
+                        <div id="saved-templates-container">
+                            <p style="color:#888;text-align:center;padding:20px;">Loading templates...</p>
+                        </div>
+                    </div>
+
+                    <!-- Part B: Active Auto-Repeats -->
+                    <div class="content-card">
+                        <h4><i class="fas fa-sync-alt"></i> Active Auto-Repeats</h4>
+                        <p style="color:#aaa;margin-bottom:20px;">Tournaments with Auto-Repeat enabled that are currently Active or Upcoming. Turn off auto-repeat to stop daily re-creation.</p>
+                        <div id="auto-repeat-container">
+                            <p style="color:#888;text-align:center;padding:20px;">Loading auto-repeat tournaments...</p>
+                        </div>
                     </div>
                 </section>
 
@@ -2747,6 +2877,10 @@
                 document.getElementById('total-tournaments').textContent = tournaments.length;
                 if (document.getElementById('tournaments-section').style.display === 'block') renderTournaments();
                 populateTournamentSelection();
+                // Auto-refresh automations section if visible
+                if (document.getElementById('automations-section').style.display === 'block') {
+                    loadAutomationsData();
+                }
             });
             userListener = db.collection("users").where("role", "==", "user").onSnapshot((snapshot) => {
                 allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -2977,6 +3111,7 @@
             else if (sectionId === 'prize-distribution-section') { populateTournamentSelection();
                 resetPrizeDistributionSection(); } else if (sectionId === 'match-results-section')
                 populateTournamentSelection();
+            else if (sectionId === 'automations-section') loadAutomationsData();
             else if (sectionId === 'app-update-section') loadAppUpdateData();
         }
 
@@ -3163,12 +3298,14 @@
         async function saveTournamentTemplate(category) {
             const name = prompt("Enter a name for this template:");
             if (!name) return;
+            const imageUrl = document.getElementById(`${category}-image-url`).value.trim();
             let data = {
                 templateName: name,
                 category: category,
                 title: document.getElementById(`${category}-title`).value,
                 details: document.getElementById(`${category}-details`).value,
                 entryFee: document.getElementById(`${category}-entry-fee`).value,
+                imageUrl: imageUrl,
                 createdAt: FieldValue.serverTimestamp()
             };
             if (category === 'solo') {
@@ -3185,6 +3322,10 @@
                 await db.collection("tournament_templates").add(data);
                 showToast("Template saved!", 'success');
                 await fetchTournamentTemplates();
+                // Refresh automations if visible
+                if (document.getElementById('automations-section').style.display === 'block') {
+                    loadAutomationsData();
+                }
             } catch (e) { showToast("Error saving template", 'error'); }
         }
 
@@ -3195,6 +3336,16 @@
             document.getElementById(`${category}-title`).value = t.title || '';
             document.getElementById(`${category}-details`).value = t.details || '';
             document.getElementById(`${category}-entry-fee`).value = t.entryFee || '';
+            // Load image URL if present
+            if (t.imageUrl) {
+                document.getElementById(`${category}-image-url`).value = t.imageUrl;
+                const preview = document.getElementById(`${category}-image-preview`);
+                preview.src = t.imageUrl;
+                preview.style.display = 'block';
+                const container = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
+                '.file-upload-text');
+                container.innerHTML = `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template image loaded`;
+            }
             if (category === 'solo') {
                 document.getElementById('solo-max-players').value = t.maxParticipants || '';
                 document.getElementById('solo-per-kill').value = t.perKill || '';
@@ -3208,6 +3359,159 @@
             showToast("Template loaded!", 'info');
         }
 
+        // Delete template from Firestore
+        async function deleteTemplate(templateId) {
+            showConfirmationModal("Delete Template", "Are you sure you want to delete this template?", async () => {
+                try {
+                    await db.collection("tournament_templates").doc(templateId).delete();
+                    showToast("Template deleted!", 'success');
+                    await fetchTournamentTemplates();
+                    if (document.getElementById('automations-section').style.display === 'block') {
+                        loadAutomationsData();
+                    }
+                } catch (e) { showToast("Error deleting template.", 'error'); }
+            });
+        }
+
+        // =====================================================
+        // AUTOMATIONS & TEMPLATES
+        // =====================================================
+        async function loadAutomationsData() {
+            await loadSavedTemplates();
+            await loadActiveAutoRepeats();
+        }
+
+        // Part A: Saved Templates
+        async function loadSavedTemplates() {
+            const container = document.getElementById('saved-templates-container');
+            if (!container) return;
+            try {
+                const snap = await db.collection("tournament_templates").orderBy("createdAt", "desc").get();
+                const templates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                if (!templates.length) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-save"></i>
+                            <h3>No Templates Saved</h3>
+                            <p>Create a tournament and click "Save as Template" to save templates here.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                templates.forEach(t => {
+                    const imgHtml = t.imageUrl ?
+                        `<img src="${t.imageUrl}" alt="${t.title || 'Template'}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #333;">` :
+                        `<div style="width:60px;height:60px;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#666;font-size:24px;"><i class="fas fa-image"></i></div>`;
+                    html += `
+                        <div class="template-card">
+                            <div class="template-info">
+                                ${imgHtml}
+                                <div class="template-details">
+                                    <div class="template-title">${t.templateName || 'Unnamed'}</div>
+                                    <div class="template-meta">
+                                        <span class="badge-category">${t.category || 'N/A'}</span>
+                                        ${t.title ? `<span style="color:#aaa;margin-left:10px;">${t.title}</span>` : ''}
+                                        ${t.entryFee ? `<span style="color:#ffd700;margin-left:10px;">₹${t.entryFee}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="template-actions">
+                                <button onclick="deleteTemplate('${t.id}')" class="btn-danger" style="padding:8px 16px;font-size:13px;">
+                                    <i class="fas fa-trash-alt"></i> Delete Template
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML =
+                    `<p style="color:#d72638;text-align:center;padding:20px;">Error loading templates: ${e.message}</p>`;
+            }
+        }
+
+        // Part B: Active Auto-Repeats
+        async function loadActiveAutoRepeats() {
+            const container = document.getElementById('auto-repeat-container');
+            if (!container) return;
+            try {
+                const snap = await db.collection("tournaments")
+                    .where("isAutoRepeat", "==", true)
+                    .where("status", "in", ["active", "upcoming"])
+                    .orderBy("createdAt", "desc")
+                    .get();
+
+                const autoTours = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                if (!autoTours.length) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-sync-alt"></i>
+                            <h3>No Active Auto-Repeats</h3>
+                            <p>No tournaments with Auto-Repeat enabled in Active or Upcoming status.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                autoTours.forEach(t => {
+                    const statusBadge = t.status === 'active' ?
+                        '<span class="status-badge status-active">Active</span>' :
+                        '<span class="status-badge status-pending">Upcoming</span>';
+                    html += `
+                        <div class="auto-repeat-card">
+                            <div class="auto-repeat-info">
+                                <div>
+                                    <div style="color:#fff;font-weight:600;font-size:1.05em;">${t.title || 'Untitled'}</div>
+                                    <div style="color:#aaa;font-size:0.85em;margin-top:4px;">
+                                        <span class="badge-category">${t.category || 'N/A'}</span>
+                                        ${statusBadge}
+                                        <span style="color:#666;margin-left:10px;">ID: ${t.tournamentId || 'N/A'}</span>
+                                        ${t.isAutoRepeat ? '<span style="color:#ffc700;margin-left:10px;"><i class="fas fa-sync-alt"></i> Auto-Repeat ON</span>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="auto-repeat-actions">
+                                <button onclick="turnOffAutoRepeat('${t.id}')" class="btn-danger" style="padding:8px 16px;font-size:13px;">
+                                    <i class="fas fa-power-off"></i> Turn Off Auto-Repeat
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML =
+                    `<p style="color:#d72638;text-align:center;padding:20px;">Error loading auto-repeats: ${e.message}</p>`;
+            }
+        }
+
+        // Turn off auto-repeat for a tournament
+        async function turnOffAutoRepeat(tournamentId) {
+            showConfirmationModal("Turn Off Auto-Repeat",
+                "This will disable daily auto-repeat for this tournament. It will no longer be automatically re-created daily.",
+                async () => {
+                    try {
+                        await db.collection("tournaments").doc(tournamentId).update({
+                            isAutoRepeat: false,
+                            updatedAt: FieldValue.serverTimestamp()
+                        });
+                        showToast("Auto-Repeat turned off!", 'success');
+                        logRecentActivity(`Auto-Repeat turned off for tournament ${tournamentId}`);
+                        if (document.getElementById('automations-section').style.display === 'block') {
+                            loadAutomationsData();
+                        }
+                    } catch (e) { showToast("Error turning off auto-repeat.", 'error'); }
+                });
+        }
+
+        // =====================================================
+        // CREATE TOURNAMENT (no registrationEndTime field)
+        // =====================================================
         async function createTournament(category) {
             const imageUrl = document.getElementById(`${category}-image-url`).value.trim();
             if (!imageUrl) { showToast("Please upload a tournament image.", 'error'); return; }
@@ -3477,7 +3781,7 @@
         }
 
         // =====================================================
-        // STAFF MANAGEMENT (with Shift, Limit, Force Logout, +1 Hour, Logs)
+        // STAFF MANAGEMENT (with Shift, Limit, Force Logout Toggle, +1 Hour, Logs)
         // =====================================================
         async function createStaffAccount() {
             const name = document.getElementById('staff-name').value.trim();
@@ -3522,7 +3826,6 @@
                     isBlocked: false,
                     createdBy: currentAdmin.uid,
                     lastActive: FieldValue.serverTimestamp(),
-                    // New fields
                     shiftStart: shiftStart,
                     shiftEnd: shiftEnd,
                     dailyPrizeLimit: dailyLimit,
@@ -3568,7 +3871,6 @@
                 const perf = staff.performance || 0;
                 const perms = staff.permissions || {};
 
-                // Shift & Limit display
                 const shiftDisplay = staff.shiftStart && staff.shiftEnd ?
                     `<span class="staff-shift-badge"><i class="fas fa-clock"></i> ${staff.shiftStart} - ${staff.shiftEnd}</span>` :
                     `<span class="staff-shift-badge" style="color:#888;border-color:#666;">No shift set</span>`;
@@ -3579,6 +3881,16 @@
                 const forceLogoutBadge = staff.forceLogout ?
                     `<span class="status-badge status-blocked" style="background:rgba(215,38,56,0.3);">Force Logout Active</span>` :
                     '';
+
+                // Force logout button: toggle based on staff.forceLogout
+                let forceLogoutBtnHtml = '';
+                if (staff.forceLogout) {
+                    forceLogoutBtnHtml =
+                        `<button onclick="toggleForceLogout('${staff.id}', true)" class="btn-success" style="padding:8px 16px;font-size:13px;"><i class="fas fa-undo-alt"></i> Cancel Force Logout</button>`;
+                } else {
+                    forceLogoutBtnHtml =
+                        `<button onclick="toggleForceLogout('${staff.id}', false)" class="btn-danger" style="padding:8px 16px;font-size:13px;"><i class="fas fa-power-off"></i> Force Logout</button>`;
+                }
 
                 card.innerHTML = `
                     <div class="staff-details">
@@ -3614,7 +3926,7 @@
                         }
                         <button onclick="deleteStaffAccount('${staff.id}')" style="background:#444;"><i class="fas fa-trash-alt"></i> Delete</button>
                         <button onclick="updateStaffPerformance('${staff.id}',${perf})" style="background:#00a8ff;"><i class="fas fa-chart-line"></i> Update Performance</button>
-                        <button onclick="forceStaffLogout('${staff.id}')" style="background:linear-gradient(135deg,#d72638 0%,#ff4655 100%);"><i class="fas fa-power-off"></i> Force Logout</button>
+                        ${forceLogoutBtnHtml}
                         <button onclick="extendStaffShift('${staff.id}')" style="background:linear-gradient(135deg,#ffc700 0%,#f5a623 100%);color:#1a1a1a;"><i class="fas fa-clock"></i> +1 Hour Extension</button>
                         <button onclick="viewStaffLogs('${staff.id}','${staff.name}')" style="background:#1c71d8;"><i class="fas fa-list-ul"></i> View Logs</button>
                     </div>
@@ -3659,22 +3971,34 @@
             }
         }
 
-        // --- Force Logout ---
-        async function forceStaffLogout(staffId) {
-            showConfirmationModal("Force Logout",
-                "This will force the staff member to be logged out immediately. They will need to log in again.",
+        // --- Toggle Force Logout (new toggle logic) ---
+        async function toggleForceLogout(staffId, currentState) {
+            // currentState: true means forceLogout is currently true (so we want to turn it off)
+            // currentState: false means forceLogout is currently false (so we want to turn it on)
+            const newState = !currentState;
+            const action = newState ? 'enable' : 'disable';
+            const actionLabel = newState ? 'enable' : 'disable';
+            const confirmMsg = newState ?
+                'This will force the staff member to be logged out immediately. They will need to log in again.' :
+                'This will cancel the force logout for this staff member. They will be able to log in normally.';
+            showConfirmationModal(
+                newState ? 'Force Logout' : 'Cancel Force Logout',
+                confirmMsg,
                 async () => {
                     try {
                         await db.collection("users").doc(staffId).update({
-                            forceLogout: true,
+                            forceLogout: newState,
                             updatedAt: FieldValue.serverTimestamp()
                         });
-                        // Also log this action
-                        await logStaffAction(staffId, 'force_logout', 'Admin forced logout', 0);
-                        showToast("Force logout triggered. Staff will be logged out.", 'success');
-                        logRecentActivity(`Force logout triggered for staff ${staffId}`);
-                    } catch (e) { showToast("Error triggering force logout.", 'error'); }
-                });
+                        await logStaffAction(staffId, newState ? 'force_logout' : 'cancel_force_logout',
+                            newState ? 'Admin forced logout' : 'Admin cancelled force logout', 0);
+                        showToast(newState ? 'Force logout triggered.' : 'Force logout cancelled.', 'success');
+                        logRecentActivity(`${newState ? 'Force logout' : 'Cancelled force logout'} for staff ${staffId}`);
+                        // Re-render staff list to update the button state
+                        renderStaffList();
+                    } catch (e) { showToast("Error updating staff.", 'error'); }
+                }
+            );
         }
 
         // --- +1 Hour Extension ---
@@ -3687,7 +4011,6 @@
                         if (!doc.exists) { showToast("Staff not found.", 'error'); return; }
                         const data = doc.data();
                         if (!data.shiftEnd) { showToast("No shift end time set.", 'error'); return; }
-                        // Parse shiftEnd (HH:MM) and add 1 hour
                         const parts = data.shiftEnd.split(':');
                         let h = parseInt(parts[0]);
                         let m = parseInt(parts[1] || 0);
@@ -3700,6 +4023,7 @@
                         await logStaffAction(staffId, 'shift_extension', `Shift extended to ${newEnd}`, 0);
                         showToast(`Shift extended to ${newEnd}!`, 'success');
                         logRecentActivity(`Shift extended for staff ${staffId} to ${newEnd}`);
+                        renderStaffList();
                     } catch (e) { showToast("Error extending shift.", 'error'); }
                 });
         }
@@ -3781,7 +4105,6 @@
                             return;
                         }
 
-                        // Group by staffId
                         const groups = {};
                         snap.forEach(doc => {
                             const log = doc.data();
@@ -3799,18 +4122,15 @@
                             groups[sid].actions.push(log.action);
                         });
 
-                        // For each staff, create a summary and delete old logs
                         const batch = db.batch();
                         const summaryPromises = [];
 
                         for (const [sid, data] of Object.entries(groups)) {
-                            // Build 1-line summary
                             const actionSummary = data.actions.slice(0, 5).join(', ') + (data.actions.length > 5 ?
                                 ` +${data.actions.length - 5} more` : '');
                             const summaryLine =
                                 `${data.staffName}: ${data.count} actions, ₹${data.totalAmount.toFixed(2)} total. Actions: ${actionSummary}`;
 
-                            // Save to staff_weekly_summaries
                             const summaryRef = db.collection("staff_weekly_summaries").doc();
                             summaryPromises.push(summaryRef.set({
                                 staffId: sid,
@@ -3823,7 +4143,6 @@
                                 createdAt: FieldValue.serverTimestamp()
                             }));
 
-                            // Delete old logs for this staff
                             const staffSnap = await db.collection("staff_logs")
                                 .where("staffId", "==", sid)
                                 .where("timestamp", "<", sevenDaysAgo)
@@ -3833,7 +4152,6 @@
                             });
                         }
 
-                        // Commit all deletions and summaries
                         await Promise.all(summaryPromises);
                         if (snap.size > 0) {
                             await batch.commit();
@@ -4301,7 +4619,6 @@
                             updatedAt: FieldValue.serverTimestamp()
                         });
 
-                        // Log staff action
                         if (currentAdmin) {
                             await logStaffAction(currentAdmin.uid, 'prize_distribution',
                                 `Distributed ₹${totalAmount.toFixed(2)} for ${selectedPrizeTournament.title}`,
