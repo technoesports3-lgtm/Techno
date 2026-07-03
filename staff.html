@@ -4023,7 +4023,7 @@
 
                 await db.collection("tournaments").add(formData);
 
-                sendPushNotification("New Tournament!", "New Match: " + formData.title + " is live! Join fast.");
+    
 
                 showToast(`${category} tournament created successfully!`, 'success');
 
@@ -4911,8 +4911,7 @@
                             `;
                         resultContainer.style.display = 'block';
                         showToast("Prizes distributed successfully!", 'success');
-                        await sendPushNotification("🏆 Tournament Results!",
-                            "🏆 Tournament Results! Check your wallet for prize money!");
+            
                     } catch (error) {
                         console.error("Error distributing prizes:", error);
                         showToast(error.message || "Failed to distribute prizes.", 'error');
