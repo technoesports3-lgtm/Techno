@@ -3833,6 +3833,96 @@
             }
         }
 
+        // ===== NEW: applyTemplateFromList - called from Automations "Load" button =====
+        async function applyTemplateFromList(templateId, category) {
+            if (!templateId) {
+                showToast("Invalid template ID.", 'error');
+                return;
+            }
+
+            try {
+                // 1. Fetch the template from Firestore
+                const doc = await db.collection("tournament_templates").doc(templateId).get();
+                if (!doc.exists) {
+                    showToast("Template not found.", 'error');
+                    return;
+                }
+
+                const data = doc.data();
+
+                // 2. Show tournaments section
+                showSection('tournaments-section');
+
+                // 3. Switch to the correct category tab
+                switchTournamentCategory(category);
+
+                // 4. Fill all respective form inputs
+                if (category === 'solo') {
+                    document.getElementById('solo-title').value = data.title || '';
+                    document.getElementById('solo-entry-fee').value = data.entryFee || 0;
+                    document.getElementById('solo-details').value = data.details || '';
+                    document.getElementById('solo-max-players').value = data.maxParticipants || 0;
+                    document.getElementById('solo-per-kill').value = data.perKill || '0';
+                    document.getElementById('solo-tournament-id').value = data.tournamentId || '';
+                    document.getElementById('solo-tournament-password').value = data.tournamentPassword || '';
+                    document.getElementById('solo-show-credentials').checked = data.showCredentials !== false;
+                    document.getElementById('solo-tournament-status').value = data.status || 'active';
+                } else if (category === 'duo') {
+                    document.getElementById('duo-title').value = data.title || '';
+                    document.getElementById('duo-entry-fee').value = data.entryFee || 0;
+                    document.getElementById('duo-details').value = data.details || '';
+                    document.getElementById('duo-max-teams').value = data.maxParticipants || 0;
+                    document.getElementById('duo-prizes').value = data.prizes || '';
+                    document.getElementById('duo-tournament-id').value = data.tournamentId || '';
+                    document.getElementById('duo-tournament-password').value = data.tournamentPassword || '';
+                    document.getElementById('duo-show-credentials').checked = data.showCredentials !== false;
+                    document.getElementById('duo-tournament-status').value = data.status || 'active';
+                } else if (category === 'squad') {
+                    document.getElementById('squad-title').value = data.title || '';
+                    document.getElementById('squad-entry-fee').value = data.entryFee || 0;
+                    document.getElementById('squad-details').value = data.details || '';
+                    document.getElementById('squad-max-squads').value = data.maxParticipants || 0;
+                    document.getElementById('squad-prizes').value = data.prizes || '';
+                    document.getElementById('squad-tournament-id').value = data.tournamentId || '';
+                    document.getElementById('squad-tournament-password').value = data.tournamentPassword || '';
+                    document.getElementById('squad-show-credentials').checked = data.showCredentials !== false;
+                    document.getElementById('squad-tournament-status').value = data.status || 'active';
+                }
+
+                // 5. Fill imageUrl input, update preview, show block, change upload text
+                if (data.imageUrl) {
+                    document.getElementById(`${category}-image-url`).value = data.imageUrl;
+                    const preview = document.getElementById(`${category}-image-preview`);
+                    preview.src = data.imageUrl;
+                    preview.style.display = 'block';
+                    const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
+                        '.file-upload-text');
+                    if (uploadContainer) {
+                        uploadContainer.innerHTML =
+                            `<i class="fas fa-check-circle" style="color: #26a269;"></i><br>Template image loaded`;
+                    }
+                }
+
+                // 6. Show success toast with advice to add date and time
+                const templateName = data.templateName || data.title || 'Template';
+                showToast(
+                    `✅ "${templateName}" loaded! Please add the Conducted Date and Time before creating the tournament.`,
+                    'success',
+                    'Template Applied'
+                );
+
+                // Also update the template select dropdown to match (for consistency)
+                const select = document.getElementById(`${category}-template-select`);
+                if (select) {
+                    select.value = templateId;
+                }
+
+            } catch (error) {
+                console.error("Error applying template:", error);
+                showToast("Failed to load template. Please try again.", 'error');
+            }
+        }
+
         // ===== DELETE TEMPLATE (for automations section) =====
         async function deleteTemplate(templateId) {
             if (!hasPermissions.manageTournaments) {
@@ -3916,7 +4006,7 @@
                         templatesSnapshot.forEach(doc => {
                             const data = doc.data();
                             const title = data.templateName || data.title || 'Unnamed Template';
-                            const category = data.category ? data.category.toUpperCase() : '?';
+                            const category = data.category ? data.category.toLowerCase() : 'solo';
                             const dateStr = data.createdAt?.toDate ? new Date(data.createdAt.toDate())
                                 .toLocaleDateString() : 'N/A';
                             const imageHtml = data.imageUrl ?
@@ -3930,7 +4020,7 @@
                                             ${imageHtml}
                                             <span>${title}</span>
                                         </div>
-                                        <span style="color:#888; font-size:0.8em;">${category}</span>
+                                        <span style="color:#888; font-size:0.8em;">${category.toUpperCase()}</span>
                                     </div>
                                     <div class="automation-meta">
                                         Saved: ${dateStr}
@@ -3938,7 +4028,7 @@
                                         ${data.maxParticipants ? ` • Max: ${data.maxParticipants}` : ''}
                                     </div>
                                     <div class="automation-actions">
-                                        <button class="btn-sm" onclick="loadTemplateFromAutomation('${doc.id}', '${data.category || 'solo'}')" style="background:#333;">
+                                        <button class="btn-sm" onclick="applyTemplateFromList('${doc.id}', '${category}')" style="background:#333;">
                                             <i class="fas fa-upload"></i> Load
                                         </button>
                                         <button class="btn-danger-sm" onclick="deleteTemplate('${doc.id}')">
@@ -4026,25 +4116,6 @@
                     autorepeatContainer.innerHTML =
                         '<p style="color:#d72638; text-align:center; padding:20px;">Failed to load auto-repeat tournaments.</p>';
                 }
-            }
-        }
-
-        // Helper: load template from automations section
-        async function loadTemplateFromAutomation(templateId, category) {
-            try {
-                // First, switch to the tournaments section and the correct category tab
-                showSection('tournaments-section');
-                switchTournamentCategory(category);
-
-                // Then set the template select value and trigger load
-                const select = document.getElementById(`${category}-template-select`);
-                if (select) {
-                    select.value = templateId;
-                    await loadTemplate(category);
-                }
-            } catch (error) {
-                console.error("Error loading template from automation:", error);
-                showToast("Error loading template.", 'error');
             }
         }
 
@@ -5320,6 +5391,7 @@
         console.log("  - Automations & Templates section (templates + auto-repeat)");
         console.log("  - Fixed: forceLogout does NOT reset to false");
         console.log("  - Removed: registrationEndTime fields");
+        console.log("  - NEW: applyTemplateFromList() attached to Load button in Automations");
     </script>
 </body>
 </html>
