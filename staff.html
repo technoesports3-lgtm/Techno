@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>TECHNO E-SPORTS STAFF PANEL</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    body {
-       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-       margin: 0;
-       background-color: #0a0a0a;
-       color: #fff;
-       -webkit-text-size-adjust: 100%;
-       -ms-text-size-adjust: 100%;
-       text-size-adjust: 100%;
-       overflow-x: auto;
-       }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #0a0a0a;
+            color: #fff;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            overflow-x: auto;
+        }
 
         .app-container {
             max-width: 1000px;
@@ -32,7 +35,9 @@
             display: none;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             color: #00a8ff;
         }
 
@@ -84,7 +89,9 @@
             transition: border-color 0.3s;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #00a8ff;
             outline: none;
             box-shadow: 0 0 0 2px rgba(0, 168, 255, 0.2);
@@ -172,12 +179,19 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .professional-auth-container {
@@ -225,7 +239,7 @@
         .auth-icon img {
             width: 50px;
             height: 50px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
 
         .auth-slogan {
@@ -648,15 +662,19 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(90deg,
-                rgba(255,255,255,0.1) 0%,
-                rgba(255,255,255,0.2) 50%,
-                rgba(255,255,255,0.1) 100%);
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0.1) 100%);
             animation: shimmer 2s infinite;
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .performance-percentage {
@@ -963,8 +981,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .screenshot-nav {
@@ -1120,16 +1144,23 @@
             border-radius: 20px;
             font-size: 32px;
             z-index: 5000;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             text-align: center;
             animation: fadeout 3s forwards;
             display: none;
         }
 
         @keyframes fadeout {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; display: none; }
+            0% {
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                display: none;
+            }
         }
 
         .staff-profile {
@@ -1180,7 +1211,8 @@
             border: 1px solid #333;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #333;
             padding: 12px 15px;
             text-align: left;
@@ -1290,11 +1322,11 @@
             border-radius: 50%;
         }
 
-        input:checked + .toggle-slider {
+        input:checked+.toggle-slider {
             background-color: #00a8ff;
         }
 
-        input:checked + .toggle-slider:before {
+        input:checked+.toggle-slider:before {
             transform: translateX(26px);
         }
 
@@ -1690,7 +1722,7 @@
                     <span class="menu-icon-symbol"><i class="fas fa-user-circle"></i></span> My Profile
                 </div>
                 <div class="sidebar-menu-item" onclick="showSection('announcements-section')" id="announcements-menu-item">
-                <span class="menu-icon-symbol"><i class="fas fa-bullhorn"></i></span> Announcements
+                    <span class="menu-icon-symbol"><i class="fas fa-bullhorn"></i></span> Announcements
                 </div>
                 <div class="sidebar-menu-item" onclick="showSection('manage-users-section')" id="users-menu-item" style="display: none;">
                     <span class="menu-icon-symbol"><i class="fas fa-users"></i></span> Manage Users
@@ -1871,6 +1903,10 @@
                                 <div style="color: #666; font-size: 0.8em; margin-top: 20px;">
                                     <div>Joined: <span id="join-date" style="color: #aaa;">Loading...</span></div>
                                     <div>Last Active: <span id="last-active" style="color: #aaa;">Loading...</span></div>
+                                    <div style="margin-top:10px; padding-top:10px; border-top:1px solid #333;">
+                                        <span style="color:#888;">Shift: </span>
+                                        <span id="shift-display" style="color:#00a8ff;">Loading...</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2638,12 +2674,10 @@
             };
 
             if (targetTagKey) {
-                // Use filters for targeted push
                 payload.filters = [
                     { "field": "tag", "key": targetTagKey, "relation": "=", "value": "joined" }
                 ];
             } else {
-                // Use included_segments for broadcast
                 payload.included_segments = ["All"];
             }
 
@@ -2683,7 +2717,7 @@
             } finally {
                 setButtonLoading('send-push-announcement-btn', false);
                 document.getElementById('send-push-announcement-btn').innerHTML =
-                '<i class="fas fa-bell"></i> Send Push Notification (Free)';
+                    '<i class="fas fa-bell"></i> Send Push Notification (Free)';
             }
         }
 
@@ -2716,6 +2750,153 @@
         let recentActivity = [];
         const BACKEND_BASE_URL = "https://techno-esports-backend.onrender.com";
 
+        // ---- SHIFT-BASED ACCESS ENFORCEMENT ----
+        let shiftCheckInterval = null;
+
+        function checkShiftStatus() {
+            if (!currentStaff || !staffData) return;
+
+            // If no shift times are set, allow access (default to "always on")
+            if (!staffData.shiftStart && !staffData.shiftEnd && !staffData.forceLogout) {
+                return;
+            }
+
+            // Check forceLogout first - if true, sign out immediately
+            if (staffData.forceLogout === true) {
+                // Set forceLogout back to false before signing out
+                db.collection("users").doc(currentStaff.uid).update({
+                    forceLogout: false
+                }).then(() => {
+                    showToast("Access Denied: Force Logged Out", 'error');
+                    auth.signOut();
+                }).catch(() => {
+                    // If update fails, still sign out
+                    auth.signOut();
+                });
+                return;
+            }
+
+            // If no shift times defined, allow access
+            if (!staffData.shiftStart || !staffData.shiftEnd) {
+                return;
+            }
+
+            try {
+                const now = new Date();
+                const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0');
+
+                // Parse shift times (format: "HH:MM")
+                const shiftStart = staffData.shiftStart.trim();
+                const shiftEnd = staffData.shiftEnd.trim();
+
+                // If times are invalid, allow access
+                if (!shiftStart.match(/^\d{2}:\d{2}$/) || !shiftEnd.match(/^\d{2}:\d{2}$/)) {
+                    return;
+                }
+
+                // Compare times as strings (lexicographic works for HH:MM)
+                let isWithinShift = false;
+                if (shiftStart <= shiftEnd) {
+                    // Normal shift (e.g., 09:00 - 17:00)
+                    isWithinShift = currentTimeStr >= shiftStart && currentTimeStr <= shiftEnd;
+                } else {
+                    // Overnight shift (e.g., 22:00 - 06:00)
+                    isWithinShift = currentTimeStr >= shiftStart || currentTimeStr <= shiftEnd;
+                }
+
+                if (!isWithinShift) {
+                    showToast("Access Denied: Shift Over", 'error');
+                    auth.signOut();
+                }
+
+                // Update shift display on profile
+                const shiftDisplay = document.getElementById('shift-display');
+                if (shiftDisplay) {
+                    const status = isWithinShift ? '✅ Active' : '⛔ Off-duty';
+                    shiftDisplay.textContent = `${shiftStart} - ${shiftEnd} (${status})`;
+                    shiftDisplay.style.color = isWithinShift ? '#26a269' : '#d72638';
+                }
+            } catch (e) {
+                console.warn('Shift check error:', e);
+                // Don't sign out on parsing error - allow access
+            }
+        }
+
+        // --- ACTIVITY AUDITING (staff_logs) ---
+        async function logStaffAction(actionName, details = '', amount = 0) {
+            if (!currentStaff || !staffData) {
+                console.warn('Cannot log action: staff not authenticated');
+                return;
+            }
+
+            try {
+                await db.collection("staff_logs").add({
+                    staffId: currentStaff.uid,
+                    staffName: staffData.name || 'Unknown Staff',
+                    staffEmail: staffData.email || '',
+                    action: actionName,
+                    details: details || '',
+                    amount: typeof amount === 'number' ? amount : Number(amount) || 0,
+                    timestamp: FieldValue.serverTimestamp()
+                });
+                // Also log to recent activity UI
+                logRecentActivity(actionName + (details ? ': ' + details : ''));
+            } catch (error) {
+                console.error('Error logging staff action:', error);
+                // Don't block the main flow if logging fails
+            }
+        }
+
+        // --- DAILY PRIZE LIMIT HELPERS ---
+        function getTodayDateStr() {
+            const d = new Date();
+            return d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+        }
+
+        async function getTodayDistributedAmount(staffId) {
+            if (!staffId) return 0;
+            const todayStr = getTodayDateStr();
+            try {
+                // Query staff_logs for today's prize distributions
+                const startOfDay = new Date(todayStr + 'T00:00:00');
+                const endOfDay = new Date(todayStr + 'T23:59:59');
+
+                const snapshot = await db.collection("staff_logs")
+                    .where("staffId", "==", staffId)
+                    .where("action", "==", "distributed_prizes")
+                    .get();
+
+                let total = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.timestamp) {
+                        const ts = data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+                        if (ts >= startOfDay && ts <= endOfDay) {
+                            total += Number(data.amount || 0);
+                        }
+                    } else {
+                        // Fallback: check if timestamp is missing, use the day from the log
+                        // We'll just add it if it's today's log (approximate)
+                        // Better: use the document creation time if available
+                        const created = doc.createTime ? doc.createTime.toDate() : null;
+                        if (created && created >= startOfDay && created <= endOfDay) {
+                            total += Number(data.amount || 0);
+                        }
+                    }
+                });
+                return total;
+            } catch (error) {
+                console.error('Error fetching today\'s distributed amount:', error);
+                return 0;
+            }
+        }
+
+        // =========================================================================
+        //  LOGIN / AUTH
+        // =========================================================================
         function logRecentActivity(action) {
             const time = new Date().toLocaleString();
             recentActivity.unshift({ action, time });
@@ -2731,11 +2912,11 @@
                 return;
             }
             container.innerHTML = recentActivity.map(item => `
-                <div style="padding:8px 0; border-bottom:1px solid #333;">
-                    <div style="color:#fff;">${item.action}</div>
-                    <div style="color:#888; font-size:0.85em;">${item.time}</div>
-                </div>
-            `).join('');
+                    <div style="padding:8px 0; border-bottom:1px solid #333;">
+                        <div style="color:#fff;">${item.action}</div>
+                        <div style="color:#888; font-size:0.85em;">${item.time}</div>
+                    </div>
+                `).join('');
         }
 
         // --- Toast Notification Functions ---
@@ -2804,6 +2985,7 @@
 
         function setButtonLoading(buttonId, isLoading) {
             const button = document.getElementById(buttonId);
+            if (!button) return;
             if (isLoading) {
                 button.disabled = true;
                 button.innerHTML = '<span class="loading-spinner"></span> Loading...';
@@ -2956,7 +3138,7 @@
                     preview.style.display = 'block';
 
                     const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-                    '.file-upload-text');
+                        '.file-upload-text');
                     uploadContainer.innerHTML = `<i class="fas fa-check-circle" style="color: #26a269;"></i><br>Upload successful!`;
 
                     showToast("Image uploaded successfully! URL generated.", 'success');
@@ -2975,9 +3157,9 @@
                 showToast(`Upload failed: ${error.message}`, 'error');
 
                 const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-                '.file-upload-text');
+                    '.file-upload-text');
                 uploadContainer.innerHTML = `Click to upload tournament image<br>
-                    <small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
+                        <small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
             }
         }
 
@@ -3062,7 +3244,10 @@
             if (confirm("Are you sure you want to logout?")) {
                 if (tournamentListener) tournamentListener();
                 if (userListener) userListener();
-
+                if (shiftCheckInterval) {
+                    clearInterval(shiftCheckInterval);
+                    shiftCheckInterval = null;
+                }
                 auth.signOut();
             }
         }
@@ -3095,6 +3280,15 @@
                     lastActive: FieldValue.serverTimestamp()
                 });
 
+                // ---- SHIFT CHECK - INITIAL RUN ----
+                checkShiftStatus();
+
+                // ---- SHIFT CHECK - EVERY 1 MINUTE ----
+                if (shiftCheckInterval) {
+                    clearInterval(shiftCheckInterval);
+                }
+                shiftCheckInterval = setInterval(checkShiftStatus, 60000);
+
                 hasPermissions = staffData.permissions || hasPermissions;
 
                 const popup = document.getElementById('welcome-popup');
@@ -3115,7 +3309,6 @@
 
                 showSection('dashboard-section');
 
-                // Load templates for all categories
                 refreshTemplates('solo');
                 refreshTemplates('duo');
                 refreshTemplates('squad');
@@ -3306,6 +3499,32 @@
             document.getElementById('join-date').textContent = joinDate;
             document.getElementById('last-active').textContent = lastActive;
 
+            // Update shift display
+            const shiftDisplay = document.getElementById('shift-display');
+            if (shiftDisplay && staffData.shiftStart && staffData.shiftEnd) {
+                try {
+                    const now = new Date();
+                    const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                        now.getMinutes().toString().padStart(2, '0');
+                    const shiftStart = staffData.shiftStart.trim();
+                    const shiftEnd = staffData.shiftEnd.trim();
+                    let isWithinShift = false;
+                    if (shiftStart <= shiftEnd) {
+                        isWithinShift = currentTimeStr >= shiftStart && currentTimeStr <= shiftEnd;
+                    } else {
+                        isWithinShift = currentTimeStr >= shiftStart || currentTimeStr <= shiftEnd;
+                    }
+                    const status = isWithinShift ? '✅ Active' : '⛔ Off-duty';
+                    shiftDisplay.textContent = `${shiftStart} - ${shiftEnd} (${status})`;
+                    shiftDisplay.style.color = isWithinShift ? '#26a269' : '#d72638';
+                } catch (e) {
+                    shiftDisplay.textContent = `${staffData.shiftStart} - ${staffData.shiftEnd}`;
+                }
+            } else if (shiftDisplay) {
+                shiftDisplay.textContent = 'No shift set (always on)';
+                shiftDisplay.style.color = '#888';
+            }
+
             const permissionsContainer = document.getElementById('permissions-container');
             permissionsContainer.innerHTML = '';
 
@@ -3384,103 +3603,103 @@
 
             container.innerHTML = filtered.map(
                 req => `
-        <div style="background:rgba(0,0,0,0.3);
-        border:1px solid #333; border-radius:8px;
-        padding:15px; margin-bottom:10px;">
-            <div style="display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:10px;">
-                <div>
-                    <div style="color:#fff;
-                    font-weight:700;
-                    font-size:1.1em;">
-                      ₹${req.amount}
+                <div style="background:rgba(0,0,0,0.3);
+                border:1px solid #333; border-radius:8px;
+                padding:15px; margin-bottom:10px;">
+                    <div style="display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:10px;">
+                        <div>
+                            <div style="color:#fff;
+                            font-weight:700;
+                            font-size:1.1em;">
+                              ₹${req.amount}
+                            </div>
+                            <div style="color:#aaa;
+                            font-size:0.85em;">
+                              UPI: ${req.upiId}
+                            </div>
+                            <div style="color:#666;
+                            font-size:0.8em;">
+                              ${req.createdAt ?
+                                new Date(req.createdAt)
+                                    .toLocaleString() : 'N/A'}
+                            </div>
+                        </div>
+                        <div>
+                            <span style="background:
+                            ${req.status === 'paid' ?
+                                'rgba(38,162,105,0.2)' :
+                                'rgba(255,199,0,0.2)'};
+                            color:
+                            ${req.status === 'paid' ?
+                                '#26a269' : '#ffc700'};
+                            padding:4px 10px;
+                            border-radius:12px;
+                            font-size:0.8em;
+                            font-weight:700;">
+                                ${req.status === 'paid'
+                                ? 'PAID' : 'PENDING'}
+                            </span>
+                        </div>
                     </div>
-                    <div style="color:#aaa;
-                    font-size:0.85em;">
-                      UPI: ${req.upiId}
-                    </div>
-                    <div style="color:#666;
-                    font-size:0.8em;">
-                      ${req.createdAt ?
-                        new Date(req.createdAt)
-                            .toLocaleString() : 'N/A'}
-                    </div>
+                    ${req.status === 'pending' ? `
+                        <div style="background:
+                        rgba(255,199,0,0.1);
+                        border:1px solid #ffc700;
+                        border-radius:6px;
+                        padding:10px;
+                        margin-bottom:10px;">
+                            <div style="color:#ffc700;
+                            font-size:0.9em;
+                            font-weight:600;">
+                              Pay this UPI ID:
+                            </div>
+                            <div style="color:#fff;
+                            font-size:1.1em;
+                            font-family:monospace;
+                            margin-top:5px;">
+                              ${req.upiId}
+                            </div>
+                            <div style="color:#aaa;
+                            font-size:0.85em;
+                            margin-top:5px;">
+                              Amount: ₹${req.amount}
+                            </div>
+                        </div>
+                        <button onclick=
+                        "markWithdrawalPaid(
+                        '${req.id}', '${req.userId}')"
+                        style="width:100%;
+                        background:linear-gradient(
+                        135deg,#26a269,#2ec27e);">
+                            <i class="fas fa-check"></i>
+                            Mark as Paid
+                        </button>
+                    ` : `
+                        <div style="color:#26a269;
+                        font-size:0.9em;">
+                          <i class="fas fa-check-circle">
+                          </i> Payment completed
+                        </div>
+                    `}
                 </div>
-                <div>
-                    <span style="background:
-                    ${req.status === 'paid' ?
-                        'rgba(38,162,105,0.2)' :
-                        'rgba(255,199,0,0.2)'};
-                    color:
-                    ${req.status === 'paid' ?
-                        '#26a269' : '#ffc700'};
-                    padding:4px 10px;
-                    border-radius:12px;
-                    font-size:0.8em;
-                    font-weight:700;">
-                        ${req.status === 'paid'
-                        ? 'PAID' : 'PENDING'}
-                    </span>
-                </div>
-            </div>
-            ${req.status === 'pending' ? `
-                <div style="background:
-                rgba(255,199,0,0.1);
-                border:1px solid #ffc700;
-                border-radius:6px;
-                padding:10px;
-                margin-bottom:10px;">
-                    <div style="color:#ffc700;
-                    font-size:0.9em;
-                    font-weight:600;">
-                      Pay this UPI ID:
-                    </div>
-                    <div style="color:#fff;
-                    font-size:1.1em;
-                    font-family:monospace;
-                    margin-top:5px;">
-                      ${req.upiId}
-                    </div>
-                    <div style="color:#aaa;
-                    font-size:0.85em;
-                    margin-top:5px;">
-                      Amount: ₹${req.amount}
-                    </div>
-                </div>
-                <button onclick=
-                "markWithdrawalPaid(
-                '${req.id}', '${req.userId}')"
-                style="width:100%;
-                background:linear-gradient(
-                135deg,#26a269,#2ec27e);">
-                    <i class="fas fa-check"></i>
-                    Mark as Paid
-                </button>
-            ` : `
-                <div style="color:#26a269;
-                font-size:0.9em;">
-                  <i class="fas fa-check-circle">
-                  </i> Payment completed
-                </div>
-            `}
-        </div>
-    `
+            `
             ).join('');
         }
 
         async function markWithdrawalPaid(
             requestId, userId) {
             if (!confirm(
-                'Did you send the payment via GPay/PhonePe?'
-                + ' Click OK only after paying!')) return;
+                    'Did you send the payment via GPay/PhonePe?'
+                    + ' Click OK only after paying!')) return;
 
             try {
                 const response = await fetch(
-                    'https://techno-esports-backend'
-                    + '.onrender.com'
-                    + '/api/wallet/withdraw/mark-paid', {
+                    'https://techno-esports-backend' +
+                    '.onrender.com' +
+                    '/api/wallet/withdraw/mark-paid', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -3541,7 +3760,6 @@
             document.getElementById('duo-tournaments-content').style.display = category === 'duo' ? 'block' : 'none';
             document.getElementById('squad-tournaments-content').style.display = category === 'squad' ? 'block' : 'none';
 
-            // Refresh templates when switching category
             refreshTemplates(category);
         }
 
@@ -3552,7 +3770,6 @@
                 return;
             }
 
-            // Gather template data from form
             let templateData = {
                 category: category,
                 createdBy: currentStaff.uid,
@@ -3580,13 +3797,11 @@
                 templateData.prizes = document.getElementById('squad-prizes').value.trim();
             }
 
-            // Validate required fields
             if (!templateData.title) {
                 showToast("Please enter a tournament title to save as template.", 'error');
                 return;
             }
 
-            // Ask for template name
             const templateName = prompt("Enter a name for this template:", templateData.title);
             if (!templateName) return;
 
@@ -3595,7 +3810,7 @@
             try {
                 await db.collection("tournament_templates").add(templateData);
                 showToast(`Template "${templateName}" saved successfully!`, 'success');
-                logRecentActivity(`Saved template "${templateName}" for ${category.toUpperCase()}`);
+                logStaffAction('saved_template', `${category.toUpperCase()} template: ${templateName}`, 0);
                 refreshTemplates(category);
             } catch (error) {
                 console.error("Error saving template:", error);
@@ -3607,7 +3822,6 @@
             const select = document.getElementById(`${category}-template-select`);
             if (!select) return;
 
-            // Preserve current selection if any
             const currentVal = select.value;
 
             select.innerHTML = '<option value="">-- Select a Template --</option>';
@@ -3626,7 +3840,6 @@
                     select.appendChild(option);
                 });
 
-                // Restore selection if still valid
                 if (currentVal && select.querySelector(`option[value="${currentVal}"]`)) {
                     select.value = currentVal;
                 }
@@ -3650,7 +3863,6 @@
 
                 const data = doc.data();
 
-                // Populate form fields (non-date specific)
                 if (category === 'solo') {
                     document.getElementById('solo-title').value = data.title || '';
                     document.getElementById('solo-entry-fee').value = data.entryFee || 0;
@@ -3685,6 +3897,9 @@
                 return;
             }
 
+            // Check shift before creating
+            checkShiftStatus();
+
             let formData = {};
 
             const imageUrl = document.getElementById(`${category}-image-url`).value.trim();
@@ -3694,7 +3909,6 @@
                 return;
             }
 
-            // Get auto-repeat toggle value
             const isAutoRepeat = document.getElementById(`${category}-auto-repeat`).checked;
 
             if (category === 'solo') {
@@ -3809,11 +4023,12 @@
 
                 await db.collection("tournaments").add(formData);
 
-                // Send broadcast notification for new tournament
                 sendPushNotification("New Tournament!", "New Match: " + formData.title + " is live! Join fast.");
 
                 showToast(`${category} tournament created successfully!`, 'success');
-                logRecentActivity(`Created ${category.toUpperCase()} tournament: ${formData.title}`);
+
+                // Log staff action
+                await logStaffAction('created_tournament', `${category.toUpperCase()} tournament: ${formData.title} (ID: ${formData.tournamentId})`, formData.entryFee || 0);
 
                 await updateStaffPerformance(1, 0, 0);
 
@@ -3846,11 +4061,10 @@
             preview.style.display = 'none';
 
             const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-            '.file-upload-text');
+                '.file-upload-text');
             uploadContainer.innerHTML = `Click to upload tournament image<br>
-                <small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
+                    <small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
 
-            // Reset auto-repeat toggle
             document.getElementById(`${category}-auto-repeat`).checked = false;
         }
 
@@ -3932,64 +4146,64 @@
             const autoRepeatColor = tournament.isAutoRepeat ? '#26a269' : '#888';
 
             card.innerHTML = `
-                <div class="tournament-header">
-                    <div style="font-weight: bold; color: #00a8ff;">${tournament.title}</div>
-                    ${statusBadge}
-                </div>
-
-                <div style="padding: 15px;">
-                    ${tournament.imageUrl ? `
-                    <div style="text-align: center; margin-bottom: 15px;">
-                        <img src="${tournament.imageUrl}" alt="${tournament.title}" style="max-width: 100%; max-height: 150px; border-radius: 6px; border: 1px solid #333;">
-                    </div>
-                    ` : ''}
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Date & Time</div>
-                            <div style="color: #fff; font-size: 0.9em;">${tournamentDate} - ${tournament.conductingTime || 'TBA'}</div>
-                        </div>
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Entry Fee</div>
-                            <div style="color: #ffd700; font-weight: bold;">₹${tournament.entryFee || 0}</div>
-                        </div>
+                    <div class="tournament-header">
+                        <div style="font-weight: bold; color: #00a8ff;">${tournament.title}</div>
+                        ${statusBadge}
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Max Players</div>
-                            <div style="color: #fff; font-size: 0.9em;">${tournament.maxParticipants || 0}</div>
+                    <div style="padding: 15px;">
+                        ${tournament.imageUrl ? `
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <img src="${tournament.imageUrl}" alt="${tournament.title}" style="max-width: 100%; max-height: 150px; border-radius: 6px; border: 1px solid #333;">
                         </div>
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Registered</div>
-                            <div style="color: #fff; font-size: 0.9em;">${tournament.participants || 0}</div>
-                        </div>
-                    </div>
+                        ` : ''}
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Credentials</div>
-                            <div style="color: ${visibilityColor}; font-size: 0.9em;">${visibilityText}</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Date & Time</div>
+                                <div style="color: #fff; font-size: 0.9em;">${tournamentDate} - ${tournament.conductingTime || 'TBA'}</div>
+                            </div>
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Entry Fee</div>
+                                <div style="color: #ffd700; font-weight: bold;">₹${tournament.entryFee || 0}</div>
+                            </div>
                         </div>
-                        <div>
-                            <div style="color: #aaa; font-size: 0.8em;">Auto-Repeat</div>
-                            <div style="color: ${autoRepeatColor}; font-size: 0.9em;">${autoRepeatText}</div>
-                        </div>
-                    </div>
 
-                    <div class="tournament-actions">
-                        <button onclick="showCredentialsModal('${tournament.id}')" style="background: #333; flex: 1;">
-                            <i class="fas fa-key"></i> View Credentials
-                        </button>
-                        <button onclick="toggleTournamentStatus('${tournament.id}', '${tournament.status}')" style="flex: 1;">
-                            <i class="fas fa-edit"></i> Edit Status
-                        </button>
-                        <button onclick="deleteTournament('${tournament.id}')" style="background: #d72638; flex: 1;">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Max Players</div>
+                                <div style="color: #fff; font-size: 0.9em;">${tournament.maxParticipants || 0}</div>
+                            </div>
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Registered</div>
+                                <div style="color: #fff; font-size: 0.9em;">${tournament.participants || 0}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Credentials</div>
+                                <div style="color: ${visibilityColor}; font-size: 0.9em;">${visibilityText}</div>
+                            </div>
+                            <div>
+                                <div style="color: #aaa; font-size: 0.8em;">Auto-Repeat</div>
+                                <div style="color: ${autoRepeatColor}; font-size: 0.9em;">${autoRepeatText}</div>
+                            </div>
+                        </div>
+
+                        <div class="tournament-actions">
+                            <button onclick="showCredentialsModal('${tournament.id}')" style="background: #333; flex: 1;">
+                                <i class="fas fa-key"></i> View Credentials
+                            </button>
+                            <button onclick="toggleTournamentStatus('${tournament.id}', '${tournament.status}')" style="flex: 1;">
+                                <i class="fas fa-edit"></i> Edit Status
+                            </button>
+                            <button onclick="deleteTournament('${tournament.id}')" style="background: #d72638; flex: 1;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
 
             return card;
         }
@@ -4010,8 +4224,8 @@
             showConfirmationModal(
                 "Delete Tournament",
                 `Are you sure you want to delete the tournament:<br>
-                <strong>${tournament.title}</strong><br>
-                This action cannot be undone and will also delete all related registrations.`,
+                        <strong>${tournament.title}</strong><br>
+                        This action cannot be undone and will also delete all related registrations.`,
                 async () => {
                     try {
                         const registrationsSnapshot = await db.collection("tournament_registrations")
@@ -4089,11 +4303,15 @@
                 });
 
                 if (newVisibility) {
-                    // TARGETED PUSH: send only to users who have joined this tournament
                     const targetTag = "tour_" + currentTournamentId;
                     await sendPushNotification("Credentials Released!", "Room ID & Password for the match are now visible.",
                         targetTag);
                 }
+
+                // Log action
+                await logStaffAction('updated_credentials',
+                    `Tournament: ${tournament.title}, Credentials ${newVisibility ? 'shown' : 'hidden'} to users`,
+                    0);
 
                 showToast(`Credentials ${newVisibility ? 'shown' : 'hidden'} to users!`, 'success');
                 closeModal('credentials-modal');
@@ -4122,11 +4340,11 @@
             statusOptions.forEach((status, index) => {
                 const isCurrent = status === currentStatus;
                 statusHtml += `
-                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                        <input type="radio" id="status-${status}" name="tournament-status" value="${status}" ${isCurrent ? 'checked' : ''}>
-                        <label for="status-${status}" style="margin-left: 8px; color: #fff;">${statusNames[index]}</label>
-                    </div>
-                `;
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <input type="radio" id="status-${status}" name="tournament-status" value="${status}" ${isCurrent ? 'checked' : ''}>
+                            <label for="status-${status}" style="margin-left: 8px; color: #fff;">${statusNames[index]}</label>
+                        </div>
+                    `;
             });
             statusHtml += '</div>';
 
@@ -4143,6 +4361,12 @@
                             visibleToUsers: selectedStatus === 'active' || selectedStatus === 'upcoming',
                             updatedAt: FieldValue.serverTimestamp()
                         });
+
+                        // Log action
+                        await logStaffAction('changed_tournament_status',
+                            `Tournament: ${tournament.title}, Status: ${currentStatus} → ${selectedStatus}`,
+                            0);
+
                         showToast(`Tournament status updated to ${selectedStatus}!`, 'success');
                     } catch (error) {
                         console.error("Error updating tournament status:", error);
@@ -4168,33 +4392,33 @@
                 const row = tbody.insertRow();
 
                 const regDate = user.registeredAt ? new Date(user.registeredAt.toDate()).toLocaleDateString() :
-                'N/A';
+                    'N/A';
                 const statusBadge = user.isBlocked ?
                     '<span class="status-badge status-blocked">Blocked</span>' :
                     '<span class="status-badge status-active">Active</span>';
 
                 const blockButton = user.isBlocked ?
                     `<button onclick="toggleUserBlock('${user.id}', ${user.isBlocked})" style="background: #26a269; padding: 6px 12px; font-size: 0.8em;">
-                        <i class="fas fa-unlock"></i> Unblock
-                       </button>` :
+                            <i class="fas fa-unlock"></i> Unblock
+                           </button>` :
                     `<button onclick="toggleUserBlock('${user.id}', ${user.isBlocked})" style="background: #d72638; padding: 6px 12px; font-size: 0.8em;">
-                        <i class="fas fa-ban"></i> Block
-                       </button>`;
+                            <i class="fas fa-ban"></i> Block
+                           </button>`;
 
                 row.innerHTML = `
-                    <td>${user.username || 'N/A'}</td>
-                    <td>${user.phone || 'N/A'}</td>
-                    <td>${user.email}</td>
-                    <td>${user.tournamentsParticipated || 0}</td>
-                    <td>₹${Number(user.walletBalance || 0).toFixed(2)}</td>
-                    <td>${statusBadge}</td>
-                    <td>
-                        ${blockButton}
-                        <button onclick="addWalletCredit('${user.id}')" style="background:#26a269; padding:6px 12px; font-size:0.8em; margin-left:6px;">
-                            <i class="fas fa-plus-circle"></i> Add ₹
-                        </button>
-                    </td>
-                `;
+                        <td>${user.username || 'N/A'}</td>
+                        <td>${user.phone || 'N/A'}</td>
+                        <td>${user.email}</td>
+                        <td>${user.tournamentsParticipated || 0}</td>
+                        <td>₹${Number(user.walletBalance || 0).toFixed(2)}</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            ${blockButton}
+                            <button onclick="addWalletCredit('${user.id}')" style="background:#26a269; padding:6px 12px; font-size:0.8em; margin-left:6px;">
+                                <i class="fas fa-plus-circle"></i> Add ₹
+                            </button>
+                        </td>
+                    `;
             });
         }
 
@@ -4218,7 +4442,7 @@
                     updatedAt: FieldValue.serverTimestamp()
                 });
                 showToast(`₹${amount.toFixed(2)} added to wallet.`, 'success');
-                logRecentActivity(`Manual wallet credit of ₹${amount.toFixed(2)} completed`);
+                logStaffAction('manual_wallet_credit', `Added ₹${amount.toFixed(2)} to user ${userId}`, amount);
                 await updateStaffPerformance(0, 1, 0);
             } catch (error) {
                 console.error("Error adding wallet credit:", error);
@@ -4241,10 +4465,12 @@
                     try {
                         await db.collection("users").doc(userId).update({ isBlocked: newBlockedStatus });
 
+                        await logStaffAction('toggled_user_block',
+                            `User ${userId} ${newBlockedStatus ? 'blocked' : 'unblocked'}`, 0);
+
                         await updateStaffPerformance(0, 1, 0);
 
                         showToast(`User ${newBlockedStatus ? 'blocked' : 'unblocked'} successfully!`, 'success');
-                        logRecentActivity(`User ${newBlockedStatus ? 'blocked' : 'unblocked'} successfully`);
                     } catch (error) {
                         console.error("Error toggling user block status:", error);
                         showToast("Error updating user status.", 'error');
@@ -4334,12 +4560,12 @@
 
             if (playersContainer) {
                 playersContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-trophy"></i>
-                        <h3>No Tournament Selected</h3>
-                        <p>Select a tournament to load approved players.</p>
-                    </div>
-                `;
+                        <div class="empty-state">
+                            <i class="fas fa-trophy"></i>
+                            <h3>No Tournament Selected</h3>
+                            <p>Select a tournament to load approved players.</p>
+                        </div>
+                    `;
             }
             if (previewContainer) previewContainer.style.display = 'none';
             if (resultContainer) {
@@ -4384,11 +4610,11 @@
                 const perKillAmount = Number(selectedPrizeTournament.perKill || 0);
                 detailsEl.style.display = 'block';
                 detailsEl.innerHTML = `
-                    <strong style="color:#00a8ff;">${selectedPrizeTournament.title}</strong><br>
-                    Category: ${String(selectedPrizeTournament.category || '').toUpperCase()} |
-                    Entry Fee: ₹${Number(selectedPrizeTournament.entryFee || 0).toFixed(2)} |
-                    Per Kill: ₹${perKillAmount.toFixed(2)}
-                `;
+                        <strong style="color:#00a8ff;">${selectedPrizeTournament.title}</strong><br>
+                        Category: ${String(selectedPrizeTournament.category || '').toUpperCase()} |
+                        Entry Fee: ₹${Number(selectedPrizeTournament.entryFee || 0).toFixed(2)} |
+                        Per Kill: ₹${perKillAmount.toFixed(2)}
+                    `;
                 if (perKillReadonly) perKillReadonly.textContent = `₹${perKillAmount.toFixed(2)}`;
             }
 
@@ -4445,12 +4671,12 @@
 
             if (!prizeDistributionPlayers.length) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-slash"></i>
-                        <h3>No Approved Players</h3>
-                        <p>No approved players found for this tournament.</p>
-                    </div>
-                `;
+                        <div class="empty-state">
+                            <i class="fas fa-user-slash"></i>
+                            <h3>No Approved Players</h3>
+                            <p>No approved players found for this tournament.</p>
+                        </div>
+                    `;
                 return;
             }
 
@@ -4458,43 +4684,43 @@
             const perKillText = Number.isFinite(perKillAmount) ? perKillAmount : 0;
 
             container.innerHTML = `
-                <div style="color:#aaa; margin-bottom:10px;">
-                    Players: ${prizeDistributionPlayers.length} | Per Kill: <span style="color:#00a8ff; font-weight:600;">₹${perKillText}</span>
-                </div>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Player</th>
-                                <th>FF UID</th>
-                                <th>Kills</th>
-                                <th>Position</th>
-                                <th>Total Prize</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${prizeDistributionPlayers.map((player, idx) => `
+                    <div style="color:#aaa; margin-bottom:10px;">
+                        Players: ${prizeDistributionPlayers.length} | Per Kill: <span style="color:#00a8ff; font-weight:600;">₹${perKillText}</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>${player.name}</td>
-                                    <td>${player.freeFireId}</td>
-                                    <td>
-                                        <input type="number" min="0" value="${player.kills}" onchange="updatePlayerKills(${idx}, this.value)" style="min-width:90px;">
-                                    </td>
-                                    <td>
-                                        <select onchange="updatePlayerPosition(${idx}, this.value)" style="min-width:120px;">
-                                            <option value="none" ${player.position === 'none' ? 'selected' : ''}>None</option>
-                                            <option value="1st" ${player.position === '1st' ? 'selected' : ''}>1st</option>
-                                            <option value="2nd" ${player.position === '2nd' ? 'selected' : ''}>2nd</option>
-                                            <option value="3rd" ${player.position === '3rd' ? 'selected' : ''}>3rd</option>
-                                        </select>
-                                    </td>
-                                    <td style="color:#00a8ff; font-weight:700;">₹${Number(player.amount || 0).toFixed(2)}</td>
+                                    <th>Player</th>
+                                    <th>FF UID</th>
+                                    <th>Kills</th>
+                                    <th>Position</th>
+                                    <th>Total Prize</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
+                            </thead>
+                            <tbody>
+                                ${prizeDistributionPlayers.map((player, idx) => `
+                                    <tr>
+                                        <td>${player.name}</td>
+                                        <td>${player.freeFireId}</td>
+                                        <td>
+                                            <input type="number" min="0" value="${player.kills}" onchange="updatePlayerKills(${idx}, this.value)" style="min-width:90px;">
+                                        </td>
+                                        <td>
+                                            <select onchange="updatePlayerPosition(${idx}, this.value)" style="min-width:120px;">
+                                                <option value="none" ${player.position === 'none' ? 'selected' : ''}>None</option>
+                                                <option value="1st" ${player.position === '1st' ? 'selected' : ''}>1st</option>
+                                                <option value="2nd" ${player.position === '2nd' ? 'selected' : ''}>2nd</option>
+                                                <option value="3rd" ${player.position === '3rd' ? 'selected' : ''}>3rd</option>
+                                            </select>
+                                        </td>
+                                        <td style="color:#00a8ff; font-weight:700;">₹${Number(player.amount || 0).toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
 
             const matchContainer = document.getElementById('match-results-players-container');
             if (matchContainer && document.getElementById('match-results-section')?.style.display === 'block') {
@@ -4552,11 +4778,11 @@
                 total += totalPrize;
 
                 previewRows += `
-                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #333;">
-                        <span style="color:#ddd;">${player.name} (${player.kills} Kills${player.position && player.position !== 'none' ? `, ${player.position}` : ''})</span>
-                        <span style="color:#00a8ff; font-weight:600;">₹${totalPrize.toFixed(2)}</span>
-                    </div>
-                `;
+                        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #333;">
+                            <span style="color:#ddd;">${player.name} (${player.kills} Kills${player.position && player.position !== 'none' ? `, ${player.position}` : ''})</span>
+                            <span style="color:#00a8ff; font-weight:600;">₹${totalPrize.toFixed(2)}</span>
+                        </div>
+                    `;
             });
 
             renderPrizeDistributionPlayers();
@@ -4566,10 +4792,26 @@
             previewContainer.style.display = 'block';
         }
 
+        // ---- DISTRIBUTE PRIZES with Daily Limit Enforcement ----
         async function distributePrizes() {
             if (!selectedPrizeTournament || !prizeDistributionPlayers.length) {
                 showToast("Please select tournament and players first.", 'error');
                 return;
+            }
+
+            // ---- DAILY PRIZE LIMIT CHECK ----
+            const dailyLimit = Number(staffData.dailyPrizeLimit || 0);
+            if (dailyLimit > 0) {
+                const todayDistributed = await getTodayDistributedAmount(currentStaff.uid);
+                const newTotalAmount = prizeDistributionPlayers.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+                if (todayDistributed + newTotalAmount > dailyLimit) {
+                    showToast(
+                        `Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}. Cannot distribute ₹${newTotalAmount.toFixed(2)}.`,
+                        'error'
+                    );
+                    return;
+                }
             }
 
             const distributeBtn = document.getElementById('distribute-prizes-btn');
@@ -4602,14 +4844,39 @@
             };
 
             const totalAmount = winners.reduce((sum, w) => sum + Number(w.amount || 0), 0);
+
+            // Show confirmation with daily limit info
+            let confirmMsg =
+                `Are you sure? This will add money to <strong>${winners.length}</strong> players' wallets.`;
+            if (dailyLimit > 0) {
+                const todayDistributed = await getTodayDistributedAmount(currentStaff.uid);
+                confirmMsg +=
+                    `<br><br><span style="color:#00a8ff;">Daily limit: ₹${dailyLimit.toFixed(2)} | Used today: ₹${todayDistributed.toFixed(2)} | This distribution: ₹${totalAmount.toFixed(2)}</span>`;
+            }
+            confirmMsg += `<br><br><strong style="color:#ffc700;">Total: ₹${totalAmount.toFixed(2)}</strong>`;
+
             showConfirmationModal(
                 "Confirm Prize Distribution",
-                `Are you sure? This will add money to <strong>${winners.length}</strong> players' wallets.`,
+                confirmMsg,
                 async () => {
                     distributeBtn.disabled = true;
                     distributeBtn.innerHTML = '<span class="loading-spinner"></span> Distributing...';
 
                     try {
+                        // Double-check daily limit before sending
+                        if (dailyLimit > 0) {
+                            const todayDistributed = await getTodayDistributedAmount(currentStaff.uid);
+                            if (todayDistributed + totalAmount > dailyLimit) {
+                                showToast(
+                                    `Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}`,
+                                    'error'
+                                );
+                                distributeBtn.disabled = false;
+                                distributeBtn.innerHTML = '<i class="fas fa-coins"></i> Distribute Now';
+                                return;
+                            }
+                        }
+
                         const response = await fetch(`${BACKEND_BASE_URL}/api/tournament/distribute-prizes`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -4626,19 +4893,26 @@
                             updatedAt: FieldValue.serverTimestamp()
                         });
 
+                        // --- Log the prize distribution action ---
+                        await logStaffAction(
+                            'distributed_prizes',
+                            `Tournament: ${selectedPrizeTournament.title}, Winners: ${winners.length}`,
+                            totalAmount
+                        );
+
                         resultContainer.innerHTML = `
-                            <h4 style="margin:0 0 8px 0; color:#26a269;"><i class="fas fa-check-circle"></i> Prizes Distributed Successfully</h4>
-                            <div style="color:#ddd; font-size:0.92em;">
-                                Tournament: <strong>${selectedPrizeTournament.title}</strong><br>
-                                Winners Updated: <strong>${winners.length}</strong><br>
-                                Total Distributed: <strong>₹${totalAmount.toFixed(2)}</strong>
-                            </div>
-                        `;
+                                <h4 style="margin:0 0 8px 0; color:#26a269;"><i class="fas fa-check-circle"></i> Prizes Distributed Successfully</h4>
+                                <div style="color:#ddd; font-size:0.92em;">
+                                    Tournament: <strong>${selectedPrizeTournament.title}</strong><br>
+                                    Winners Updated: <strong>${winners.length}</strong><br>
+                                    Total Distributed: <strong>₹${totalAmount.toFixed(2)}</strong>
+                                    ${dailyLimit > 0 ? `<br>Daily limit remaining: ₹${(dailyLimit - (await getTodayDistributedAmount(currentStaff.uid))).toFixed(2)}` : ''}
+                                </div>
+                            `;
                         resultContainer.style.display = 'block';
                         showToast("Prizes distributed successfully!", 'success');
-                        await sendPushNotification("🏆 Tournament Results!", "🏆 Tournament Results! Check your wallet for prize money!");
-                        logRecentActivity(
-                            `Distributed ₹${totalAmount.toFixed(2)} prizes for ${selectedPrizeTournament.title}`);
+                        await sendPushNotification("🏆 Tournament Results!",
+                            "🏆 Tournament Results! Check your wallet for prize money!");
                     } catch (error) {
                         console.error("Error distributing prizes:", error);
                         showToast(error.message || "Failed to distribute prizes.", 'error');
@@ -4674,12 +4948,12 @@
 
             if (!tournamentId) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-check"></i>
-                        <h3>No Tournament Selected</h3>
-                        <p>Please select a tournament from the dropdown above.</p>
-                    </div>
-                `;
+                        <div class="empty-state">
+                            <i class="fas fa-user-check"></i>
+                            <h3>No Tournament Selected</h3>
+                            <p>Please select a tournament from the dropdown above.</p>
+                        </div>
+                    `;
                 return;
             }
 
@@ -4700,25 +4974,25 @@
 
                 if (registeredUsers.length === 0) {
                     container.innerHTML = `
-                        <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
-                        <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
-                            Total: 0 ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
-                        </div>
-                        <div class="empty-state">
-                            <i class="fas fa-user-slash"></i>
-                            <h3>No Registered Users</h3>
-                            <p>No users have registered for this tournament yet.</p>
-                        </div>
-                    `;
+                            <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
+                            <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
+                                Total: 0 ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
+                            </div>
+                            <div class="empty-state">
+                                <i class="fas fa-user-slash"></i>
+                                <h3>No Registered Users</h3>
+                                <p>No users have registered for this tournament yet.</p>
+                            </div>
+                        `;
                     return;
                 }
 
                 container.innerHTML = `
-                    <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
-                    <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
-                        Total: ${registeredUsers.length} ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
-                    </div>
-                `;
+                        <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
+                        <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
+                            Total: ${registeredUsers.length} ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
+                        </div>
+                    `;
 
                 registeredUsers.forEach((reg, index) => {
                     const userCard = document.createElement('div');
@@ -4728,54 +5002,54 @@
                     if (reg.playerDetails && Array.isArray(reg.playerDetails)) {
                         reg.playerDetails.forEach((player, idx) => {
                             playerDetailsHtml += `
-                                <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; margin-top: 5px; font-size: 0.85em;">
-                                    <div><strong>Player ${idx + 1}:</strong> ${player.name}</div>
-                                    <div>FF ID: ${player.freeFireId || 'N/A'} | Level: ${player.level || 'N/A'}</div>
-                                </div>
-                            `;
+                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; margin-top: 5px; font-size: 0.85em;">
+                                        <div><strong>Player ${idx + 1}:</strong> ${player.name}</div>
+                                        <div>FF ID: ${player.freeFireId || 'N/A'} | Level: ${player.level || 'N/A'}</div>
+                                    </div>
+                                `;
                         });
                     }
 
                     const hasScreenshot = reg.paymentScreenshotUrl && reg.paymentScreenshotUrl.trim() !== '';
 
                     userCard.innerHTML = `
-                        <div class="user-header">
-                            <div class="user-name">${reg.name}</div>
-                            <div style="color: #00a8ff; font-weight: bold;">#${index + 1}</div>
-                        </div>
-                        <div class="user-details">
-                            <div>Email: ${reg.email}</div>
-                            <div>Mobile: ${reg.mobile}</div>
-                            ${reg.teamName ? `<div>Team: ${reg.teamName}</div>` : ''}
-                            <div style="margin-top: 10px;">
-                                <strong>Player Details:</strong>
-                                ${playerDetailsHtml || '<div style="color: #888; font-style: italic;">No player details</div>'}
+                            <div class="user-header">
+                                <div class="user-name">${reg.name}</div>
+                                <div style="color: #00a8ff; font-weight: bold;">#${index + 1}</div>
                             </div>
-                            <div style="margin-top: 10px; color: #666; font-size: 0.85em;">
-                                Registered: ${reg.registeredAt ? new Date(reg.registeredAt.toDate()).toLocaleString() : 'N/A'}
-                                ${reg.verifiedAt ? `<br>Approved: ${new Date(reg.verifiedAt.toDate()).toLocaleString()}` : ''}
-                            </div>
+                            <div class="user-details">
+                                <div>Email: ${reg.email}</div>
+                                <div>Mobile: ${reg.mobile}</div>
+                                ${reg.teamName ? `<div>Team: ${reg.teamName}</div>` : ''}
+                                <div style="margin-top: 10px;">
+                                    <strong>Player Details:</strong>
+                                    ${playerDetailsHtml || '<div style="color: #888; font-style: italic;">No player details</div>'}
+                                </div>
+                                <div style="margin-top: 10px; color: #666; font-size: 0.85em;">
+                                    Registered: ${reg.registeredAt ? new Date(reg.registeredAt.toDate()).toLocaleString() : 'N/A'}
+                                    ${reg.verifiedAt ? `<br>Approved: ${new Date(reg.verifiedAt.toDate()).toLocaleString()}` : ''}
+                                </div>
 
-                            ${hasScreenshot ? `
-                            <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                                <div style="color: #aaa; font-size: 0.9em; margin-bottom: 10px;">
-                                    <i class="fas fa-image"></i> Payment Proof
+                                ${hasScreenshot ? `
+                                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+                                    <div style="color: #aaa; font-size: 0.9em; margin-bottom: 10px;">
+                                        <i class="fas fa-image"></i> Payment Proof
+                                    </div>
+                                    <div>
+                                        <button onclick="viewScreenshotFullscreen('${reg.paymentScreenshotUrl}', '${reg.name}')" style="background: #333; width: 100%;">
+                                            <i class="fas fa-eye"></i> View Screenshot
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button onclick="viewScreenshotFullscreen('${reg.paymentScreenshotUrl}', '${reg.name}')" style="background: #333; width: 100%;">
-                                        <i class="fas fa-eye"></i> View Screenshot
-                                    </button>
+                                ` : `
+                                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+                                    <div style="color: #888; font-size: 0.85em; text-align: center;">
+                                        <i class="fas fa-exclamation-circle"></i> No payment screenshot available
+                                    </div>
                                 </div>
+                                `}
                             </div>
-                            ` : `
-                            <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                                <div style="color: #888; font-size: 0.85em; text-align: center;">
-                                    <i class="fas fa-exclamation-circle"></i> No payment screenshot available
-                                </div>
-                            </div>
-                            `}
-                        </div>
-                    `;
+                        `;
 
                     container.appendChild(userCard);
                 });
@@ -4834,6 +5108,10 @@
 
                 if (tournamentListener) tournamentListener();
                 if (userListener) userListener();
+                if (shiftCheckInterval) {
+                    clearInterval(shiftCheckInterval);
+                    shiftCheckInterval = null;
+                }
 
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('professional-auth-section').style.display = 'flex';
@@ -4894,21 +5172,10 @@
             }
         }
 
-        // --- Removed Application Verification functions ---
-        // The following functions have been removed as requested:
-        // - renderPendingApplications()
-        // - showRejectionModal()
-        // - approveApplication()
-        // - confirmRejection()
-        // - pendingApplications array
-
-        // Note: The rejection-modal and related UI elements are kept in HTML
-        // but the JS functions that powered them have been removed.
-        // The modal itself is harmless and can be removed later if desired.
-
         console.log("✅ Staff panel loaded with all requested features:");
-        console.log("  - Application Verification removed");
-        console.log("  - OneSignal push with targetTagKey support");
+        console.log("  - Shift-Based Access Enforcement (checkShiftStatus every 60s)");
+        console.log("  - Activity Auditing (staff_logs)");
+        console.log("  - Daily Prize Limit Enforcement");
         console.log("  - Tournament Templates (Save & Load)");
         console.log("  - Daily Auto-Repeat toggle");
     </script>
