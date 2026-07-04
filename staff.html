@@ -2303,7 +2303,13 @@
                             <hr style="border-color:#333; margin:25px 0;">
 
                             <!-- Auto-Repeat Tournaments Sub-section -->
-                            <h4 style="color:#00a8ff;">Active Auto-Repeat Tournaments</h4>
+                            <!-- Added "Run Auto-Repeat Now" button -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <h4 style="color:#00a8ff; margin:0;">Active Auto-Repeat Tournaments</h4>
+                                <button onclick="triggerAutoRepeatManually()" id="trigger-repeat-btn" style="background:linear-gradient(135deg, #1e8b57 0%, #26a269 100%); padding:8px 15px; font-size:13px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600; box-shadow: 0 4px 15px rgba(38, 162, 105, 0.3);">
+                                    <i class="fas fa-bolt"></i> Run Auto-Repeat Now
+                                </button>
+                            </div>
                             <div style="color:#aaa; font-size:0.9em; margin-bottom:12px;">
                                 Tournaments that automatically repeat daily. Turn off repeat to stop the cycle.
                             </div>
@@ -5300,6 +5306,47 @@
             document.getElementById('confirmation-modal').style.display = 'block';
         }
 
+        // ===== NEW: triggerAutoRepeatManually =====
+        async function triggerAutoRepeatManually() {
+            showConfirmationModal(
+                "Run Auto-Repeat",
+                "This will manually trigger the daily auto-repeat process for all active auto-repeat tournaments. Are you sure?",
+                async () => {
+                    const btn = document.getElementById('trigger-repeat-btn');
+                    const originalText = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Running...';
+
+                    try {
+                        const response = await fetch(`${BACKEND_BASE_URL}/api/trigger-auto-repeat`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Failed to trigger auto-repeat');
+                        }
+
+                        showToast(data.message || 'Auto-repeat triggered successfully!', 'success');
+
+                        // Log action
+                        await logStaffAction('trigger_auto_repeat_manual', 'Manually triggered auto-repeat', 0);
+
+                        // Refresh UI
+                        await loadTemplatesAndAutoRepeat();
+                        await renderTournaments();
+
+                    } catch (error) {
+                        showToast('Error: ' + error.message, 'error');
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    }
+                }
+            );
+        }
+
         // --- Auth State ---
         auth.onAuthStateChanged(async user => {
             authStateChecked = true;
@@ -5392,6 +5439,7 @@
         console.log("  - Fixed: forceLogout does NOT reset to false");
         console.log("  - Removed: registrationEndTime fields");
         console.log("  - NEW: applyTemplateFromList() attached to Load button in Automations");
+        console.log("  - NEW: triggerAutoRepeatManually() with Run Auto-Repeat Now button");
     </script>
 </body>
 </html>
