@@ -3181,18 +3181,12 @@
             if (!templateId) { clearTournamentForm(category); return; }
             const t = tournamentTemplates.find(tm => tm.id === templateId);
             if (!t) return;
+            
+            // 1. Text Fields ని ఫిల్ చేయడం
             document.getElementById(`${category}-title`).value = t.title || '';
             document.getElementById(`${category}-details`).value = t.details || '';
             document.getElementById(`${category}-entry-fee`).value = t.entryFee || '';
-            if (t.imageUrl) {
-                document.getElementById(`${category}-image-url`).value = t.imageUrl;
-                const preview = document.getElementById(`${category}-image-preview`);
-                preview.src = t.imageUrl;
-                preview.style.display = 'block';
-                const container = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-                '.file-upload-text');
-                container.innerHTML = `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template image loaded`;
-            }
+            
             if (category === 'solo') {
                 document.getElementById('solo-max-players').value = t.maxParticipants || '';
                 document.getElementById('solo-per-kill').value = t.perKill || '';
@@ -3203,7 +3197,26 @@
                 document.getElementById('squad-max-squads').value = t.maxParticipants || '';
                 document.getElementById('squad-prizes').value = t.prizes || '';
             }
-            showToast("Template loaded!", 'info');
+
+            // 2. IMAGE ని ఫిల్ చేసి చూపించడం (The Fix 🔥)
+            const imageUrlInput = document.getElementById(`${category}-image-url`);
+            const imagePreview = document.getElementById(`${category}-image-preview`);
+            const uploadTextContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector('.file-upload-text');
+
+            if (t.imageUrl && t.imageUrl.trim() !== '') {
+                imageUrlInput.value = t.imageUrl;
+                imagePreview.src = t.imageUrl;
+                imagePreview.style.display = 'block';
+                uploadTextContainer.innerHTML = `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template Image Loaded!`;
+            } else {
+                // ఒకవేళ టెంప్లేట్ లో ఇమేజ్ లేకపోతే
+                imageUrlInput.value = '';
+                imagePreview.src = '';
+                imagePreview.style.display = 'none';
+                uploadTextContainer.innerHTML = `Click to upload tournament image<br><small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
+            }
+
+            showToast("Template loaded successfully!", 'success');
         }
 
         // ─── NEW: applyTemplateFromList ────────────────────────
@@ -3350,57 +3363,46 @@
             const container = document.getElementById('auto-repeat-container');
             if (!container) return;
             try {
-                const snap = await db.collection("tournaments")
-                    .where("isAutoRepeat", "==", true)
-                    .where("status", "in", ["active", "upcoming"])
-                    .orderBy("createdAt", "desc")
-                    .get();
+    // కేవలం isAutoRepeat ఉన్నవి మాత్రమే డేటాబేస్ నుంచి తెచ్చుకుంటాం (ఇండెక్స్ అవసరం లేదు)
+    const snap = await db.collection("tournaments")
+        .where("isAutoRepeat", "==", true)
+        .get();
 
-                const autoTours = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // వచ్చిన డేటాని జావాస్క్రిప్ట్ లోనే ఫిల్టర్ చేస్తాం
+    const autoRepeats = snap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(t => t.status === 'active' || t.status === 'upcoming');
 
-                if (!autoTours.length) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-sync-alt"></i>
-                            <h3>No Active Auto-Repeats</h3>
-                            <p>No tournaments with Auto-Repeat enabled in Active or Upcoming status.</p>
-                        </div>
-                    `;
-                    return;
-                }
+    // UI లో చూపించడం
+    const container = document.getElementById('active-auto-repeats-container'); 
+    // గమనిక: DeepSeek ఏ id ఇచ్చిందో అది ఉంచుకో, నేను ఉదాహరణకి container అని రాశాను
+    
+    if (autoRepeats.length === 0) {
+        container.innerHTML = '<p style="color:#aaa;">No active auto-repeat tournaments found.</p>';
+        return;
+    }
 
-                let html = '';
-                autoTours.forEach(t => {
-                    const statusBadge = t.status === 'active' ?
-                        '<span class="status-badge status-active">Active</span>' :
-                        '<span class="status-badge status-pending">Upcoming</span>';
-                    html += `
-                        <div class="auto-repeat-card">
-                            <div class="auto-repeat-info">
-                                <div>
-                                    <div style="color:#fff;font-weight:600;font-size:1.05em;">${t.title || 'Untitled'}</div>
-                                    <div style="color:#aaa;font-size:0.85em;margin-top:4px;">
-                                        <span class="badge-category">${t.category || 'N/A'}</span>
-                                        ${statusBadge}
-                                        <span style="color:#666;margin-left:10px;">ID: ${t.tournamentId || 'N/A'}</span>
-                                        ${t.isAutoRepeat ? '<span style="color:#ffc700;margin-left:10px;"><i class="fas fa-sync-alt"></i> Auto-Repeat ON</span>' : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="auto-repeat-actions">
-                                <button onclick="turnOffAutoRepeat('${t.id}')" class="btn-danger" style="padding:8px 16px;font-size:13px;">
-                                    <i class="fas fa-power-off"></i> Turn Off Auto-Repeat
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (e) {
-                container.innerHTML =
-                    `<p style="color:#d72638;text-align:center;padding:20px;">Error loading auto-repeats: ${e.message}</p>`;
-            }
-        }
+    let html = '';
+    autoRepeats.forEach(t => {
+        html += `
+            <div style="background:rgba(0,0,0,0.3); border:1px solid #333; padding:15px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h4 style="margin:0; color:#ff4655;">${t.title}</h4>
+                    <span style="color:#aaa; font-size:0.85em; text-transform:uppercase;">${t.category} | Fee: ₹${t.entryFee}</span>
+                </div>
+                <button onclick="turnOffAutoRepeat('${t.id}')" style="background:linear-gradient(135deg, #d72638 0%, #ff4655 100%); padding:8px 15px; font-size:0.85em;">
+                    <i class="fas fa-power-off"></i> Turn Off
+                </button>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+
+} catch (error) {
+    console.error("Error loading auto-repeats:", error);
+    // ఎర్రర్ వస్తే చూపించడానికి
+}
+}
 
         // Turn off auto-repeat for a tournament
         async function turnOffAutoRepeat(tournamentId) {
