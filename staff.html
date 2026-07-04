@@ -4064,9 +4064,9 @@
             }
 
             try {
+                // ఫైర్‌బేస్ ఇండెక్స్ ఎర్రర్ రాకుండా orderBy ని తీసేశాను!
                 const autoSnapshot = await db.collection("tournaments")
                     .where("isAutoRepeat", "==", true)
-                    .orderBy("createdAt", "desc")
                     .get();
 
                 if (autorepeatContainer) {
@@ -4079,41 +4079,57 @@
                             </div>
                         `;
                     } else {
-                        let html = `<div class="automation-grid">`;
-                        autoSnapshot.forEach(doc => {
-                            const data = doc.data();
-                            const title = data.title || 'Unnamed Tournament';
-                            const category = data.category ? data.category.toUpperCase() : '?';
-                            const status = data.status || 'active';
-                            const statusColor = status === 'active' ? '#26a269' : '#ffc700';
-                            const imageHtml = data.imageUrl ?
-                                `<img src="${data.imageUrl}" class="automation-thumb" alt="tournament image">` :
-                                '';
-
-                            html += `
-                                <div class="automation-card">
-                                    <div class="automation-header">
-                                        <div class="automation-title">
-                                            ${imageHtml}
-                                            <span>${title}</span>
-                                        </div>
-                                        <span style="color:${statusColor}; font-size:0.8em; font-weight:600;">${status.toUpperCase()}</span>
-                                    </div>
-                                    <div class="automation-meta">
-                                        ${category} • ${data.entryFee ? `₹${data.entryFee} fee` : ''}
-                                        ${data.maxParticipants ? ` • ${data.maxParticipants} max` : ''}
-                                        ${data.conductingDate ? ` • ${new Date(data.conductingDate).toLocaleDateString()}` : ''}
-                                    </div>
-                                    <div class="automation-actions">
-                                        <button class="btn-warning-sm" onclick="turnOffAutoRepeat('${doc.id}')">
-                                            <i class="fas fa-stop-circle"></i> Turn Off Repeat
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
+                        // వచ్చిన డేటాని జావాస్క్రిప్ట్ లోనే ఫిల్టర్ చేసి, సార్ట్ చేస్తున్నాం
+                        let autoRepeats = autoSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        autoRepeats = autoRepeats.filter(t => t.status === 'active' || t.status === 'upcoming');
+                        autoRepeats.sort((a, b) => {
+                            const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                            const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                            return dateB - dateA;
                         });
-                        html += `</div>`;
-                        autorepeatContainer.innerHTML = html;
+
+                        if (autoRepeats.length === 0) {
+                            autorepeatContainer.innerHTML = `
+                                <div class="empty-state" style="padding:20px;">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <h3>No Active Auto-Repeat Tournaments</h3>
+                                    <p>Turn on "Daily Auto-Repeat" to see it here.</p>
+                                </div>`;
+                        } else {
+                            let html = `<div class="automation-grid">`;
+                            autoRepeats.forEach(data => {
+                                const title = data.title || 'Unnamed Tournament';
+                                const category = data.category ? data.category.toUpperCase() : '?';
+                                const status = data.status || 'active';
+                                const statusColor = status === 'active' ? '#26a269' : '#ffc700';
+                                const imageHtml = data.imageUrl ?
+                                    `<img src="${data.imageUrl}" class="automation-thumb" alt="tournament image">` : '';
+
+                                html += `
+                                    <div class="automation-card">
+                                        <div class="automation-header">
+                                            <div class="automation-title">
+                                                ${imageHtml}
+                                                <span>${title}</span>
+                                            </div>
+                                            <span style="color:${statusColor}; font-size:0.8em; font-weight:600;">${status.toUpperCase()}</span>
+                                        </div>
+                                        <div class="automation-meta">
+                                            ${category} • ${data.entryFee ? `₹${data.entryFee} fee` : ''}
+                                            ${data.maxParticipants ? ` • ${data.maxParticipants} max` : ''}
+                                            ${data.conductingDate ? ` • ${new Date(data.conductingDate).toLocaleDateString()}` : ''}
+                                        </div>
+                                        <div class="automation-actions">
+                                            <button class="btn-warning-sm" onclick="turnOffAutoRepeat('${data.id}')">
+                                                <i class="fas fa-stop-circle"></i> Turn Off Repeat
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            html += `</div>`;
+                            autorepeatContainer.innerHTML = html;
+                        }
                     }
                 }
             } catch (error) {
@@ -4123,6 +4139,7 @@
                         '<p style="color:#d72638; text-align:center; padding:20px;">Failed to load auto-repeat tournaments.</p>';
                 }
             }
+
         }
 
         // --- Tournament Management ---
