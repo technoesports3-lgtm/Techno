@@ -60,8 +60,13 @@
             --btn-grad-1: linear-gradient(135deg, #1a6fb5, #4a8fc9);
             --btn-grad-2: linear-gradient(135deg, #e31b2e, #b81222);
             --btn-grad-3: linear-gradient(135deg, #1e8e4a, #157a3e);
-            /* NEW: green gradient for coin packages */
             --btn-grad-green: linear-gradient(135deg, #1e8e4a, #157a3e);
+            /* WhatsApp green */
+            --whatsapp-green: #25D366;
+            --whatsapp-dark: #1da851;
+            /* Email red */
+            --email-red: #ea4335;
+            --email-dark: #d33426;
         }
 
         html,
@@ -273,6 +278,159 @@
         }
 
         /* =============================================================
+                   HELP & SUPPORT – REVAMPED BUTTONS
+                   ============================================================= */
+        .help-support-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 8px 0 4px;
+        }
+
+        .help-support-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            padding: 18px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            letter-spacing: 0.5px;
+            min-height: 62px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .help-support-btn i {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .help-support-btn .btn-label {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+
+        .help-support-btn .btn-label .sub {
+            font-size: 0.65rem;
+            font-weight: 400;
+            opacity: 0.80;
+            margin-top: 1px;
+        }
+
+        /* WhatsApp Button */
+        .help-support-btn.whatsapp {
+            background: var(--whatsapp-green);
+            box-shadow: 0 4px 24px rgba(37, 211, 102, 0.25);
+        }
+        .help-support-btn.whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(37, 211, 102, 0.35);
+            background: var(--whatsapp-dark);
+        }
+        .help-support-btn.whatsapp:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        /* Email Button */
+        .help-support-btn.email {
+            background: var(--email-red);
+            box-shadow: 0 4px 24px rgba(234, 67, 53, 0.25);
+        }
+        .help-support-btn.email:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(234, 67, 53, 0.35);
+            background: var(--email-dark);
+        }
+        .help-support-btn.email:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        .help-support-btn .btn-arrow {
+            margin-left: auto;
+            font-size: 1.0rem;
+            opacity: 0.6;
+            transition: transform var(--transition);
+        }
+        .help-support-btn:hover .btn-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        /* =============================================================
+                   AD PLACEHOLDER
+                   ============================================================= */
+        .ad-placeholder {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px dashed #ccc;
+            padding: 10px;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .ad-placeholder .ad-label {
+            font-weight: 600;
+            color: #aaa;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .ad-placeholder .ad-script-hint {
+            font-size: 9px;
+            color: #bbb;
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 2px 10px;
+            border-radius: 4px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ad-placeholder:hover {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: #aaa;
+        }
+
+        /* Specific sizing hints */
+        #ad-home-top,
+        #ad-details-banner {
+            min-height: 70px;
+        }
+
+        #ad-wallet-mid {
+            min-height: 270px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* =============================================================
                    INPUTS – Clean
                    ============================================================= */
         input[type="text"],
@@ -372,14 +530,12 @@
             z-index: 9999;
         }
 
-        /* ─── MODIFIED: removed white background, border, padding ─── */
         .loading-logo {
             width: 130px;
             height: 130px;
             margin-bottom: 20px;
             border-radius: 50%;
             overflow: hidden;
-            /* removed border, background, padding — only black BG remains */
             background: transparent;
             border: none;
             box-shadow: none;
@@ -1126,7 +1282,6 @@
             font-size: 0.9em;
         }
 
-        /* ─── MODIFIED: Details button — vibrant purple-blue ─── */
         .details-btn {
             background: linear-gradient(135deg, #5b3cc4, #7c5cfc);
             color: #fff;
@@ -1138,7 +1293,6 @@
             box-shadow: 0 6px 24px rgba(91, 60, 196, 0.30);
         }
 
-        /* ─── MODIFIED: Players button — vibrant teal/cyan ─── */
         .players-btn {
             background: linear-gradient(135deg, #0f7a7a, #14b8b8);
             color: #fff;
@@ -2044,7 +2198,7 @@
         }
 
         /* =============================================================
-                   CONTACT / HELP
+                   CONTACT / HELP – Legacy (kept for backup)
                    ============================================================= */
         .contact-info-container {
             background: #ffffff;
@@ -2655,6 +2809,20 @@
                 font-size: 0.85rem;
                 padding: 3px 10px 3px 8px;
             }
+            .help-support-btn {
+                padding: 14px 18px;
+                font-size: 1.0rem;
+                min-height: 54px;
+            }
+            .help-support-btn i {
+                font-size: 1.4rem;
+            }
+            .help-support-btn .btn-label .sub {
+                font-size: 0.60rem;
+            }
+            #ad-wallet-mid {
+                min-height: 230px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2801,6 +2969,31 @@
                 font-size: 0.75rem;
                 padding: 2px 8px 2px 6px;
             }
+            .help-support-btn {
+                padding: 12px 14px;
+                font-size: 0.90rem;
+                min-height: 48px;
+                gap: 10px;
+            }
+            .help-support-btn i {
+                font-size: 1.2rem;
+            }
+            .help-support-btn .btn-label .sub {
+                font-size: 0.55rem;
+            }
+            #ad-wallet-mid {
+                min-height: 200px;
+            }
+            #ad-home-top,
+            #ad-details-banner {
+                min-height: 60px;
+            }
+            .ad-placeholder {
+                margin: 8px 12px;
+                padding: 8px;
+                font-size: 11px;
+                min-height: 46px;
+            }
         }
 
         /* =============================================================
@@ -2846,7 +3039,6 @@
             padding-left: 38px !important;
         }
 
-        /* ─── File Upload ─── */
         .file-upload-container {
             border: 2px dashed var(--border);
             border-radius: var(--radius-sm);
@@ -2898,7 +3090,6 @@
             font-size: 0.85rem;
         }
 
-        /* ─── Withdraw ─── */
         .withdraw-section {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -2947,7 +3138,6 @@
             font-size: 1.1rem;
         }
 
-        /* ─── MODIFIED: Coin package price badge — GREEN ─── */
         .coin-price-badge {
             background: var(--btn-grad-green);
             color: #fff;
@@ -2964,10 +3154,6 @@
 </head>
 
 <body>
-
-    <!-- =============================================================
-    ONBOARDING – REMOVED (no intro video, no get started)
-    ============================================================= -->
 
     <div class="app-container">
 
@@ -3200,6 +3386,26 @@
                         <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
                         <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
                     </div>
+
+                    <!-- AD PLACEHOLDER 1: Home Top (320x50) -->
+                    <div id="ad-home-top" class="ad-placeholder">
+                        <span class="ad-label">📢 Adsterra Banner (320x50)</span>
+                        <span class="ad-script-hint">key: a2762df83e8e3d85eb4b7680f93f3429</span>
+                        <!-- Adsterra script for 320x50 -->
+                        <!--
+                        <script>
+                          atOptions = {
+                            'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
+                            'format' : 'iframe',
+                            'height' : 50,
+                            'width' : 320,
+                            'params' : {}
+                          };
+                        </script>
+                        <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js"></script>
+                        -->
+                    </div>
+
                     <div id="solo-tournaments"></div>
                     <div id="duo-tournaments" style="display:none;"></div>
                     <div id="squad-tournaments" style="display:none;"></div>
@@ -3217,6 +3423,25 @@
                     <div class="withdrawable-balance-row">
                         <span class="label"><i class="fas fa-check-circle"></i> Withdrawable Coins</span>
                         <span class="amount" id="withdrawable-balance-display">0</span>
+                    </div>
+
+                    <!-- AD PLACEHOLDER 2: Wallet Mid (300x250) -->
+                    <div id="ad-wallet-mid" class="ad-placeholder">
+                        <span class="ad-label">📢 Adsterra Banner (300x250)</span>
+                        <span class="ad-script-hint">key: 515b6bc048c46f9a57c1f159e001084b</span>
+                        <!-- Adsterra script for 300x250 -->
+                        <!--
+                        <script>
+                          atOptions = {
+                            'key' : '515b6bc048c46f9a57c1f159e001084b',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                          };
+                        </script>
+                        <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js"></script>
+                        -->
                     </div>
 
                     <!-- Watch & Earn -->
@@ -3409,19 +3634,18 @@
                             </button>
                             <h3 style="margin:0; color:var(--primary);">Help &amp; Support</h3>
                         </div>
-                        <div class="contact-info-item">
-                            <div class="contact-label"><i class="fas fa-envelope"></i> Email Support</div>
-                            <div class="contact-value">
-                                <span class="contact-text" id="contact-email-text">Loading...</span>
-                                <button class="contact-action-btn" id="copy-email-btn" onclick="copyContactEmail()">Copy</button>
-                            </div>
-                        </div>
-                        <div class="contact-info-item">
-                            <div class="contact-label"><i class="fab fa-instagram"></i> Instagram</div>
-                            <div class="contact-value" id="instagram-btn">
-                                <span class="contact-text" id="instagram-text">Loading...</span>
-                                <button class="contact-action-btn instagram" onclick="openInstagram()">Follow</button>
-                            </div>
+                        <!-- REVAMPED: Help & Support buttons in legacy contact section too -->
+                        <div class="help-support-buttons">
+                            <a href="https://wa.me/916281919992?text=Hi%20Techno%20E-Sports%20Admin,%20I%20need%20help!" target="_blank" class="help-support-btn whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span class="btn-label">Chat on WhatsApp <span class="sub">Response within 24 hrs</span></span>
+                                <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                            </a>
+                            <a href="mailto:technoesports3@gmail.com" class="help-support-btn email">
+                                <i class="fas fa-envelope"></i>
+                                <span class="btn-label">Email Us <span class="sub">technoesports3@gmail.com</span></span>
+                                <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                            </a>
                         </div>
                         <div style="margin-top:14px; padding:12px; background:#f5f7fa; border-radius:var(--radius-sm); border:1px solid var(--border); text-align:center; color:var(--text-secondary); font-size:0.82rem;">
                             <i class="fas fa-clock"></i> Response time: 24-48 hours
@@ -3517,24 +3741,74 @@
             </div>
         </div>
 
-        <!-- HELP & SUPPORT FULL PAGE -->
+        <!-- =============================================================
+        HELP & SUPPORT FULL PAGE – REVAMPED
+        ============================================================= -->
         <div id="help-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-life-ring"></i> Help &amp; Support</div>
                 <button class="close-page-btn" onclick="closeHelpPage()"><i class="fas fa-times"></i></button>
             </div>
             <div class="full-page-body" id="help-page-body">
+
+                <!-- REVAMPED: Two large modern buttons -->
+                <div class="content-block" style="padding: 20px 20px 24px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <span style="font-size:2rem;"><i class="fas fa-headset" style="color:var(--primary);"></i></span>
+                        <div>
+                            <h4 style="margin:0; color:var(--text-primary); font-size:1.1rem;">How can we help you?</h4>
+                            <p style="color:var(--text-muted); font-size:0.85rem; margin:2px 0 0;">Get in touch with our support team</p>
+                        </div>
+                    </div>
+
+                    <div class="help-support-buttons">
+                        <!-- WhatsApp Button -->
+                        <a href="https://wa.me/916281919992?text=Hi%20Techno%20E-Sports%20Admin,%20I%20need%20help!" target="_blank" class="help-support-btn whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="btn-label">
+                                Chat on WhatsApp
+                                <span class="sub">Quick response via WhatsApp</span>
+                            </span>
+                            <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <!-- Email Button -->
+                        <a href="mailto:technoesports3@gmail.com" class="help-support-btn email">
+                            <i class="fas fa-envelope"></i>
+                            <span class="btn-label">
+                                Email Us
+                                <span class="sub">technoesports3@gmail.com</span>
+                            </span>
+                            <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                    </div>
+
+                    <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; border-top:1px solid var(--border); padding-top:16px;">
+                        <span style="color:var(--text-muted); font-size:0.75rem; display:flex; align-items:center; gap:6px;">
+                            <i class="fas fa-clock" style="color:var(--primary);"></i> Response: 24-48 hrs
+                        </span>
+                        <span style="color:var(--text-muted); font-size:0.75rem; display:flex; align-items:center; gap:6px;">
+                            <i class="fas fa-check-circle" style="color:#1e8e4a;"></i> 100% Free Support
+                        </span>
+                        <span style="color:var(--text-muted); font-size:0.75rem; display:flex; align-items:center; gap:6px;">
+                            <i class="fas fa-shield-alt" style="color:var(--primary);"></i> Secure &amp; Private
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Quick Help Topics -->
                 <div class="content-block">
-                    <h4>How can we help you?</h4>
-                    <p>Welcome to TECHNO E-SPORTS Support. Here are some common topics:</p>
-                    <ul>
-                        <li><strong>Account Issues:</strong> For login, registration, or profile-related issues, please contact us via email.</li>
-                        <li><strong>Tournament Registration:</strong> If you face issues joining a tournament, check your wallet balance and ensure the tournament is still open.</li>
-                        <li><strong>Wallet &amp; Payments:</strong> For transaction issues, coin purchases, or withdrawal queries, reach out to our support team.</li>
-                        <li><strong>Technical Support:</strong> For app bugs, feature requests, or technical difficulties, we're here to assist.</li>
+                    <h4><i class="fas fa-bolt" style="color:var(--primary);"></i> Quick Help Topics</h4>
+                    <ul style="margin:6px 0 0 0; padding-left:20px;">
+                        <li><strong>Account Issues:</strong> Login, registration, or profile help</li>
+                        <li><strong>Tournaments:</strong> Registration, joining, or credentials</li>
+                        <li><strong>Wallet &amp; Payments:</strong> Coin purchases, transactions, withdrawals</li>
+                        <li><strong>Technical Support:</strong> App bugs, feature requests, or general queries</li>
                     </ul>
-                    <p style="margin-top:12px;"><strong>Response Time:</strong> We aim to respond within 24-48 hours.</p>
-                    <p style="margin-top:8px;"><strong>Email:</strong> <span id="help-email-text" style="color:var(--primary);font-weight:700;">Loading...</span></p>
+                    <p style="margin-top:10px; font-size:0.85rem; color:var(--text-muted);">
+                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                        For urgent issues, please use WhatsApp for the fastest response.
+                    </p>
                 </div>
             </div>
         </div>
@@ -3726,7 +4000,7 @@
                 best: true },
         ];
 
-        // ─── RENDER COIN PACKAGES ─── (with GREEN price badge)
+        // ─── RENDER COIN PACKAGES ───
         function renderCoinPackages() {
             const grid = document.getElementById('coin-packages-grid');
             if (!grid) return;
@@ -3742,7 +4016,6 @@
                             <div style="font-size:1.2rem;margin:${pkg.best || pkg.popular ? '8px 0 2px' : '2px 0 2px'};"><i class="fas fa-coins" style="color:var(--primary);"></i></div>
                             <div style="color:var(--text-primary);font-size:0.90rem;font-weight:800;line-height:1;">${pkg.coins}</div>
                             <div style="color:var(--text-muted);font-size:0.55rem;margin-bottom:4px;">coins</div>
-                            <!-- MODIFIED: green gradient for price badge -->
                             <div class="coin-price-badge">
                                 <i class="fas fa-rupee-sign"></i> ${pkg.price}
                             </div>
@@ -4069,7 +4342,6 @@
             const headerEl = document.getElementById('header-wallet-balance');
             if (headerEl) headerEl.textContent = bal;
 
-            // Update withdrawable balance
             const wb = Math.floor(Number(withdrawableBalance || 0));
             const wbDisplay = document.getElementById('withdrawable-balance-display');
             if (wbDisplay) wbDisplay.textContent = wb;
@@ -4085,7 +4357,6 @@
                 const d = await r.json();
                 if (!r.ok) throw new Error(d.message || 'Failed');
                 walletBalance = Number(d.balance || 0);
-                // Fetch withdrawable balance from Firestore
                 const userDoc = await db.collection("users").doc(uid).get();
                 if (userDoc.exists) {
                     const data = userDoc.data() || {};
@@ -4170,7 +4441,6 @@
                 if (earnEl) earnEl.textContent = String(data.referralEarnings || (data.referralCount || 0) * 10 || 0);
                 const profCode = document.getElementById('profile-referral-code');
                 if (profCode) profCode.textContent = code || '-';
-                // Also fetch withdrawable balance
                 withdrawableBalance = Number(data.withdrawableBalance || 0);
                 updateWalletUI();
             } catch (e) {
@@ -4232,7 +4502,7 @@
             await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), fetchReferralData(), fetchProfileData()]);
         }
 
-        // ─── UPI PAYMENT ─── (opens in full page QR)
+        // ─── UPI PAYMENT ───
         async function initiateUpiPayment(amount) {
             const user = auth.currentUser;
             if (!user) return showToast('Please login first', 'error');
@@ -4287,9 +4557,7 @@
                         </div>
                     `;
             page.style.display = 'block';
-            // Store ref for polling
             window._qrRefNumber = data.refNumber;
-            // Auto-start polling
             setTimeout(() => startPaymentPollingFromQr(data.refNumber), 1000);
         }
 
@@ -4357,7 +4625,7 @@
             document.getElementById('qr-full-page').style.display = 'none';
         }
 
-        // ─── WITHDRAW RESTRICTION: only admin-credited coins ───
+        // ─── WITHDRAW ───
         async function requestWithdrawal() {
             const uid = getCurrentUserId();
             const amount = Number(document.getElementById('withdraw-amount').value);
@@ -4365,7 +4633,6 @@
             if (!amount || amount < 50) return showToast('Minimum withdrawal is 50', 'error');
             if (!upiId) return showToast('Please enter UPI ID', 'error');
 
-            // Check if withdrawable balance is sufficient
             await fetchWalletBalance();
             if (withdrawableBalance < amount) {
                 showToast(`Insufficient withdrawable balance. Available: ${withdrawableBalance}`, 'error');
@@ -4377,7 +4644,6 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-                // Send withdrawal request with type 'admin_only' to enforce restriction
                 const r = await fetch(`${BACKEND_BASE_URL}/api/wallet/withdraw`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -4385,13 +4651,12 @@
                         userId: uid,
                         amount,
                         upiId,
-                        source: 'admin_credited_only' // flag for backend to enforce
+                        source: 'admin_credited_only'
                     })
                 });
                 const d = await r.json();
                 if (!r.ok) throw new Error(d.message || 'Withdrawal failed');
 
-                // Show success popup with logo
                 showWithdrawSuccessPopup();
 
                 document.getElementById('withdraw-amount').value = '';
@@ -4612,7 +4877,7 @@
             return card;
         }
 
-        // ─── TOURNAMENT DETAILS FULL PAGE ───
+        // ─── TOURNAMENT DETAILS FULL PAGE (with Ad placeholder) ───
         function showTournamentDetails(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -4653,10 +4918,32 @@
                 }
             }
 
+            // ─── AD PLACEHOLDER 3: Tournament Details (320x50) ───
+            const adHTML = `
+                        <div id="ad-details-banner" class="ad-placeholder" style="margin: 12px 0 16px 0;">
+                            <span class="ad-label">📢 Adsterra Banner (320x50)</span>
+                            <span class="ad-script-hint">key: a2762df83e8e3d85eb4b7680f93f3429</span>
+                            <!-- Adsterra script for 320x50 -->
+                            <!--
+                            <script>
+                              atOptions = {
+                                'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
+                                'format' : 'iframe',
+                                'height' : 50,
+                                'width' : 320,
+                                'params' : {}
+                              };
+                            <\/script>
+                            <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js"><\/script>
+                            -->
+                        </div>
+                    `;
+
             document.getElementById('details-page-body').innerHTML = `
                         <div style="text-align:center;margin-bottom:16px;">
                             <img src="${t.imageUrl || 'https://via.placeholder.com/400x200?text=Tournament+Banner'}" alt="${t.title}" style="width:100%;border-radius:var(--radius-sm);max-height:220px;object-fit:cover;">
                         </div>
+                        ${adHTML}
                         ${startTimerHTML}
                         <div class="content-block">
                             <h4><i class="fas fa-info-circle" style="color:var(--primary);"></i> Tournament Information</h4>
@@ -4703,9 +4990,7 @@
         }
 
         function openHelpPage() {
-            const emailEl = document.getElementById('help-email-text');
-            if (appConfig.contactEmail) emailEl.textContent = appConfig.contactEmail;
-            else emailEl.textContent = 'Loading...';
+            // The help page now has static buttons, no need to load from appConfig
             document.getElementById('help-page').style.display = 'block';
         }
 
@@ -5014,7 +5299,7 @@
             }
         }
 
-        // ─── CONTACT ───
+        // ─── CONTACT (legacy) ───
         function openInstagram() {
             if (appConfig.instagramUrl) window.open(appConfig.instagramUrl, '_blank');
             else showToast('Instagram link not available', 'error');
@@ -5034,16 +5319,7 @@
         }
 
         function updateContactInfo() {
-            const instaText = document.getElementById('instagram-text');
-            const emailText = document.getElementById('contact-email-text');
-            if (appConfig.instagramUrl) {
-                const username = appConfig.instagramUrl.split('/').pop();
-                instaText.textContent = `@${username}`;
-                document.getElementById('instagram-btn').style.display = 'flex';
-            } else { instaText.textContent = 'Not available';
-                document.getElementById('instagram-btn').style.display = 'none'; }
-            if (appConfig.contactEmail) emailText.textContent = appConfig.contactEmail;
-            else emailText.textContent = 'Not available';
+            // Legacy contact section is now static with buttons, so no need to update from config
         }
 
         // ─── APP CONFIG ───
@@ -5323,17 +5599,14 @@
             }
         }, 3000);
 
-        // ─── ONBOARDING – REMOVED ───
-        // No intro video, no get started button
-
         // ─── INITIAL RENDER ───
         renderCoinPackages();
         console.log('TECHNO E-SPORTS UI — All modifications applied.');
         console.log('- Loading screen: black background, NO white circle around logo');
-        console.log('- Details button: purple-blue gradient');
-        console.log('- Players button: teal-cyan gradient');
-        console.log('- Coin package price badges: GREEN gradient');
-        console.log('- All other features remain unchanged.');
+        console.log('- Help & Support: Revamped with WhatsApp and Email buttons');
+        console.log('- Ad Placeholder 1: Home Top (320x50) with Adsterra script (commented)');
+        console.log('- Ad Placeholder 2: Wallet Mid (300x250) with Adsterra script (commented)');
+        console.log('- Ad Placeholder 3: Tournament Details (320x50) with Adsterra script (commented)');
     </script>
 </body>
 
