@@ -61,10 +61,8 @@
             --btn-grad-2: linear-gradient(135deg, #e31b2e, #b81222);
             --btn-grad-3: linear-gradient(135deg, #1e8e4a, #157a3e);
             --btn-grad-green: linear-gradient(135deg, #1e8e4a, #157a3e);
-            /* WhatsApp green */
             --whatsapp-green: #25D366;
             --whatsapp-dark: #1da851;
-            /* Email red */
             --email-red: #ea4335;
             --email-dark: #d33426;
         }
@@ -328,7 +326,6 @@
             margin-top: 1px;
         }
 
-        /* WhatsApp Button */
         .help-support-btn.whatsapp {
             background: var(--whatsapp-green);
             box-shadow: 0 4px 24px rgba(37, 211, 102, 0.25);
@@ -342,7 +339,6 @@
             transform: translateY(0) scale(0.97);
         }
 
-        /* Email Button */
         .help-support-btn.email {
             background: var(--email-red);
             box-shadow: 0 4px 24px rgba(234, 67, 53, 0.25);
@@ -416,7 +412,6 @@
             border-color: #aaa;
         }
 
-        /* Specific sizing hints */
         #ad-home-top,
         #ad-details-banner {
             min-height: 70px;
@@ -1372,7 +1367,7 @@
         }
 
         /* =============================================================
-                   FULL PAGE SECTIONS – Details, Privacy, Terms, Help, QR
+                   FULL PAGE SECTIONS – Details, Privacy, Terms, Help, QR, Coin Packages, Transactions
                    ============================================================= */
         .full-page-section {
             position: fixed;
@@ -1704,7 +1699,7 @@
         }
 
         /* =============================================================
-                   WALLET – Professional
+                   WALLET – Professional Clean Layout
                    ============================================================= */
         .wallet-balance-card {
             background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
@@ -1739,6 +1734,84 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
+        }
+
+        /* Withdrawable balance - prominent */
+        .withdrawable-prominent {
+            background: linear-gradient(135deg, #e8f5ed 0%, #f0faf4 100%);
+            border: 2px solid #1e8e4a;
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 16px rgba(30, 142, 74, 0.08);
+        }
+
+        .withdrawable-prominent .label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .withdrawable-prominent .label i {
+            color: #1e8e4a;
+            font-size: 1.2rem;
+        }
+
+        .withdrawable-prominent .amount {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #1e8e4a;
+        }
+
+        /* Wallet action buttons row */
+        .wallet-action-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .wallet-action-row .wallet-action-btn {
+            flex: 1;
+            padding: 14px 10px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 52px;
+        }
+
+        .wallet-action-row .wallet-action-btn.add-coins {
+            background: linear-gradient(135deg, #ffc700, #f5a623);
+            color: #121826;
+            box-shadow: 0 4px 20px rgba(255, 199, 0, 0.25);
+        }
+
+        .wallet-action-row .wallet-action-btn.add-coins:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(255, 199, 0, 0.35);
+        }
+
+        .wallet-action-row .wallet-action-btn.history {
+            background: #f0f2f6;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .wallet-action-row .wallet-action-btn.history:hover {
+            background: #e6e9ef;
+            transform: translateY(-2px);
         }
 
         .wallet-panel {
@@ -2129,7 +2202,7 @@
         }
 
         /* =============================================================
-                   NAV BAR – Clean (BAL removed)
+                   NAV BAR – Clean
                    ============================================================= */
         .nav-bar {
             display: flex;
@@ -2540,7 +2613,7 @@
         }
 
         /* =============================================================
-                   ONBOARDING – REMOVED (no intro video)
+                   ONBOARDING – REMOVED
                    ============================================================= */
         #onboarding-screen {
             display: none !important;
@@ -2583,7 +2656,7 @@
         }
 
         /* =============================================================
-                   QR / UPI (legacy kept, but now using full page)
+                   QR / UPI (legacy)
                    ============================================================= */
         .qr-code-container {
             text-align: center;
@@ -2736,6 +2809,82 @@
             box-shadow: 0 8px 28px rgba(26, 111, 181, 0.25);
         }
 
+        /* Coin packages grid inside full page */
+        .coin-packages-grid-full {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .coin-package-card {
+            background: #f5f7fa;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coin-package-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            background: #ffffff;
+        }
+
+        .coin-package-card .badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.50rem;
+            font-weight: 800;
+            padding: 2px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .coin-package-card .badge.best {
+            background: #ffc700;
+            color: #121826;
+        }
+
+        .coin-package-card .badge.hot {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .coin-package-card .icon {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin: 4px 0 2px;
+        }
+
+        .coin-package-card .coins {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .coin-package-card .label {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .coin-package-card .price {
+            background: var(--btn-grad-green);
+            color: #fff;
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
         /* =============================================================
                    RESPONSIVE
                    ============================================================= */
@@ -2822,6 +2971,26 @@
             }
             #ad-wallet-mid {
                 min-height: 230px;
+            }
+            .withdrawable-prominent {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .withdrawable-prominent .amount {
+                font-size: 1.3rem;
+            }
+            .wallet-action-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .wallet-action-row .wallet-action-btn {
+                min-height: 44px;
+                font-size: 0.80rem;
+            }
+            .coin-packages-grid-full {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
         }
 
@@ -2993,6 +3162,38 @@
                 padding: 8px;
                 font-size: 11px;
                 min-height: 46px;
+            }
+            .withdrawable-prominent {
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .withdrawable-prominent .amount {
+                font-size: 1.4rem;
+            }
+            .wallet-action-row {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .wallet-action-row .wallet-action-btn {
+                padding: 12px;
+                font-size: 0.75rem;
+                min-height: 40px;
+            }
+            .coin-packages-grid-full {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .coin-package-card {
+                padding: 12px 6px;
+            }
+            .coin-package-card .coins {
+                font-size: 1.0rem;
+            }
+            .coin-package-card .price {
+                font-size: 0.65rem;
+                padding: 2px 8px;
             }
         }
 
@@ -3389,10 +3590,7 @@
 
                     <!-- AD PLACEHOLDER 1: Home Top (320x50) -->
                     <div id="ad-home-top" class="ad-placeholder">
-                        <span class="ad-label">📢 Adsterra Banner (320x50)</span>
-                        <span class="ad-script-hint">key: a2762df83e8e3d85eb4b7680f93f3429</span>
-                        <!-- Adsterra script for 320x50 -->
-                        <!--
+                        
                         <script>
                           atOptions = {
                             'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -3403,7 +3601,7 @@
                           };
                         </script>
                         <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js"></script>
-                        -->
+                        
                     </div>
 
                     <div id="solo-tournaments"></div>
@@ -3411,26 +3609,27 @@
                     <div id="squad-tournaments" style="display:none;"></div>
                 </section>
 
-                <!-- 2. WALLET -->
+                <!-- 2. WALLET - REVAMPED -->
                 <section id="wallet-section" class="section" style="display:none;">
+                    <!-- Total Balance Card -->
                     <div class="wallet-balance-card">
                         <div class="balance-icon"><i class="fas fa-coins"></i></div>
                         <div class="balance-label">Total Coins</div>
                         <div class="balance-amount"><span id="wallet-balance-display">0</span></div>
                     </div>
 
-                    <!-- Withdrawable balance indicator -->
-                    <div class="withdrawable-balance-row">
-                        <span class="label"><i class="fas fa-check-circle"></i> Withdrawable Coins</span>
-                        <span class="amount" id="withdrawable-balance-display">0</span>
+                    <!-- Withdrawable Balance - PROMINENT -->
+                    <div class="withdrawable-prominent">
+                        <div class="label">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Withdrawable Coins</span>
+                        </div>
+                        <div class="amount" id="withdrawable-balance-display">0</div>
                     </div>
 
                     <!-- AD PLACEHOLDER 2: Wallet Mid (300x250) -->
                     <div id="ad-wallet-mid" class="ad-placeholder">
-                        <span class="ad-label">📢 Adsterra Banner (300x250)</span>
-                        <span class="ad-script-hint">key: 515b6bc048c46f9a57c1f159e001084b</span>
-                        <!-- Adsterra script for 300x250 -->
-                        <!--
+                        
                         <script>
                           atOptions = {
                             'key' : '515b6bc048c46f9a57c1f159e001084b',
@@ -3441,7 +3640,17 @@
                           };
                         </script>
                         <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js"></script>
-                        -->
+                        
+                    </div>
+
+                    <!-- Action Buttons: Add Coins & Transaction History -->
+                    <div class="wallet-action-row">
+                        <button class="wallet-action-btn add-coins" onclick="openCoinPackagesPage()">
+                            <i class="fas fa-plus-circle"></i> Add Coins
+                        </button>
+                        <button class="wallet-action-btn history" onclick="openTransactionHistoryPage()">
+                            <i class="fas fa-history"></i> Transactions
+                        </button>
                     </div>
 
                     <!-- Watch & Earn -->
@@ -3470,37 +3679,7 @@
                         </div>
                     </div>
 
-                    <!-- Buy Coins -->
-                    <div class="wallet-panel">
-                        <div class="panel-title"><i class="fas fa-shopping-cart"></i> Buy Coins</div>
-                        <div style="background:rgba(255,199,0,0.04); border:1px solid rgba(255,199,0,0.10); border-radius:var(--radius-sm); padding:8px 12px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-                            <span style="font-size:1.1rem;"><i class="fas fa-lightbulb" style="color:#ffc700;"></i></span>
-                            <span style="color:var(--text-secondary); font-size:0.75rem; line-height:1.4;">
-                                Paise ≥ 50 <span style="color:#1e8e4a; font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:var(--primary); font-weight:700;">11 Coins</span>
-                            </span>
-                        </div>
-                        <div id="coin-packages-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;"></div>
-                        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:12px;">
-                            <button onclick="initiateUpiPayment(10)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>10<br><span>= 10 coins</span></button>
-                            <button onclick="initiateUpiPayment(15)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>15<br><span>= 15 coins</span></button>
-                            <button onclick="initiateUpiPayment(20)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>20<br><span>= 20 coins</span></button>
-                            <button onclick="initiateUpiPayment(25)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>25<br><span>= 25 coins</span></button>
-                            <button onclick="initiateUpiPayment(50)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>50<br><span>= 50 coins</span></button>
-                            <button onclick="initiateUpiPayment(100)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>100<br><span>= 100 coins</span></button>
-                            <button onclick="initiateUpiPayment(150)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>150<br><span>= 150 coins</span></button>
-                            <button onclick="initiateUpiPayment(200)" class="wallet-block-btn"><i class="fas fa-rupee-sign"></i>200<br><span>= 200 coins</span></button>
-                        </div>
-                    </div>
-
-                    <!-- Transaction History -->
-                    <div class="wallet-panel">
-                        <div class="panel-title"><i class="fas fa-history"></i> Transaction History</div>
-                        <div id="wallet-transactions-list" style="max-height:320px; overflow-y:auto;">
-                            <p style="color:var(--text-muted); text-align:center;">Loading transactions...</p>
-                        </div>
-                    </div>
-
-                    <!-- Withdraw -->
+                    <!-- Withdraw Section -->
                     <div class="withdraw-section">
                         <div class="section-title"><i class="fas fa-credit-card"></i> Withdraw Funds</div>
                         <div class="withdrawable-info">
@@ -3634,7 +3813,6 @@
                             </button>
                             <h3 style="margin:0; color:var(--primary);">Help &amp; Support</h3>
                         </div>
-                        <!-- REVAMPED: Help & Support buttons in legacy contact section too -->
                         <div class="help-support-buttons">
                             <a href="https://wa.me/916281919992?text=Hi%20Techno%20E-Sports%20Admin,%20I%20need%20help!" target="_blank" class="help-support-btn whatsapp">
                                 <i class="fab fa-whatsapp"></i>
@@ -3655,7 +3833,7 @@
 
             </div> <!-- end content-area -->
 
-            <!-- NAV BAR (BAL removed) -->
+            <!-- NAV BAR -->
             <footer class="nav-bar">
                 <div class="nav-item active" data-section="home-section" onclick="showSection('home-section', this)">
                     <span class="nav-icon"><i class="fas fa-gamepad"></i></span>
@@ -3741,17 +3919,13 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        HELP & SUPPORT FULL PAGE – REVAMPED
-        ============================================================= -->
+        <!-- HELP & SUPPORT FULL PAGE – REVAMPED -->
         <div id="help-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-life-ring"></i> Help &amp; Support</div>
                 <button class="close-page-btn" onclick="closeHelpPage()"><i class="fas fa-times"></i></button>
             </div>
             <div class="full-page-body" id="help-page-body">
-
-                <!-- REVAMPED: Two large modern buttons -->
                 <div class="content-block" style="padding: 20px 20px 24px;">
                     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
                         <span style="font-size:2rem;"><i class="fas fa-headset" style="color:var(--primary);"></i></span>
@@ -3762,7 +3936,6 @@
                     </div>
 
                     <div class="help-support-buttons">
-                        <!-- WhatsApp Button -->
                         <a href="https://wa.me/916281919992?text=Hi%20Techno%20E-Sports%20Admin,%20I%20need%20help!" target="_blank" class="help-support-btn whatsapp">
                             <i class="fab fa-whatsapp"></i>
                             <span class="btn-label">
@@ -3771,8 +3944,6 @@
                             </span>
                             <span class="btn-arrow"><i class="fas fa-chevron-right"></i></span>
                         </a>
-
-                        <!-- Email Button -->
                         <a href="mailto:technoesports3@gmail.com" class="help-support-btn email">
                             <i class="fas fa-envelope"></i>
                             <span class="btn-label">
@@ -3796,7 +3967,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Help Topics -->
                 <div class="content-block">
                     <h4><i class="fas fa-bolt" style="color:var(--primary);"></i> Quick Help Topics</h4>
                     <ul style="margin:6px 0 0 0; padding-left:20px;">
@@ -3809,6 +3979,47 @@
                         <i class="fas fa-info-circle" style="color:var(--primary);"></i>
                         For urgent issues, please use WhatsApp for the fastest response.
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- =============================================================
+        COIN PACKAGES FULL PAGE
+        ============================================================= -->
+        <div id="coin-packages-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-coins"></i> Add Coins</div>
+                <button class="close-page-btn" onclick="closeCoinPackagesPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="coin-packages-page-body">
+                <div class="content-block">
+                    <h4><i class="fas fa-gem" style="color:#ffc700;"></i> Choose Your Package</h4>
+                    <p style="color:var(--text-secondary); font-size:0.85rem;">Select a package below to buy coins. You'll be redirected to UPI payment.</p>
+                    <div style="background:rgba(255,199,0,0.04); border:1px solid rgba(255,199,0,0.10); border-radius:var(--radius-sm); padding:8px 12px; margin:10px 0 14px; display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:1.1rem;"><i class="fas fa-lightbulb" style="color:#ffc700;"></i></span>
+                        <span style="color:var(--text-secondary); font-size:0.75rem; line-height:1.4;">
+                            Paise ≥ 50 <span style="color:#1e8e4a; font-weight:700;">+1 Bonus Coin</span> free! &nbsp;|&nbsp; ₹10.60 pay → <span style="color:var(--primary); font-weight:700;">11 Coins</span>
+                        </span>
+                    </div>
+                    <div class="coin-packages-grid-full" id="coin-packages-full-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =============================================================
+        TRANSACTION HISTORY FULL PAGE
+        ============================================================= -->
+        <div id="transaction-history-page" class="full-page-section">
+            <div class="full-page-header">
+                <div class="page-title"><i class="fas fa-history"></i> Transaction History</div>
+                <button class="close-page-btn" onclick="closeTransactionHistoryPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="full-page-body" id="transaction-history-page-body">
+                <div class="content-block">
+                    <h4><i class="fas fa-receipt" style="color:var(--primary);"></i> All Transactions</h4>
+                    <div id="transaction-history-full-list" style="max-height:60vh; overflow-y:auto;">
+                        <p style="color:var(--text-muted); text-align:center;">Loading transactions...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4000,7 +4211,7 @@
                 best: true },
         ];
 
-        // ─── RENDER COIN PACKAGES ───
+        // ─── RENDER COIN PACKAGES (for wallet panel) ───
         function renderCoinPackages() {
             const grid = document.getElementById('coin-packages-grid');
             if (!grid) return;
@@ -4021,6 +4232,78 @@
                             </div>
                         </div>
                     `).join('');
+        }
+
+        // ─── RENDER COIN PACKAGES FULL PAGE ───
+        function renderCoinPackagesFull() {
+            const grid = document.getElementById('coin-packages-full-grid');
+            if (!grid) return;
+            grid.innerHTML = COIN_PACKAGES.map(pkg => `
+                        <div class="coin-package-card" onclick="initiateUpiPaymentFromFull(${pkg.price})">
+                            ${pkg.best ? `<div class="badge best">BEST</div>` : ''}
+                            ${pkg.popular && !pkg.best ? `<div class="badge hot">HOT</div>` : ''}
+                            <div class="icon"><i class="fas fa-coins"></i></div>
+                            <div class="coins">${pkg.coins}</div>
+                            <div class="label">coins</div>
+                            <div class="price"><i class="fas fa-rupee-sign"></i> ${pkg.price}</div>
+                        </div>
+                    `).join('');
+        }
+
+        // ─── FULL PAGE: Coin Packages ───
+        function openCoinPackagesPage() {
+            renderCoinPackagesFull();
+            document.getElementById('coin-packages-page').style.display = 'block';
+        }
+
+        function closeCoinPackagesPage() {
+            document.getElementById('coin-packages-page').style.display = 'none';
+        }
+
+        function initiateUpiPaymentFromFull(amount) {
+            initiateUpiPayment(amount);
+        }
+
+        // ─── FULL PAGE: Transaction History ───
+        function openTransactionHistoryPage() {
+            renderFullTransactionHistory();
+            document.getElementById('transaction-history-page').style.display = 'block';
+        }
+
+        function closeTransactionHistoryPage() {
+            document.getElementById('transaction-history-page').style.display = 'none';
+        }
+
+        function renderFullTransactionHistory() {
+            const container = document.getElementById('transaction-history-full-list');
+            if (!container) return;
+            if (!walletTransactions.length) {
+                container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No transactions found.</p>';
+                return;
+            }
+            container.innerHTML = walletTransactions.map(tx => {
+                const isCredit = (tx.type || '').toLowerCase() === 'credit';
+                const color = isCredit ? '#1e8e4a' : '#d72638';
+                const sign = isCredit ? '+' : '-';
+                const amount = Number(tx.amount || 0).toFixed(2);
+                const dateText = tx.createdAt || tx.date || tx.timestamp ? new Date(tx.createdAt || tx.date || tx
+                    .timestamp).toLocaleString() : 'N/A';
+                const isWithdrawable = tx.isWithdrawable === true;
+                const badge = isWithdrawable ? '<span style="background:#1e8e4a;color:#fff;font-size:0.55rem;padding:1px 8px;border-radius:10px;font-weight:600;margin-left:6px;">WITHDRAWABLE</span>' :
+                    '';
+                return `
+                            <div class="wallet-tx-item ${isCredit ? 'credit' : 'debit'}">
+                                <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
+                                    <div style="color:var(--text-primary);font-weight:600;">${tx.description || 'Wallet transaction'} ${badge}</div>
+                                    <div style="color:${color};font-weight:700;">${sign}${amount}</div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;color:var(--text-muted);font-size:0.78rem;margin-top:4px;">
+                                    <span>${isCredit ? 'Credit' : 'Debit'}</span>
+                                    <span>${dateText}</span>
+                                </div>
+                            </div>
+                        `;
+            }).join('');
         }
 
         // ─── TOAST ───
@@ -4378,6 +4661,10 @@
                 if (!r.ok) throw new Error(d.message || 'Failed');
                 walletTransactions = Array.isArray(d.transactions) ? d.transactions : [];
                 renderWalletTransactions();
+                // Also update full page if open
+                if (document.getElementById('transaction-history-page').style.display === 'block') {
+                    renderFullTransactionHistory();
+                }
             } catch (e) {
                 console.error('Wallet transactions error:', e);
                 if (container) container.innerHTML =
@@ -4392,7 +4679,9 @@
                 container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No transactions found.</p>';
                 return;
             }
-            container.innerHTML = walletTransactions.map(tx => {
+            // Show only last 5 in wallet panel
+            const recent = walletTransactions.slice(0, 5);
+            container.innerHTML = recent.map(tx => {
                 const isCredit = (tx.type || '').toLowerCase() === 'credit';
                 const color = isCredit ? '#1e8e4a' : '#d72638';
                 const sign = isCredit ? '+' : '-';
@@ -4414,7 +4703,10 @@
                                 </div>
                             </div>
                         `;
-            }).join('');
+            }).join('') +
+            (walletTransactions.length > 5 ?
+                `<div style="text-align:center;margin-top:8px;"><button class="btn-secondary" onclick="openTransactionHistoryPage()" style="font-size:0.75rem;padding:6px 16px;">View All ${walletTransactions.length} Transactions</button></div>` :
+                '');
         }
 
         async function fetchReferralData() {
@@ -4559,6 +4851,8 @@
             page.style.display = 'block';
             window._qrRefNumber = data.refNumber;
             setTimeout(() => startPaymentPollingFromQr(data.refNumber), 1000);
+            // Close coin packages page if open
+            closeCoinPackagesPage();
         }
 
         let qrPollingInterval = null;
@@ -4918,13 +5212,10 @@
                 }
             }
 
-            // ─── AD PLACEHOLDER 3: Tournament Details (320x50) ───
+            // AD PLACEHOLDER 3: Tournament Details (320x50)
             const adHTML = `
                         <div id="ad-details-banner" class="ad-placeholder" style="margin: 12px 0 16px 0;">
-                            <span class="ad-label">📢 Adsterra Banner (320x50)</span>
-                            <span class="ad-script-hint">key: a2762df83e8e3d85eb4b7680f93f3429</span>
-                            <!-- Adsterra script for 320x50 -->
-                            <!--
+                            
                             <script>
                               atOptions = {
                                 'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -4990,7 +5281,6 @@
         }
 
         function openHelpPage() {
-            // The help page now has static buttons, no need to load from appConfig
             document.getElementById('help-page').style.display = 'block';
         }
 
@@ -5319,7 +5609,7 @@
         }
 
         function updateContactInfo() {
-            // Legacy contact section is now static with buttons, so no need to update from config
+            // Legacy contact section is now static with buttons
         }
 
         // ─── APP CONFIG ───
@@ -5602,11 +5892,18 @@
         // ─── INITIAL RENDER ───
         renderCoinPackages();
         console.log('TECHNO E-SPORTS UI — All modifications applied.');
-        console.log('- Loading screen: black background, NO white circle around logo');
-        console.log('- Help & Support: Revamped with WhatsApp and Email buttons');
-        console.log('- Ad Placeholder 1: Home Top (320x50) with Adsterra script (commented)');
-        console.log('- Ad Placeholder 2: Wallet Mid (300x250) with Adsterra script (commented)');
-        console.log('- Ad Placeholder 3: Tournament Details (320x50) with Adsterra script (commented)');
+        console.log('✅ Loading screen: black background, NO white circle around logo');
+        console.log('✅ Help & Support: Revamped with WhatsApp and Email buttons');
+        console.log('✅ Ad Placeholder 1: Home Top (320x50) - scripts commented');
+        console.log('✅ Ad Placeholder 2: Wallet Mid (300x250) - scripts commented');
+        console.log('✅ Ad Placeholder 3: Tournament Details (320x50) - scripts commented');
+        console.log('✅ Wallet: Withdrawable coins prominently displayed');
+        console.log('✅ Wallet: "Add Coins" button opens full-page coin packages');
+        console.log('✅ Wallet: "Transactions" button opens full-page history');
+        console.log('✅ Wallet section is now cleaner with more space');
+        console.log('');
+        console.log('📌 TO SHOW ADS: Uncomment the script tags inside each .ad-placeholder div');
+        console.log('   Search for "TO SHOW ADS" in the HTML to find them.');
     </script>
 </body>
 
