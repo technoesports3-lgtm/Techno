@@ -1472,31 +1472,31 @@
         }
 
         /* =============================================================
-                   QR FULL PAGE
+                   QR FULL PAGE – REVAMPED (Larger QR, Timer, Disabled UPI Buttons)
                    ============================================================= */
         #qr-full-page .full-page-body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 70vh;
-            padding: 20px;
+            padding: 16px 20px 30px;
         }
 
         #qr-full-page .qr-display {
             background: #ffffff;
             border-radius: var(--radius);
-            padding: 30px;
+            padding: 24px 20px 28px;
             text-align: center;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
         }
 
         #qr-full-page .qr-display .qr-image {
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
             margin: 0 auto 16px;
             display: block;
             border-radius: var(--radius-sm);
@@ -1505,11 +1505,46 @@
             padding: 8px;
         }
 
+        /* Timer on QR page */
+        #qr-full-page .qr-timer-container {
+            background: linear-gradient(135deg, #f0f6ff 0%, #fafbfc 100%);
+            border: 1px solid rgba(26, 111, 181, 0.12);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin: 10px 0 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        #qr-full-page .qr-timer-container .timer-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #qr-full-page .qr-timer-container .timer-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 2px;
+            min-width: 80px;
+        }
+
+        #qr-full-page .qr-timer-container .timer-display.expired {
+            color: #d72638;
+        }
+
         #qr-full-page .qr-display .upi-details {
             background: #f5f7fa;
             padding: 14px;
             border-radius: var(--radius-sm);
-            margin: 12px 0;
+            margin: 10px 0;
             border: 1px solid var(--border);
         }
 
@@ -1550,15 +1585,12 @@
             background: #1e8e4a;
         }
 
+        /* UPI intent buttons – DISABLED / non-functional */
         #qr-full-page .qr-display .payment-actions {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
-            margin-top: 14px;
-        }
-
-        #qr-full-page .qr-display .payment-actions a {
-            text-decoration: none;
+            margin-top: 12px;
         }
 
         #qr-full-page .qr-display .payment-actions .pay-btn {
@@ -1569,15 +1601,20 @@
             text-align: center;
             font-weight: 700;
             font-size: 0.80rem;
-            transition: all var(--transition);
-            cursor: pointer;
-            color: var(--text-primary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.55;
+            transition: none;
+            pointer-events: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
 
-        #qr-full-page .qr-display .payment-actions .pay-btn:hover {
-            border-color: var(--primary);
-            background: rgba(26, 111, 181, 0.04);
-            transform: translateY(-2px);
+        #qr-full-page .qr-display .payment-actions .pay-btn i {
+            opacity: 0.5;
         }
 
         #qr-full-page .qr-display .payment-actions .pay-btn.gpay {
@@ -1588,6 +1625,15 @@
         }
         #qr-full-page .qr-display .payment-actions .pay-btn.bhim {
             color: #00529C;
+        }
+
+        /* Disabled overlay hint */
+        #qr-full-page .qr-display .payment-actions .pay-btn .disabled-hint {
+            font-size: 0.50rem;
+            color: #aaa;
+            display: block;
+            margin-top: 2px;
+            font-weight: 400;
         }
 
         #qr-full-page .qr-display .ref-number {
@@ -1623,12 +1669,39 @@
             cursor: pointer;
             font-size: 0.90rem;
             transition: all var(--transition);
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         #qr-full-page .qr-display .verify-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 28px rgba(26, 111, 181, 0.25);
+        }
+
+        #qr-full-page .qr-display .verify-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* QR page scan instruction */
+        #qr-full-page .qr-scan-instruction {
+            background: rgba(30, 142, 74, 0.04);
+            border: 1px solid rgba(30, 142, 74, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin: 6px 0 12px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        #qr-full-page .qr-scan-instruction i {
+            color: #1e8e4a;
+            font-size: 1.0rem;
         }
 
         /* =============================================================
@@ -2945,8 +3018,8 @@
                 padding: 16px 18px;
             }
             #qr-full-page .qr-display .qr-image {
-                width: 160px;
-                height: 160px;
+                width: 220px;
+                height: 220px;
             }
             #qr-full-page .qr-display .payment-actions {
                 grid-template-columns: 1fr 1fr 1fr;
@@ -2991,6 +3064,14 @@
             .coin-packages-grid-full {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
+            }
+            #qr-full-page .qr-display .qr-image {
+                width: 200px;
+                height: 200px;
+            }
+            #qr-full-page .qr-timer-container .timer-display {
+                font-size: 1.3rem;
+                min-width: 60px;
             }
         }
 
@@ -3117,8 +3198,8 @@
                 font-size: 0.95rem;
             }
             #qr-full-page .qr-display .qr-image {
-                width: 140px;
-                height: 140px;
+                width: 180px;
+                height: 180px;
             }
             #qr-full-page .qr-display {
                 padding: 16px;
@@ -3194,6 +3275,18 @@
             .coin-package-card .price {
                 font-size: 0.65rem;
                 padding: 2px 8px;
+            }
+            #qr-full-page .qr-display .qr-image {
+                width: 160px;
+                height: 160px;
+            }
+            #qr-full-page .qr-timer-container .timer-display {
+                font-size: 1.1rem;
+                min-width: 50px;
+            }
+            #qr-full-page .qr-timer-container {
+                padding: 8px 12px;
+                gap: 8px;
             }
         }
 
@@ -3590,18 +3683,19 @@
 
                     <!-- AD PLACEHOLDER 1: Home Top (320x50) -->
                     <div id="ad-home-top" class="ad-placeholder">
-                        
+
                         <script>
-                          atOptions = {
-                            'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
-                            'format' : 'iframe',
-                            'height' : 50,
-                            'width' : 320,
-                            'params' : {}
-                          };
+                            atOptions = {
+                                'key': 'a2762df83e8e3d85eb4b7680f93f3429',
+                                'format': 'iframe',
+                                'height': 50,
+                                'width': 320,
+                                'params': {}
+                            };
                         </script>
-                        <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js"></script>
-                        
+                        <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
+                        </script>
+
                     </div>
 
                     <div id="solo-tournaments"></div>
@@ -3629,18 +3723,19 @@
 
                     <!-- AD PLACEHOLDER 2: Wallet Mid (300x250) -->
                     <div id="ad-wallet-mid" class="ad-placeholder">
-                        
+
                         <script>
-                          atOptions = {
-                            'key' : '515b6bc048c46f9a57c1f159e001084b',
-                            'format' : 'iframe',
-                            'height' : 250,
-                            'width' : 300,
-                            'params' : {}
-                          };
+                            atOptions = {
+                                'key': '515b6bc048c46f9a57c1f159e001084b',
+                                'format': 'iframe',
+                                'height': 250,
+                                'width': 300,
+                                'params': {}
+                            };
                         </script>
-                        <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js"></script>
-                        
+                        <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js">
+                        </script>
+
                     </div>
 
                     <!-- Action Buttons: Add Coins & Transaction History -->
@@ -3858,11 +3953,27 @@
         FULL PAGE SECTIONS
         ============================================================= -->
 
-        <!-- TOURNAMENT DETAILS FULL PAGE -->
+        <!-- TOURNAMENT DETAILS FULL PAGE – AD MOVED OUTSIDE DYNAMIC CONTENT -->
         <div id="tournament-details-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-info-circle"></i> <span id="details-page-title">Tournament Details</span></div>
                 <button class="close-page-btn" onclick="closeDetailsPage()"><i class="fas fa-times"></i></button>
+            </div>
+            <!-- AD PLACEHOLDER 3: Tournament Details (320x50) – MOVED OUTSIDE DYNAMIC BODY -->
+            <div id="ad-details-banner" class="ad-placeholder" style="margin: 8px 16px 4px 16px; min-height: 65px;">
+
+                <script>
+                    atOptions = {
+                        'key': 'a2762df83e8e3d85eb4b7680f93f3429',
+                        'format': 'iframe',
+                        'height': 50,
+                        'width': 320,
+                        'params': {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
+                </script>
+
             </div>
             <div class="full-page-body" id="details-page-body">
                 <!-- populated dynamically -->
@@ -4025,7 +4136,7 @@
         </div>
 
         <!-- =============================================================
-        QR FULL PAGE
+        QR FULL PAGE – REVAMPED (Larger QR, Timer, UPI Buttons DISABLED)
         ============================================================= -->
         <div id="qr-full-page" class="full-page-section">
             <div class="full-page-header">
@@ -4815,10 +4926,24 @@
                 showToast('Error: ' + e.message, 'error'); }
         }
 
+        // ─── QR FULL PAGE – REVAMPED with Timer (4 min), Larger QR, Disabled UPI Buttons ───
+        let qrTimerInterval = null;
+        let qrPollingInterval = null;
+        let qrTimeLeft = 240; // 4 minutes in seconds
+
         function showQrFullPage(data) {
             const page = document.getElementById('qr-full-page');
             document.getElementById('qr-page-title').textContent = 'Pay with UPI';
             const body = document.getElementById('qr-page-body');
+
+            // Reset timer
+            qrTimeLeft = 240;
+            if (qrTimerInterval) clearInterval(qrTimerInterval);
+            if (qrPollingInterval) clearInterval(qrPollingInterval);
+
+            // Larger QR: size=300x300
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data.upiLink)}&bgcolor=ffffff&color=000000&margin=10`;
+
             body.innerHTML = `
                         <div class="qr-display">
                             <div style="color:var(--text-muted);font-size:0.70rem;margin-bottom:4px;">You Will Receive</div>
@@ -4827,42 +4952,120 @@
                             <div style="color:var(--text-primary);font-size:2rem;font-weight:900;"><i class="fas fa-rupee-sign"></i> ${data.amount}</div>
                             <div style="color:var(--primary);font-size:0.65rem;margin-top:4px;">pay exact amount along with paise</div>
 
+                            <!-- QR IMAGE – LARGER (300x300) -->
                             <div style="margin:16px 0 10px;">
-                                <img src="${data.qrCodeUrl}" alt="UPI QR" class="qr-image">
+                                <img src="${qrCodeUrl}" alt="UPI QR" class="qr-image">
                             </div>
 
+                            <!-- SCAN INSTRUCTION -->
+                            <div class="qr-scan-instruction">
+                                <i class="fas fa-qrcode"></i> Scan this QR code using any UPI app to pay
+                            </div>
+
+                            <!-- TIMER – 4 MINUTES COUNTDOWN -->
+                            <div class="qr-timer-container">
+                                <span class="timer-label"><i class="far fa-clock"></i> Payment expires in</span>
+                                <span class="timer-display" id="qr-timer-display">04:00</span>
+                            </div>
+
+                            <!-- UPI DETAILS -->
+                            <div class="upi-details">
+                                <div class="upi-row">
+                                    <span class="upi-text">${data.upiId || 'BHARATPE2A0D0H2E0M03501@unitype'}</span>
+                                    <button class="copy-upi-btn" onclick="copyUpiFromQr()">Copy</button>
+                                </div>
+                            </div>
+
+                            <!-- REF NUMBER -->
                             <div class="ref-number">
                                 <div class="label">Add in Payment Remarks</div>
                                 <div class="code">${data.refNumber}</div>
                             </div>
 
+                            <!-- UPI INTENT BUTTONS – DISABLED (no links, pointer-events:none, opacity:0.55) -->
                             <div class="payment-actions">
-                                <a href="${data.gpayLink}" target="_blank"><div class="pay-btn gpay"><i class="fab fa-google-pay"></i> GPay</div></a>
-                                <a href="${data.phonepeLink}" target="_blank"><div class="pay-btn phonepe"><i class="fas fa-mobile-alt"></i> PhonePe</div></a>
-                                <a href="${data.upiLink}" target="_blank"><div class="pay-btn bhim"><i class="fas fa-qrcode"></i> BHIM/UPI</div></a>
+                                <div class="pay-btn gpay"><i class="fab fa-google-pay"></i> GPay <span class="disabled-hint">(disabled)</span></div>
+                                <div class="pay-btn phonepe"><i class="fas fa-mobile-alt"></i> PhonePe <span class="disabled-hint">(disabled)</span></div>
+                                <div class="pay-btn bhim"><i class="fas fa-qrcode"></i> BHIM/UPI <span class="disabled-hint">(disabled)</span></div>
+                            </div>
+                            <div style="text-align:center;color:var(--text-muted);font-size:0.60rem;margin-top:2px;">
+                                <i class="fas fa-info-circle"></i> UPI app shortcuts are disabled. Please scan the QR code.
                             </div>
 
-                            <button class="verify-btn" onclick="startPaymentPollingFromQr('${data.refNumber}')">
+                            <button class="verify-btn" onclick="startPaymentPollingFromQr('${data.refNumber}')" id="qr-verify-btn">
                                 <i class="fas fa-check"></i> I've Paid — Verify Payment
                             </button>
-                            <div style="text-align:center;color:var(--text-muted);font-size:0.65rem;margin-top:6px;">Payment will be verified automatically within seconds</div>
+                            <div style="text-align:center;color:var(--text-muted);font-size:0.65rem;margin-top:6px;">
+                                Payment will be verified automatically within seconds
+                            </div>
                         </div>
                     `;
+
             page.style.display = 'block';
             window._qrRefNumber = data.refNumber;
+
+            // Start timer countdown (4 minutes)
+            startQrTimer();
+
+            // Start polling
             setTimeout(() => startPaymentPollingFromQr(data.refNumber), 1000);
-            // Close coin packages page if open
+
             closeCoinPackagesPage();
         }
 
-        let qrPollingInterval = null;
+        // ─── QR TIMER (4 minutes) ───
+        function startQrTimer() {
+            if (qrTimerInterval) clearInterval(qrTimerInterval);
+            qrTimeLeft = 240; // 4 minutes
+            updateQrTimerDisplay();
+            qrTimerInterval = setInterval(() => {
+                qrTimeLeft--;
+                updateQrTimerDisplay();
+                if (qrTimeLeft <= 0) {
+                    clearInterval(qrTimerInterval);
+                    qrTimerInterval = null;
+                    // Expire the session
+                    const timerDisplay = document.getElementById('qr-timer-display');
+                    if (timerDisplay) {
+                        timerDisplay.textContent = 'EXPIRED';
+                        timerDisplay.classList.add('expired');
+                    }
+                    const verifyBtn = document.getElementById('qr-verify-btn');
+                    if (verifyBtn) {
+                        verifyBtn.disabled = true;
+                        verifyBtn.innerHTML = '<i class="fas fa-times"></i> Session Expired';
+                        verifyBtn.style.background = '#d72638';
+                    }
+                    if (qrPollingInterval) {
+                        clearInterval(qrPollingInterval);
+                        qrPollingInterval = null;
+                    }
+                    showToast('Payment session expired. Please try again.', 'error');
+                }
+            }, 1000);
+        }
 
+        function updateQrTimerDisplay() {
+            const display = document.getElementById('qr-timer-display');
+            if (!display) return;
+            if (qrTimeLeft <= 0) {
+                display.textContent = 'EXPIRED';
+                display.classList.add('expired');
+                return;
+            }
+            const mins = String(Math.floor(qrTimeLeft / 60)).padStart(2, '0');
+            const secs = String(qrTimeLeft % 60).padStart(2, '0');
+            display.textContent = `${mins}:${secs}`;
+            display.classList.remove('expired');
+        }
+
+        // ─── POLLING ───
         function startPaymentPollingFromQr(refNumber) {
             if (!refNumber) return;
             if (qrPollingInterval) clearInterval(qrPollingInterval);
             let attempts = 0,
-                max = 60;
-            const btn = document.querySelector('#qr-full-page .verify-btn');
+                max = 120;
+            const btn = document.getElementById('qr-verify-btn');
             qrPollingInterval = setInterval(async () => {
                 attempts++;
                 try {
@@ -4874,7 +5077,10 @@
                         clearInterval(qrPollingInterval);
                         qrPollingInterval = null;
                         if (btn) { btn.innerHTML = '<i class="fas fa-check-circle"></i> Payment Verified!';
-                            btn.style.background = '#1e8e4a'; }
+                            btn.style.background = '#1e8e4a';
+                            btn.disabled = true; }
+                        if (qrTimerInterval) { clearInterval(qrTimerInterval);
+                            qrTimerInterval = null; }
                         showToast('Payment successful! Wallet credited.', 'success');
                         await fetchWalletBalance();
                         await fetchWalletTransactions();
@@ -4885,7 +5091,8 @@
                         clearInterval(qrPollingInterval);
                         qrPollingInterval = null;
                         if (btn) { btn.innerHTML = '<i class="fas fa-times"></i> Session Expired';
-                            btn.style.background = '#d72638'; }
+                            btn.style.background = '#d72638';
+                            btn.disabled = true; }
                         showToast('Session expired. Please try again.', 'error');
                         return;
                     }
@@ -4893,7 +5100,8 @@
                         clearInterval(qrPollingInterval);
                         qrPollingInterval = null;
                         if (btn) { btn.innerHTML = '<i class="fas fa-clock"></i> Check Status';
-                            btn.style.background = 'var(--primary-gradient)'; }
+                            btn.style.background = 'var(--primary-gradient)';
+                            btn.disabled = false; }
                         showToast('Not confirmed. Contact support: ' + refNumber, 'info');
                     }
                 } catch (e) { console.log('Poll attempt', attempts, ':', e.message); }
@@ -4914,6 +5122,8 @@
         }
 
         function closeQrPage() {
+            if (qrTimerInterval) { clearInterval(qrTimerInterval);
+                qrTimerInterval = null; }
             if (qrPollingInterval) { clearInterval(qrPollingInterval);
                 qrPollingInterval = null; }
             document.getElementById('qr-full-page').style.display = 'none';
@@ -5171,7 +5381,7 @@
             return card;
         }
 
-        // ─── TOURNAMENT DETAILS FULL PAGE (with Ad placeholder) ───
+        // ─── TOURNAMENT DETAILS FULL PAGE (Ad now outside dynamic content) ───
         function showTournamentDetails(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -5212,29 +5422,11 @@
                 }
             }
 
-            // AD PLACEHOLDER 3: Tournament Details (320x50)
-            const adHTML = `
-                        <div id="ad-details-banner" class="ad-placeholder" style="margin: 12px 0 16px 0;">
-                            
-                            <script>
-                              atOptions = {
-                                'key' : 'a2762df83e8e3d85eb4b7680f93f3429',
-                                'format' : 'iframe',
-                                'height' : 50,
-                                'width' : 320,
-                                'params' : {}
-                              };
-                            <\/script>
-                            <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js"><\/script>
-                            -->
-                        </div>
-                    `;
-
+            // Ad is now outside the dynamic body — we don't include it here
             document.getElementById('details-page-body').innerHTML = `
                         <div style="text-align:center;margin-bottom:16px;">
                             <img src="${t.imageUrl || 'https://via.placeholder.com/400x200?text=Tournament+Banner'}" alt="${t.title}" style="width:100%;border-radius:var(--radius-sm);max-height:220px;object-fit:cover;">
                         </div>
-                        ${adHTML}
                         ${startTimerHTML}
                         <div class="content-block">
                             <h4><i class="fas fa-info-circle" style="color:var(--primary);"></i> Tournament Information</h4>
@@ -5894,13 +6086,16 @@
         console.log('TECHNO E-SPORTS UI — All modifications applied.');
         console.log('✅ Loading screen: black background, NO white circle around logo');
         console.log('✅ Help & Support: Revamped with WhatsApp and Email buttons');
-        console.log('✅ Ad Placeholder 1: Home Top (320x50) - scripts commented');
-        console.log('✅ Ad Placeholder 2: Wallet Mid (300x250) - scripts commented');
-        console.log('✅ Ad Placeholder 3: Tournament Details (320x50) - scripts commented');
+        console.log('✅ Ad Placeholder 1: Home Top (320x50)');
+        console.log('✅ Ad Placeholder 2: Wallet Mid (300x250)');
+        console.log('✅ Ad Placeholder 3: Tournament Details (320x50) — MOVED outside dynamic content');
         console.log('✅ Wallet: Withdrawable coins prominently displayed');
         console.log('✅ Wallet: "Add Coins" button opens full-page coin packages');
         console.log('✅ Wallet: "Transactions" button opens full-page history');
-        console.log('✅ Wallet section is now cleaner with more space');
+        console.log('✅ QR Page: UPI intent buttons DISABLED (no click)');
+        console.log('✅ QR Page: QR image LARGER (300x300)');
+        console.log('✅ QR Page: Timer shows 4 MINUTES countdown below QR');
+        console.log('✅ Backend: expiration changed from 10 min to 4 min (see payment.js)');
         console.log('');
         console.log('📌 TO SHOW ADS: Uncomment the script tags inside each .ad-placeholder div');
         console.log('   Search for "TO SHOW ADS" in the HTML to find them.');
