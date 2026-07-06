@@ -1772,6 +1772,355 @@
         }
 
         /* =============================================================
+                   SLOT BOOKING UI – WinZO Style
+                   ============================================================= */
+        .slot-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0 16px;
+            justify-content: center;
+        }
+
+        .slot-item {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            transition: all var(--transition);
+            cursor: pointer;
+            background: #ffffff;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .slot-item.available {
+            border-color: var(--primary);
+            background: rgba(26, 111, 181, 0.04);
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .slot-item.available:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(26, 111, 181, 0.15);
+            background: rgba(26, 111, 181, 0.08);
+        }
+
+        .slot-item.taken {
+            border-color: #d72638;
+            background: rgba(215, 38, 56, 0.06);
+            color: #d72638;
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .slot-item.taken .slot-label {
+            font-size: 0.55rem;
+            color: #d72638;
+        }
+
+        .slot-item .slot-number {
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .slot-item .slot-label {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .slot-item .slot-occupant {
+            font-size: 0.50rem;
+            color: var(--text-muted);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 2px;
+        }
+
+        .slot-item.selected {
+            border-color: #1e8e4a;
+            background: rgba(30, 142, 74, 0.08);
+            color: #1e8e4a;
+            box-shadow: 0 0 0 3px rgba(30, 142, 74, 0.15);
+            transform: scale(1.04);
+        }
+
+        .team-group {
+            margin: 10px 0 14px;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .team-group .team-header {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-group .team-header .team-badge {
+            background: var(--primary-gradient);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 0.60rem;
+            letter-spacing: 0.5px;
+        }
+
+        .team-group .slot-grid {
+            gap: 6px;
+            margin: 4px 0 0;
+        }
+
+        .team-group .slot-item {
+            width: 52px;
+            height: 52px;
+            font-size: 0.70rem;
+        }
+
+        .team-group .slot-item .slot-number {
+            font-size: 0.95rem;
+        }
+
+        .slot-booking-form {
+            background: #f5f7fa;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 12px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .slot-booking-form.visible {
+            display: block;
+            animation: fadeUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .slot-booking-form .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .slot-booking-form .form-row .form-group {
+            flex: 1;
+            min-width: 140px;
+            margin-bottom: 10px;
+        }
+
+        .slot-booking-form .form-row .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.70rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .slot-booking-form .form-row .form-group input {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+
+        .slot-booking-info {
+            background: rgba(26, 111, 181, 0.04);
+            border: 1px solid rgba(26, 111, 181, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin: 6px 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 0.80rem;
+            color: var(--text-secondary);
+        }
+
+        .slot-booking-info .info-highlight {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .slot-booking-info .info-highlight.taken-count {
+            color: #d72638;
+        }
+
+        /* ─── Fullscreen Ad Overlay (Iframe) ─── */
+        #ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 99999999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #ad-overlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+
+        #ad-overlay .ad-timer-overlay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            padding: 14px 22px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            z-index: 999999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 110px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.40);
+        }
+
+        #ad-overlay .ad-timer-overlay .timer-label {
+            color: rgba(255, 255, 255, 0.50);
+            font-size: 0.60rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        #ad-overlay .ad-timer-overlay .timer-number {
+            color: #ffc700;
+            font-size: 2.2rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+        }
+
+        #ad-overlay .ad-timer-overlay .timer-number.complete {
+            color: #1e8e4a;
+        }
+
+        #ad-overlay .ad-close-btn-overlay {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #1e8e4a, #157a3e);
+            color: #fff;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 40px rgba(30, 142, 74, 0.40);
+            z-index: 999999999;
+            display: none;
+            transition: all var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        #ad-overlay .ad-close-btn-overlay:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 8px 56px rgba(30, 142, 74, 0.50);
+        }
+
+        #ad-overlay .ad-close-btn-overlay:active {
+            transform: translateX(-50%) scale(0.97);
+        }
+
+        /* ─── Slot booking responsive ─── */
+        @media (max-width: 480px) {
+            .slot-item {
+                width: 48px;
+                height: 48px;
+                font-size: 0.65rem;
+            }
+            .slot-item .slot-number {
+                font-size: 0.9rem;
+            }
+            .team-group .slot-item {
+                width: 44px;
+                height: 44px;
+                font-size: 0.60rem;
+            }
+            .team-group .slot-item .slot-number {
+                font-size: 0.8rem;
+            }
+            .slot-booking-form .form-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .slot-booking-form .form-row .form-group {
+                min-width: 100%;
+            }
+            #ad-overlay .ad-timer-overlay {
+                top: 12px;
+                right: 12px;
+                padding: 10px 16px;
+                min-width: 80px;
+            }
+            #ad-overlay .ad-timer-overlay .timer-number {
+                font-size: 1.6rem;
+            }
+            #ad-overlay .ad-close-btn-overlay {
+                padding: 12px 30px;
+                font-size: 0.95rem;
+                bottom: 28px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .slot-item {
+                width: 40px;
+                height: 40px;
+                font-size: 0.55rem;
+            }
+            .slot-item .slot-number {
+                font-size: 0.75rem;
+            }
+            .team-group .slot-item {
+                width: 38px;
+                height: 38px;
+                font-size: 0.50rem;
+            }
+            .team-group .slot-item .slot-number {
+                font-size: 0.65rem;
+            }
+            .slot-grid {
+                gap: 4px;
+            }
+            .team-group .slot-grid {
+                gap: 4px;
+            }
+        }
+
+        /* =============================================================
                    WALLET – Professional Clean Layout
                    ============================================================= */
         .wallet-balance-card {
@@ -2553,7 +2902,7 @@
         }
 
         /* =============================================================
-                   AD MODAL
+                   AD MODAL – Legacy (kept for reference)
                    ============================================================= */
         #in-app-ad-modal {
             display: none;
@@ -3073,6 +3422,14 @@
                 font-size: 1.3rem;
                 min-width: 60px;
             }
+            .slot-item {
+                width: 52px;
+                height: 52px;
+            }
+            .team-group .slot-item {
+                width: 46px;
+                height: 46px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -3288,6 +3645,53 @@
                 padding: 8px 12px;
                 gap: 8px;
             }
+            .slot-item {
+                width: 44px;
+                height: 44px;
+                font-size: 0.60rem;
+            }
+            .slot-item .slot-number {
+                font-size: 0.85rem;
+            }
+            .team-group .slot-item {
+                width: 40px;
+                height: 40px;
+                font-size: 0.55rem;
+            }
+            .team-group .slot-item .slot-number {
+                font-size: 0.75rem;
+            }
+            .team-group {
+                padding: 8px 10px;
+            }
+            .slot-grid {
+                gap: 5px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .slot-item {
+                width: 38px;
+                height: 38px;
+                font-size: 0.50rem;
+            }
+            .slot-item .slot-number {
+                font-size: 0.70rem;
+            }
+            .team-group .slot-item {
+                width: 34px;
+                height: 34px;
+                font-size: 0.45rem;
+            }
+            .team-group .slot-item .slot-number {
+                font-size: 0.60rem;
+            }
+            .slot-grid {
+                gap: 3px;
+            }
+            .team-group .slot-grid {
+                gap: 3px;
+            }
         }
 
         /* =============================================================
@@ -3443,6 +3847,17 @@
         }
         .coin-price-badge:hover {
             transform: scale(1.04);
+        }
+
+        .loading-spinner-small {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -3615,9 +4030,9 @@
         </div>
 
         <!-- =============================================================
-        AD MODAL
+        AD MODAL – Legacy (kept for reference, but we use new overlay)
         ============================================================= -->
-        <div id="in-app-ad-modal">
+        <div id="in-app-ad-modal" style="display:none;">
             <div class="ad-icon"><i class="fas fa-gift"></i></div>
             <h2>Sponsor Ad Running</h2>
             <p>Please view the ad in the new tab for 10 seconds to get your reward.</p>
@@ -3644,6 +4059,20 @@
                     <i class="fas fa-check"></i> Got it
                 </button>
             </div>
+        </div>
+
+        <!-- =============================================================
+        FULL-SCREEN AD OVERLAY (IFRAME) – New
+        ============================================================= -->
+        <div id="ad-overlay">
+            <iframe id="ad-iframe" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
+            <div class="ad-timer-overlay" id="ad-timer-overlay">
+                <span class="timer-label">Ad Timer</span>
+                <span class="timer-number" id="ad-timer-number">10</span>
+            </div>
+            <button class="ad-close-btn-overlay" id="ad-close-btn-overlay" onclick="closeAdOverlay()">
+                <i class="fas fa-check-circle"></i> Close &amp; Claim
+            </button>
         </div>
 
         <!-- =============================================================
@@ -4161,13 +4590,15 @@
             </div>
         </div>
 
-        <!-- Registration -->
+        <!-- Registration (SLOT BOOKING) -->
         <div id="registration-modal" class="modal">
             <div class="modal-content">
                 <button class="close-button" onclick="closeModal('registration-modal')">&times;</button>
-                <h3 style="font-size:1.2rem; color:var(--text-primary);">Register for Tournament</h3>
+                <h3 style="font-size:1.2rem; color:var(--text-primary);">Select Your Slot</h3>
                 <div id="registration-details"></div>
-                <div class="registration-form" id="registration-form-container"></div>
+                <div class="registration-form" id="registration-form-container">
+                    <!-- Slot booking UI rendered here -->
+                </div>
             </div>
         </div>
 
@@ -4304,6 +4735,16 @@
         let autoLogoutTimer = null;
         let walletBalanceInterval = null;
         const AUTO_LOGOUT_TIME = 24 * 60 * 60 * 1000;
+
+        // ─── Slot booking state ───
+        let slotBookingState = {
+            selectedTeam: null, // teamNumber (for duo/squad)
+            selectedSlot: null, // slotNumber (for all)
+            takenSlots: {}, // { teamNumber: { slotNumber: { name, uid } } } for duo/squad, or { slotNumber: { name, uid } } for solo
+            allRegistrations: [],
+            isLoading: false,
+            selectedTournamentId: null
+        };
 
         let currentForgotPasswordLanguage = 'english';
 
@@ -4469,7 +4910,7 @@
                     buttonId.includes('signup') ? 'Registering...' :
                     buttonId.includes('google') ? 'Signing in...' : 'Processing...';
                 btn.innerHTML =
-                    `<span class="loading-spinner" style="display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;margin-right:8px;"></span> ${label}`;
+                    `<span class="loading-spinner-small"></span> ${label}`;
             } else {
                 if (buttonId === 'login-button') btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
                 else if (buttonId === 'signup-button') btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
@@ -4772,7 +5213,6 @@
                 if (!r.ok) throw new Error(d.message || 'Failed');
                 walletTransactions = Array.isArray(d.transactions) ? d.transactions : [];
                 renderWalletTransactions();
-                // Also update full page if open
                 if (document.getElementById('transaction-history-page').style.display === 'block') {
                     renderFullTransactionHistory();
                 }
@@ -4790,7 +5230,6 @@
                 container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No transactions found.</p>';
                 return;
             }
-            // Show only last 5 in wallet panel
             const recent = walletTransactions.slice(0, 5);
             container.innerHTML = recent.map(tx => {
                 const isCredit = (tx.type || '').toLowerCase() === 'credit';
@@ -4929,20 +5368,19 @@
         // ─── QR FULL PAGE – REVAMPED with Timer (4 min), Larger QR, Disabled UPI Buttons ───
         let qrTimerInterval = null;
         let qrPollingInterval = null;
-        let qrTimeLeft = 240; // 4 minutes in seconds
+        let qrTimeLeft = 240;
 
         function showQrFullPage(data) {
             const page = document.getElementById('qr-full-page');
             document.getElementById('qr-page-title').textContent = 'Pay with UPI';
             const body = document.getElementById('qr-page-body');
 
-            // Reset timer
             qrTimeLeft = 240;
             if (qrTimerInterval) clearInterval(qrTimerInterval);
             if (qrPollingInterval) clearInterval(qrPollingInterval);
 
-            // Larger QR: size=300x300
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data.upiLink)}&bgcolor=ffffff&color=000000&margin=10`;
+            const qrCodeUrl =
+                `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data.upiLink)}&bgcolor=ffffff&color=000000&margin=10`;
 
             body.innerHTML = `
                         <div class="qr-display">
@@ -4952,29 +5390,24 @@
                             <div style="color:var(--text-primary);font-size:2rem;font-weight:900;"><i class="fas fa-rupee-sign"></i> ${data.amount}</div>
                             <div style="color:var(--primary);font-size:0.65rem;margin-top:4px;">pay exact amount along with paise</div>
 
-                            <!-- QR IMAGE – LARGER (300x300) -->
                             <div style="margin:16px 0 10px;">
                                 <img src="${qrCodeUrl}" alt="UPI QR" class="qr-image">
                             </div>
 
-                            <!-- SCAN INSTRUCTION -->
                             <div class="qr-scan-instruction">
                                 <i class="fas fa-qrcode"></i> Scan this QR code using any UPI app to pay
                             </div>
 
-                            <!-- TIMER – 4 MINUTES COUNTDOWN -->
                             <div class="qr-timer-container">
                                 <span class="timer-label"><i class="far fa-clock"></i> Payment expires in</span>
                                 <span class="timer-display" id="qr-timer-display">04:00</span>
                             </div>
 
-                            <!-- REF NUMBER -->
                             <div class="ref-number">
                                 <div class="label">Add in Payment Remarks</div>
                                 <div class="code">${data.refNumber}</div>
                             </div>
 
-                            <!-- UPI INTENT BUTTONS – DISABLED (no links, pointer-events:none, opacity:0.55) -->
                             <div class="payment-actions">
                                 <div class="pay-btn gpay"><i class="fab fa-google-pay"></i> GPay <span class="disabled-hint">(disabled)</span></div>
                                 <div class="pay-btn phonepe"><i class="fas fa-mobile-alt"></i> PhonePe <span class="disabled-hint">(disabled)</span></div>
@@ -4996,19 +5429,15 @@
             page.style.display = 'block';
             window._qrRefNumber = data.refNumber;
 
-            // Start timer countdown (4 minutes)
             startQrTimer();
-
-            // Start polling
             setTimeout(() => startPaymentPollingFromQr(data.refNumber), 1000);
 
             closeCoinPackagesPage();
         }
 
-        // ─── QR TIMER (4 minutes) ───
         function startQrTimer() {
             if (qrTimerInterval) clearInterval(qrTimerInterval);
-            qrTimeLeft = 240; // 4 minutes
+            qrTimeLeft = 240;
             updateQrTimerDisplay();
             qrTimerInterval = setInterval(() => {
                 qrTimeLeft--;
@@ -5016,7 +5445,6 @@
                 if (qrTimeLeft <= 0) {
                     clearInterval(qrTimerInterval);
                     qrTimerInterval = null;
-                    // Expire the session
                     const timerDisplay = document.getElementById('qr-timer-display');
                     if (timerDisplay) {
                         timerDisplay.textContent = 'EXPIRED';
@@ -5051,7 +5479,6 @@
             display.classList.remove('expired');
         }
 
-        // ─── POLLING ───
         function startPaymentPollingFromQr(refNumber) {
             if (!refNumber) return;
             if (qrPollingInterval) clearInterval(qrPollingInterval);
@@ -5098,19 +5525,6 @@
                     }
                 } catch (e) { console.log('Poll attempt', attempts, ':', e.message); }
             }, 5000);
-        }
-
-        function copyUpiFromQr() {
-            const text = document.querySelector('#qr-full-page .upi-text')?.textContent || '';
-            if (!text) return showToast('UPI ID not available.', 'error');
-            const btn = document.querySelector('#qr-full-page .copy-upi-btn');
-            navigator.clipboard.writeText(text).then(() => {
-                if (btn) { btn.textContent = 'Copied!';
-                    btn.classList.add('copied'); }
-                showToast('UPI ID copied!', 'success');
-                setTimeout(() => { if (btn) { btn.textContent = 'Copy';
-                        btn.classList.remove('copied'); } }, 2000);
-            }).catch(() => showToast('Failed to copy.', 'error'));
         }
 
         function closeQrPage() {
@@ -5414,7 +5828,6 @@
                 }
             }
 
-            // Ad is now outside the dynamic body — we don't include it here
             document.getElementById('details-page-body').innerHTML = `
                         <div style="text-align:center;margin-bottom:16px;">
                             <img src="${t.imageUrl || 'https://via.placeholder.com/400x200?text=Tournament+Banner'}" alt="${t.title}" style="width:100%;border-radius:var(--radius-sm);max-height:220px;object-fit:cover;">
@@ -5520,82 +5933,511 @@
                 showToast('Error loading registration data.', 'error'); }
         }
 
-        // ─── REGISTRATION ───
-        function registerForTournament(tournamentId) {
+        // ─── SLOT BOOKING: registerForTournament (WinZO-Style) ───
+        async function registerForTournament(tournamentId) {
             if (!currentUser) return showToast("Please login to register.", 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
-            if (t.registrationEndTime && new Date(t.registrationEndTime) <= new Date()) return showToast(
-                "Registration ended.", 'error');
+
+            // Check registration end
+            if (t.registrationEndTime && new Date(t.registrationEndTime) <= new Date())
+                return showToast("Registration ended.", 'error');
             if (t.participants >= t.maxParticipants) return showToast("Tournament is full.", 'error');
-            const reg = userRegistrations.find(r => r.tournamentId === t.id);
-            if (reg) {
-                if (reg.status === 'pending') return showToast('Registration pending approval.', 'info');
-                if (reg.status === 'approved') return showToast('Already registered.', 'info');
-                if (reg.status === 'rejected') showToast('Previous registration rejected. You can re-apply.', 'info');
+
+            // Check existing registration
+            const existingReg = userRegistrations.find(r => r.tournamentId === t.id);
+            if (existingReg) {
+                if (existingReg.status === 'pending') return showToast('Registration pending approval.', 'info');
+                if (existingReg.status === 'approved') return showToast('Already registered.', 'info');
+                if (existingReg.status === 'rejected')
+                showToast('Previous registration rejected. You can re-apply.', 'info');
             }
+
             selectedTournament = t;
+            slotBookingState.selectedTournamentId = tournamentId;
+            slotBookingState.selectedTeam = null;
+            slotBookingState.selectedSlot = null;
+
             const modal = document.getElementById('registration-modal');
             const details = document.getElementById('registration-details');
-            const form = document.getElementById('registration-form-container');
+            const formContainer = document.getElementById('registration-form-container');
 
             details.innerHTML = `
                         <div style="background:rgba(26,111,181,0.04);padding:12px;border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid rgba(26,111,181,0.08);">
                             <div style="font-weight:700;color:var(--primary);margin-bottom:4px;font-size:0.95rem;">${t.title}</div>
                             <div style="color:var(--text-muted);font-size:0.80rem;">${t.category.toUpperCase()} • <i class="fas fa-coins"></i> ${t.entryFee || 0} Entry Fee</div>
+                            <div style="color:var(--text-muted);font-size:0.75rem;margin-top:4px;">Max Participants: ${t.maxParticipants}</div>
                         </div>
                     `;
 
-            let formHTML = `
-                        <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Email</label><input type="email" id="register-email" value="${currentUser.email || ''}" readonly class="readonly-field"><small style="color:var(--text-muted);font-size:0.75rem;">Account email (cannot be changed)</small></div>
-                        <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Your Mobile Number</label><input type="tel" id="register-mobile" placeholder="Enter your mobile number" required></div>
-                    `;
+            formContainer.innerHTML = `<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading slots...</div>`;
+            modal.style.display = 'block';
 
-            if (t.category === 'duo' || t.category === 'squad') {
-                formHTML +=
-                    `<div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Team Name</label><input type="text" id="register-team-name" placeholder="Enter your team name" required></div>`;
-            }
+            // Fetch registrations and build slot UI
+            await buildSlotUI(t);
+        }
 
-            const playerCount = t.category === 'solo' ? 1 : t.category === 'duo' ? 2 : 4;
-            for (let i = 1; i <= playerCount; i++) {
-                formHTML += `
-                            <div class="player-details-section">
-                                <h4><i class="fas fa-user"></i> Player ${i} Details</h4>
-                                <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire Name</label><input type="text" id="player${i}-name" placeholder="Enter Exact In-Game Name" required></div>
-                                <div class="form-group"><label style="color:var(--text-secondary);font-size:0.80rem;font-weight:600;">Free Fire ID</label><input type="text" id="player${i}-id" placeholder="Player ${i} Free Fire ID" required pattern="[0-9]*" title="Enter numbers only"><small style="color:var(--text-muted);font-size:0.75rem;">Enter Player ${i} Free Fire ID (numeric only)</small></div>
+        // ─── BUILD SLOT UI ───
+        async function buildSlotUI(tournament) {
+            const formContainer = document.getElementById('registration-form-container');
+            const t = tournament;
+
+            try {
+                // Fetch all approved/pending registrations for this tournament
+                const snap = await db.collection("tournament_registrations")
+                    .where("tournamentId", "==", t.id)
+                    .where("status", "in", ["approved", "pending"])
+                    .get();
+
+                const registrations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                // Build taken slots map
+                let takenSlots = {};
+                const slotsPerTeam = t.category === 'duo' ? 2 : t.category === 'squad' ? 4 : 1;
+                const maxParticipants = t.maxParticipants || 0;
+                const numberOfTeams = t.category === 'solo' ? 1 : Math.ceil(maxParticipants / slotsPerTeam);
+
+                // For solo: takenSlots is { slotNumber: { name, uid } }
+                // For duo/squad: takenSlots is { teamNumber: { slotNumber: { name, uid } } }
+                if (t.category === 'solo') {
+                    takenSlots = {};
+                    registrations.forEach(reg => {
+                        // Check if registration has slotNumber
+                        const slotNum = reg.slotNumber;
+                        if (slotNum !== undefined && slotNum !== null && slotNum > 0) {
+                            const player = reg.playerDetails?.[0] || {};
+                            takenSlots[slotNum] = {
+                                name: player.name || 'Player',
+                                uid: player.freeFireId || 'N/A'
+                            };
+                        } else {
+                            // Legacy registration without slot — assign a slot based on order
+                            // We'll handle this by not marking it as taken, but instead showing a warning
+                            // Actually, for existing registrations without slot, we'll mark them as "taken" with a generic label
+                            // We'll assign them slots sequentially based on their registration order
+                            // For simplicity, we'll just count them and mark slots as taken
+                            // But we don't know their order, so we'll use a different approach: 
+                            // we'll mark the first N slots as taken where N is the number of legacy registrations
+                            // But this could conflict with new registrations. 
+                            // Instead, we'll generate a temporary slot number for each legacy registration
+                            // based on its index in the registrations array.
+                            // We'll do this after we've processed all registrations.
+                        }
+                    });
+
+                    // Now handle legacy registrations (without slotNumber)
+                    let legacyCount = 0;
+                    registrations.forEach(reg => {
+                        if (reg.slotNumber === undefined || reg.slotNumber === null || reg.slotNumber <= 0) {
+                            legacyCount++;
+                            // Find first available slot
+                            let slot = 1;
+                            while (takenSlots[slot]) slot++;
+                            const player = reg.playerDetails?.[0] || {};
+                            takenSlots[slot] = {
+                                name: player.name || `Player ${slot}`,
+                                uid: player.freeFireId || 'N/A',
+                                legacy: true
+                            };
+                        }
+                    });
+
+                } else {
+                    // Duo or Squad
+                    takenSlots = {};
+                    for (let team = 1; team <= numberOfTeams; team++) {
+                        takenSlots[team] = {};
+                    }
+
+                    registrations.forEach(reg => {
+                        const teamNum = reg.teamNumber;
+                        const slotNum = reg.slotNumber;
+                        if (teamNum !== undefined && teamNum !== null && teamNum > 0 &&
+                            slotNum !== undefined && slotNum !== null && slotNum > 0) {
+                            if (!takenSlots[teamNum]) takenSlots[teamNum] = {};
+                            const player = reg.playerDetails?.[0] || {};
+                            takenSlots[teamNum][slotNum] = {
+                                name: player.name || 'Player',
+                                uid: player.freeFireId || 'N/A'
+                            };
+                        } else {
+                            // Legacy registration — assign to first available slot
+                            let assigned = false;
+                            for (let team = 1; team <= numberOfTeams; team++) {
+                                if (!takenSlots[team]) takenSlots[team] = {};
+                                for (let slot = 1; slot <= slotsPerTeam; slot++) {
+                                    if (!takenSlots[team][slot]) {
+                                        const player = reg.playerDetails?.[0] || {};
+                                        takenSlots[team][slot] = {
+                                            name: player.name || `Player T${team}S${slot}`,
+                                            uid: player.freeFireId || 'N/A',
+                                            legacy: true
+                                        };
+                                        assigned = true;
+                                        break;
+                                    }
+                                }
+                                if (assigned) break;
+                            }
+                        }
+                    });
+                }
+
+                slotBookingState.takenSlots = takenSlots;
+                slotBookingState.allRegistrations = registrations;
+
+                // ─── RENDER SLOT UI ───
+                let html = '';
+
+                // Show taken/available info
+                const totalSlots = t.category === 'solo' ? maxParticipants : maxParticipants;
+                let takenCount = 0;
+                if (t.category === 'solo') {
+                    takenCount = Object.keys(takenSlots).length;
+                } else {
+                    for (let team in takenSlots) {
+                        takenCount += Object.keys(takenSlots[team]).length;
+                    }
+                }
+                const availableCount = totalSlots - takenCount;
+
+                html += `
+                            <div class="slot-booking-info">
+                                <span><i class="fas fa-users"></i> <span class="info-highlight">${availableCount}</span> slots available</span>
+                                <span><i class="fas fa-check-circle"></i> <span class="info-highlight taken-count">${takenCount}</span> taken</span>
+                                <span><i class="fas fa-coins"></i> Fee: <span class="info-highlight">${t.entryFee || 0}</span></span>
+                            </div>
+                            <div style="color:var(--text-muted);font-size:0.75rem;margin-bottom:8px;text-align:center;">
+                                <i class="fas fa-info-circle"></i> Click an available slot below to register
                             </div>
                         `;
+
+                if (t.category === 'solo') {
+                    // SOLO: render slots 1 to maxParticipants
+                    html += `<div class="slot-grid">`;
+                    for (let slot = 1; slot <= maxParticipants; slot++) {
+                        const taken = takenSlots[slot];
+                        const isTaken = !!taken;
+                        const isSelected = (slotBookingState.selectedSlot === slot && slotBookingState.selectedTeam ===
+                            null);
+                        html += `
+                                    <div class="slot-item ${isTaken ? 'taken' : 'available'} ${isSelected ? 'selected' : ''}"
+                                         onclick="${isTaken ? '' : `selectSlotForRegistration(null, ${slot})`}"
+                                         style="${isTaken ? '' : 'cursor:pointer;'}"
+                                         title="${isTaken ? `Taken by: ${taken?.name || 'Unknown'}` : 'Click to book'}">
+                                        <div class="slot-number">${slot}</div>
+                                        <div class="slot-label">${isTaken ? 'Taken' : 'Available'}</div>
+                                        ${isTaken ? `<div class="slot-occupant">${taken?.name?.substring(0, 10) || ''}</div>` : ''}
+                                    </div>
+                                `;
+                    }
+                    html += `</div>`;
+                } else {
+                    // DUO or SQUAD: render teams with slots
+                    const slotsPerTeam = t.category === 'duo' ? 2 : 4;
+                    const numTeams = Math.ceil(maxParticipants / slotsPerTeam);
+
+                    for (let team = 1; team <= numTeams; team++) {
+                        const teamSlots = takenSlots[team] || {};
+                        const allSlotsTaken = Object.keys(teamSlots).length >= slotsPerTeam;
+                        const isFull = allSlotsTaken;
+
+                        html += `
+                                    <div class="team-group">
+                                        <div class="team-header">
+                                            <span>Team ${team}</span>
+                                            <span class="team-badge">${isFull ? 'Full' : Object.keys(teamSlots).length + '/' + slotsPerTeam}</span>
+                                        </div>
+                                        <div class="slot-grid">
+                                        `;
+
+                        for (let slot = 1; slot <= slotsPerTeam; slot++) {
+                            const taken = teamSlots[slot];
+                            const isTaken = !!taken;
+                            const isSelected = (slotBookingState.selectedSlot === slot && slotBookingState.selectedTeam ===
+                                team);
+                            html += `
+                                        <div class="slot-item ${isTaken ? 'taken' : 'available'} ${isSelected ? 'selected' : ''}"
+                                             onclick="${isTaken ? '' : `selectSlotForRegistration(${team}, ${slot})`}"
+                                             style="${isTaken ? '' : 'cursor:pointer;'}"
+                                             title="${isTaken ? `Taken by: ${taken?.name || 'Unknown'}` : 'Click to book'}">
+                                            <div class="slot-number">${slot}</div>
+                                            <div class="slot-label">${isTaken ? 'Taken' : 'Available'}</div>
+                                            ${isTaken ? `<div class="slot-occupant">${taken?.name?.substring(0, 10) || ''}</div>` : ''}
+                                        </div>
+                                    `;
+                        }
+
+                        html += `
+                                        </div>
+                                    </div>
+                                `;
+                    }
+                }
+
+                // If all slots are taken
+                if (availableCount === 0) {
+                    html += `
+                                <div style="text-align:center;padding:16px;background:rgba(215,38,56,0.04);border-radius:var(--radius-sm);border:1px solid rgba(215,38,56,0.08);margin-top:12px;">
+                                    <i class="fas fa-exclamation-circle" style="color:#d72638;font-size:1.4rem;"></i>
+                                    <p style="color:var(--text-secondary);font-weight:600;margin:4px 0 0;">All slots are full!</p>
+                                </div>
+                            `;
+                }
+
+                // Slot booking form (hidden initially, shown when slot is selected)
+                html += `
+                            <div class="slot-booking-form" id="slot-booking-form">
+                                <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;font-size:0.95rem;">
+                                    <i class="fas fa-pen"></i> Book Slot
+                                    <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user"></i> Free Fire In-Game Name</label>
+                                        <input type="text" id="slot-player-name" placeholder="Enter your FF name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><i class="fas fa-id-card"></i> Free Fire UID</label>
+                                        <input type="text" id="slot-player-uid" placeholder="Enter your FF UID" required pattern="[0-9]*" title="Enter numbers only">
+                                    </div>
+                                </div>
+                                <button class="btn-primary" onclick="processSlotBooking()" id="slot-pay-btn" style="width:100%;margin-top:4px;">
+                                    <i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})
+                                </button>
+                                <button class="btn-secondary" onclick="cancelSlotSelection()" style="width:100%;margin-top:6px;padding:8px;">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        `;
+
+                formContainer.innerHTML = html;
+
+            } catch (e) {
+                console.error('Build slot UI error:', e);
+                formContainer.innerHTML =
+                    `<div style="text-align:center;padding:20px;color:#d72638;"><i class="fas fa-exclamation-circle"></i> Failed to load slots. Please try again.</div>`;
+                showToast('Failed to load slots: ' + e.message, 'error');
             }
-
-            formHTML += `
-                        <div style="text-align:center;margin:14px 0;">
-                            <button class="btn-primary" onclick="proceedToPayment()" style="width:100%;" id="submit-registration-btn">
-                                <i class="fas fa-arrow-right"></i> Join Tournament (<i class="fas fa-coins"></i> ${t.entryFee || 0})
-                            </button>
-                        </div>
-                    `;
-
-            form.innerHTML = formHTML;
-            modal.style.display = 'block';
         }
 
-        function proceedToPayment() {
-            const mobile = document.getElementById('register-mobile').value.trim();
-            if (!mobile || mobile.length < 10) return showToast("Please enter a valid 10-digit mobile number.", "error");
-            const p1Name = document.getElementById('player1-name').value.trim();
-            const p1Id = document.getElementById('player1-id').value.trim();
-            if (!p1Name || !p1Id) return showToast("Please enter Player 1 Name and ID.", "error");
-            if (selectedTournament.category === 'duo' || selectedTournament.category === 'squad') {
-                const teamName = document.getElementById('register-team-name').value.trim();
-                if (!teamName) return showToast("Team Name is required.", "error");
-                if (selectedTournament.category === 'duo') {
-                    const p2Id = document.getElementById('player2-id').value.trim();
-                    if (!p2Id) return showToast("Player 2 ID required.", "error");
+        // ─── SELECT SLOT ───
+        function selectSlotForRegistration(teamNumber, slotNumber) {
+            const t = selectedTournament;
+            if (!t) return;
+
+            // Check if slot is already taken (double-check)
+            const takenSlots = slotBookingState.takenSlots;
+            let isTaken = false;
+            if (t.category === 'solo') {
+                isTaken = !!takenSlots[slotNumber];
+            } else {
+                isTaken = !!(takenSlots[teamNumber] && takenSlots[teamNumber][slotNumber]);
+            }
+            if (isTaken) {
+                showToast('This slot is already taken!', 'error');
+                return;
+            }
+
+            // Check wallet balance
+            if (walletBalance < (t.entryFee || 0)) {
+                showToast('Insufficient wallet balance. Please add coins.', 'error');
+                return;
+            }
+
+            slotBookingState.selectedTeam = teamNumber;
+            slotBookingState.selectedSlot = slotNumber;
+
+            // Update UI
+            const form = document.getElementById('slot-booking-form');
+            if (form) {
+                form.classList.add('visible');
+                const display = document.getElementById('slot-selection-display');
+                if (display) {
+                    if (t.category === 'solo') {
+                        display.textContent = `Slot ${slotNumber}`;
+                    } else {
+                        display.textContent = `Team ${teamNumber} • Slot ${slotNumber}`;
+                    }
+                }
+                // Clear previous input values
+                document.getElementById('slot-player-name').value = '';
+                document.getElementById('slot-player-uid').value = '';
+                // Update button
+                const btn = document.getElementById('slot-pay-btn');
+                if (btn) {
+                    btn.innerHTML =
+                        `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
                 }
             }
-            processTournamentRegistrationWithWallet();
+
+            // Scroll to form
+            setTimeout(() => {
+                const formEl = document.getElementById('slot-booking-form');
+                if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+
+            // Update slot grid to show selection
+            const allSlots = document.querySelectorAll('.slot-item');
+            allSlots.forEach(el => el.classList.remove('selected'));
+            // Find the selected slot and add 'selected' class
+            const slotItems = document.querySelectorAll('.slot-item');
+            let idx = 0;
+            for (let el of slotItems) {
+                // We need to find the selected slot by its position
+                // Since we don't have a direct mapping, we'll use the onclick attribute
+                // But we can just re-render the whole thing with the selection state
+                // Actually, let's just rebuild the UI with the selection state
+                // For simplicity, we'll rebuild the entire slot UI
+                // But to avoid flicker, we'll just update the class on the selected slot
+                // We'll use a simpler approach: re-render the slot grid
+                // Let's just rebuild the UI
+                buildSlotUI(selectedTournament);
+            }
+
+            // Re-focus on the form after re-render
+            setTimeout(() => {
+                const formEl = document.getElementById('slot-booking-form');
+                if (formEl) {
+                    formEl.classList.add('visible');
+                    const display = document.getElementById('slot-selection-display');
+                    if (display) {
+                        if (t.category === 'solo') {
+                            display.textContent = `Slot ${slotNumber}`;
+                        } else {
+                            display.textContent = `Team ${teamNumber} • Slot ${slotNumber}`;
+                        }
+                    }
+                    document.getElementById('slot-player-name').focus();
+                }
+            }, 100);
         }
 
+        // ─── CANCEL SLOT SELECTION ───
+        function cancelSlotSelection() {
+            slotBookingState.selectedTeam = null;
+            slotBookingState.selectedSlot = null;
+            const form = document.getElementById('slot-booking-form');
+            if (form) form.classList.remove('visible');
+            // Rebuild UI to clear selection state
+            if (selectedTournament) {
+                buildSlotUI(selectedTournament);
+            }
+        }
+
+        // ─── PROCESS SLOT BOOKING ───
+        async function processSlotBooking() {
+            const t = selectedTournament;
+            if (!t) return showToast('No tournament selected.', 'error');
+
+            const team = slotBookingState.selectedTeam;
+            const slot = slotBookingState.selectedSlot;
+            if (slot === null || slot === undefined) return showToast('Please select a slot first.', 'error');
+
+            const playerName = document.getElementById('slot-player-name').value.trim();
+            const playerUid = document.getElementById('slot-player-uid').value.trim();
+            if (!playerName) return showToast('Please enter your Free Fire In-Game Name.', 'error');
+            if (!playerUid || !/^\d+$/.test(playerUid)) return showToast('Please enter a valid numeric Free Fire UID.',
+                'error');
+
+            // Check wallet balance again
+            await fetchWalletBalance();
+            if (walletBalance < (t.entryFee || 0)) {
+                showToast('Insufficient wallet balance. Please add coins.', 'error');
+                return;
+            }
+
+            // Double-check slot is still available
+            const snap = await db.collection("tournament_registrations")
+                .where("tournamentId", "==", t.id)
+                .where("status", "in", ["approved", "pending"])
+                .get();
+            const regs = snap.docs.map(d => d.data());
+
+            let slotTaken = false;
+            if (t.category === 'solo') {
+                slotTaken = regs.some(r => r.slotNumber === slot && r.status !== 'rejected');
+            } else {
+                slotTaken = regs.some(r => r.teamNumber === team && r.slotNumber === slot && r.status !== 'rejected');
+            }
+
+            if (slotTaken) {
+                showToast('This slot was just taken by someone else! Please pick another.', 'error');
+                buildSlotUI(t);
+                return;
+            }
+
+            const btn = document.getElementById('slot-pay-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                // Deduct entry fee from wallet
+                const payResult = await payTournamentEntry(t.id, t.entryFee || 0);
+                if (!payResult || !payResult.success) {
+                    throw new Error(payResult?.message || 'Payment failed.');
+                }
+
+                // Save registration with slot info
+                const playerDetails = [{ name: playerName, freeFireId: playerUid, level: 0 }];
+                const regData = {
+                    userId: currentUser.uid,
+                    tournamentId: t.id,
+                    tournamentTitle: t.title,
+                    tournamentCategory: t.category,
+                    name: currentUser.displayName || currentUser.email.split('@')[0],
+                    email: currentUser.email || '',
+                    mobile: '',
+                    teamName: t.category !== 'solo' ? `Team ${team}` : '',
+                    playerDetails: playerDetails,
+                    paymentScreenshotUrl: null,
+                    status: 'approved',
+                    paymentMethod: 'wallet',
+                    slotNumber: slot,
+                    teamNumber: team,
+                    registeredAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                const ref = await db.collection("tournament_registrations").add(regData);
+
+                // Update tournament participants count
+                await db.collection("tournaments").doc(t.id).update({
+                    participants: firebase.firestore.FieldValue.increment(1)
+                });
+
+                // ─── ONESIGNAL TAGGING ───
+                try {
+                    window.OneSignalDeferred.push(function(OneSignal) {
+                        OneSignal.sendTag("tour_" + t.id, "joined");
+                    });
+                    console.log('✅ OneSignal tag sent: tour_' + t.id + ' = joined');
+                } catch (e) {
+                    console.warn('OneSignal tagging failed:', e);
+                }
+
+                showToast('Successfully joined tournament!', 'success');
+
+                closeModal('registration-modal');
+                document.getElementById('success-modal').style.display = 'block';
+
+                // Reset state
+                slotBookingState.selectedTeam = null;
+                slotBookingState.selectedSlot = null;
+
+                await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
+                    fetchProfileData()
+                ]);
+
+            } catch (e) {
+                console.error('Slot booking error:', e);
+                showToast(e.message || 'Failed to book slot.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
+            }
+        }
+
+        // ─── PAY TOURNAMENT ENTRY (using wallet) ───
         async function payTournamentEntry(tournamentId, amount) {
             const uid = getCurrentUserId();
             const r = await fetch(`${BACKEND_BASE_URL}/api/payment/pay-tournament`, {
@@ -5608,95 +6450,7 @@
             return d;
         }
 
-        async function processTournamentRegistrationWithWallet() {
-            const entryFee = Number(selectedTournament?.entryFee || 0);
-            await fetchWalletBalance();
-            if (walletBalance < entryFee) {
-                showToast('Insufficient Balance', 'error');
-                const walletNav = document.querySelector('.nav-item[data-section="wallet-section"]');
-                showSection('wallet-section', walletNav);
-                return;
-            }
-            try {
-                await payTournamentEntry(selectedTournament.id, entryFee);
-                await submitRegistration(true);
-                showToast('Successfully joined tournament!', 'success');
-            } catch (e) { console.error('Tournament wallet payment error:', e);
-                showToast(e.message || 'Wallet payment failed.', 'error'); }
-        }
-
-        async function submitRegistration(isWalletPayment = false) {
-            const email = document.getElementById('register-email').value;
-            const mobile = document.getElementById('register-mobile').value.trim();
-            const teamName = selectedTournament.category !== 'solo' ? document.getElementById('register-team-name').value
-                .trim() : null;
-            const pCount = selectedTournament.category === 'solo' ? 1 : selectedTournament.category === 'duo' ? 2 : 4;
-            let playerDetails = [];
-            for (let i = 1; i <= pCount; i++) {
-                const id = document.getElementById(`player${i}-id`).value.trim();
-                if (!id) { showToast(`Please enter Free Fire ID for Player ${i}`, 'error'); return; }
-                playerDetails.push({ name: document.getElementById(`player${i}-name`).value.trim(), freeFireId: id,
-                    level: 0 });
-            }
-            try {
-                const btn = document.getElementById('submit-registration-btn');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-                const prev = userRegistrations.find(r => r.tournamentId === selectedTournament.id);
-                let docId;
-                if (prev && prev.id) {
-                    docId = prev.id;
-                    await db.collection("tournament_registrations").doc(docId).update({
-                        email,
-                        mobile,
-                        teamName,
-                        playerDetails,
-                        paymentScreenshotUrl: null,
-                        status: 'approved',
-                        rejectionMessage: null,
-                        paymentMethod: 'wallet',
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    showToast('Tournament joined successfully!', 'success');
-                } else {
-                    const data = {
-                        userId: currentUser.uid,
-                        tournamentId: selectedTournament.id,
-                        tournamentTitle: selectedTournament.title,
-                        tournamentCategory: selectedTournament.category,
-                        name: currentUser.displayName || currentUser.email.split('@')[0],
-                        email,
-                        mobile,
-                        teamName,
-                        playerDetails,
-                        paymentScreenshotUrl: null,
-                        status: 'approved',
-                        paymentMethod: 'wallet',
-                        registeredAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
-                    const ref = await db.collection("tournament_registrations").add(data);
-                    docId = ref.id;
-                    showToast('Tournament joined successfully!', 'success');
-                }
-                if (!prev || prev.status !== 'approved') {
-                    await db.collection("tournaments").doc(selectedTournament.id).update({
-                        participants: firebase.firestore.FieldValue.increment(1)
-                    });
-                }
-                closeModal('registration-modal');
-                document.getElementById('success-modal').style.display = 'block';
-                document.querySelector('#success-modal p').textContent = 'You have joined the tournament!';
-                await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
-                    fetchProfileData()]);
-            } catch (e) {
-                console.error("Submit registration error:", e);
-                showToast("Registration failed. Please try again.", 'error');
-                const btn = document.getElementById('submit-registration-btn');
-                if (btn) { btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-arrow-right"></i> Join Tournament'; }
-            }
-        }
-
+        // ─── SHOW TOURNAMENT CREDENTIALS ───
         async function showTournamentCredentials(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -5971,35 +6725,81 @@
                 claimBtn.style.display = 'none'; }
         }
 
+        // ─── NEW: In-App Ad Browser (Iframe Overlay) ───
+        let adOverlayTimer = null;
+        let adOverlaySeconds = 10;
+
         function startAd() {
-            const link = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
-            const modal = document.getElementById('in-app-ad-modal');
-            const timer = document.getElementById('ad-timer-text');
-            const closeBtn = document.getElementById('ad-close-btn');
+            const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
+
+            const overlay = document.getElementById('ad-overlay');
+            const iframe = document.getElementById('ad-iframe');
+            const timerNumber = document.getElementById('ad-timer-number');
+            const closeBtn = document.getElementById('ad-close-btn-overlay');
+            const timerOverlay = document.getElementById('ad-timer-overlay');
+
+            // Reset
+            if (adOverlayTimer) clearInterval(adOverlayTimer);
+            adOverlaySeconds = 10;
+            timerNumber.textContent = '10';
+            timerNumber.classList.remove('complete');
             closeBtn.style.display = 'none';
-            timer.style.display = 'block';
-            modal.style.display = 'flex';
-            window.open(link, '_blank');
-            let left = 10;
-            timer.textContent = left;
-            adCountdownTimer = setInterval(() => {
-                left--;
-                if (left > 0) timer.textContent = left;
-                else { clearInterval(adCountdownTimer);
-                    timer.style.display = 'none';
-                    closeBtn.style.display = 'block'; }
+            timerOverlay.style.display = 'flex';
+
+            // Load the ad in iframe
+            iframe.src = adLink;
+
+            // Show overlay
+            overlay.style.display = 'flex';
+
+            // Start countdown
+            adOverlayTimer = setInterval(() => {
+                adOverlaySeconds--;
+                if (adOverlaySeconds > 0) {
+                    timerNumber.textContent = adOverlaySeconds;
+                } else {
+                    clearInterval(adOverlayTimer);
+                    adOverlayTimer = null;
+                    timerNumber.textContent = '✓';
+                    timerNumber.classList.add('complete');
+                    closeBtn.style.display = 'block';
+                    // Keep timer overlay visible but show completion
+                }
+            }, 1000);
+
+            // Safety: if iframe doesn't load, still show timer
+            setTimeout(() => {
+                // If the iframe is still loading, we keep the timer going
             }, 1000);
         }
 
-        function closeAdModal() {
-            document.getElementById('in-app-ad-modal').style.display = 'none';
+        function closeAdOverlay() {
+            const overlay = document.getElementById('ad-overlay');
+            const iframe = document.getElementById('ad-iframe');
+
+            // Stop timer
+            if (adOverlayTimer) {
+                clearInterval(adOverlayTimer);
+                adOverlayTimer = null;
+            }
+
+            // Reset iframe
+            iframe.src = 'about:blank';
+            overlay.style.display = 'none';
+
+            // Increment ad count and update UI
             adsWatchedCount++;
             saveLocalAdCount();
             updateAdUI();
-            if (adsWatchedCount < ADS_NEEDED) showToast(
-                `Task Complete! Watch ${ADS_NEEDED - adsWatchedCount} more ads for 1 Coin.`, 'info');
+
+            if (adsWatchedCount < ADS_NEEDED) {
+                showToast(`Task Complete! Watch ${ADS_NEEDED - adsWatchedCount} more ads for 1 Coin.`, 'info');
+            } else {
+                showToast('You\'ve watched all ads! Claim your coin now!', 'success');
+            }
         }
 
+        // ─── CLAIM AD REWARD ───
         async function claimAdReward() {
             if (adsWatchedCount < ADS_NEEDED) return;
             const uid = getCurrentUserId();
@@ -6075,22 +6875,14 @@
 
         // ─── INITIAL RENDER ───
         renderCoinPackages();
-        console.log('TECHNO E-SPORTS UI — All modifications applied.');
+        console.log('✅ TECHNO E-SPORTS — All features implemented.');
+        console.log('✅ 1. WinZO-Style Slot Booking System');
+        console.log('✅ 2. OneSignal Tagging on slot booking');
+        console.log('✅ 3. In-App Ad Browser (Iframe Overlay) with 10s countdown');
         console.log('✅ Loading screen: black background, NO white circle around logo');
         console.log('✅ Help & Support: Revamped with WhatsApp and Email buttons');
-        console.log('✅ Ad Placeholder 1: Home Top (320x50)');
-        console.log('✅ Ad Placeholder 2: Wallet Mid (300x250)');
-        console.log('✅ Ad Placeholder 3: Tournament Details (320x50) — MOVED outside dynamic content');
-        console.log('✅ Wallet: Withdrawable coins prominently displayed');
-        console.log('✅ Wallet: "Add Coins" button opens full-page coin packages');
-        console.log('✅ Wallet: "Transactions" button opens full-page history');
-        console.log('✅ QR Page: UPI intent buttons DISABLED (no click)');
-        console.log('✅ QR Page: QR image LARGER (300x300)');
-        console.log('✅ QR Page: Timer shows 4 MINUTES countdown below QR');
-        console.log('✅ Backend: expiration changed from 10 min to 4 min (see payment.js)');
-        console.log('');
-        console.log('📌 TO SHOW ADS: Uncomment the script tags inside each .ad-placeholder div');
-        console.log('   Search for "TO SHOW ADS" in the HTML to find them.');
+        console.log('✅ QR Page: UPI intent buttons DISABLED');
+        console.log('✅ QR Page: 4-minute timer');
     </script>
 </body>
 
