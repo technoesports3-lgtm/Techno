@@ -26,21 +26,20 @@
             if (!OneSignal.Notifications.permission) {
                 await OneSignal.Notifications.requestPermission();
             }
+            console.log('✅ OneSignal initialized');
         });
     </script>
 
     <!-- =============================================================
-    ONESIGNAL REST API KEY — Split into 3 parts (as requested)
+    ONESIGNAL REST API KEY — Split into 3 parts
     ============================================================= -->
     <script>
-        // ─── ONESIGNAL REST API KEY (split into 3 parts) ───
         const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfqohbzhv3o7";
         const p2 = "ewmntwxuavmvinhbxifs2zjlhs5ukp5433cntzv";
         const p3 = "5ikhgnghcx7asb3jwuownwsfitb4q";
         const ONESIGNAL_REST_KEY = p1 + p2 + p3;
         const ONESIGNAL_APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
-
-        console.log('🔑 OneSignal REST Key loaded (split into 3 parts)');
+        console.log('🔑 OneSignal REST Key loaded');
     </script>
 
     <style>
@@ -132,9 +131,6 @@
             letter-spacing: -0.02em;
         }
 
-        /* =============================================================
-                   SCROLLBAR
-                   ============================================================= */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -147,9 +143,6 @@
             border-radius: 4px;
         }
 
-        /* =============================================================
-                   BUTTONS – Professional
-                   ============================================================= */
         button,
         .action-btn,
         .nav-item,
@@ -289,9 +282,6 @@
             box-shadow: 0 8px 28px rgba(30, 142, 74, 0.30);
         }
 
-        /* =============================================================
-                   HELP & SUPPORT – REVAMPED BUTTONS
-                   ============================================================= */
         .help-support-buttons {
             display: flex;
             flex-direction: column;
@@ -377,9 +367,6 @@
             opacity: 1;
         }
 
-        /* =============================================================
-                   AD PLACEHOLDER
-                   ============================================================= */
         .ad-placeholder {
             background: rgba(0, 0, 0, 0.03);
             border: 1px dashed #ccc;
@@ -439,9 +426,6 @@
             flex-direction: column;
         }
 
-        /* =============================================================
-                   INPUTS – Clean
-                   ============================================================= */
         input[type="text"],
         input[type="email"],
         input[type="password"],
@@ -522,9 +506,6 @@
             cursor: not-allowed;
         }
 
-        /* =============================================================
-                   LOADING SCREEN – Branded with BLACK background, NO white circle
-                   ============================================================= */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -595,9 +576,6 @@
             }
         }
 
-        /* =============================================================
-                   AUTH – Professional Card
-                   ============================================================= */
         .professional-auth-container {
             display: flex;
             align-items: center;
@@ -817,9 +795,6 @@
             font-weight: 600;
         }
 
-        /* =============================================================
-                   TOAST – Clean
-                   ============================================================= */
         .toast-notification {
             position: fixed;
             top: 20px;
@@ -897,9 +872,6 @@
             color: #1a6fb5;
         }
 
-        /* =============================================================
-                   APP HEADER – With Logo
-                   ============================================================= */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -1004,9 +976,6 @@
             color: var(--primary);
         }
 
-        /* =============================================================
-                   TOURNAMENT TABS – Pill style
-                   ============================================================= */
         .tournament-tabs {
             display: flex;
             background: #ffffff;
@@ -1044,9 +1013,6 @@
             background: #f0f2f6;
         }
 
-        /* =============================================================
-                   TOURNAMENT CARDS – Professional with Logo integration
-                   ============================================================= */
         .tournament-card {
             background: #ffffff;
             border-radius: var(--radius);
@@ -1355,9 +1321,6 @@
             transform: translateY(-1px);
         }
 
-        /* =============================================================
-                   EMPTY STATE
-                   ============================================================= */
         .empty-state {
             text-align: center;
             padding: 48px 20px;
@@ -1380,9 +1343,6 @@
             margin-bottom: 6px;
         }
 
-        /* =============================================================
-                   FULL PAGE SECTIONS – Details, Privacy, Terms, Help, QR, Coin Packages, Transactions
-                   ============================================================= */
         .full-page-section {
             position: fixed;
             top: 0;
@@ -1485,9 +1445,6 @@
             font-size: 0.95rem;
         }
 
-        /* =============================================================
-                   QR FULL PAGE – REVAMPED (Larger QR, Timer, Disabled UPI Buttons)
-                   ============================================================= */
         #qr-full-page .full-page-body {
             display: flex;
             flex-direction: column;
@@ -1519,7 +1476,6 @@
             padding: 8px;
         }
 
-        /* Timer on QR page */
         #qr-full-page .qr-timer-container {
             background: linear-gradient(135deg, #f0f6ff 0%, #fafbfc 100%);
             border: 1px solid rgba(26, 111, 181, 0.12);
@@ -1599,7 +1555,6 @@
             background: #1e8e4a;
         }
 
-        /* UPI intent buttons – DISABLED / non-functional */
         #qr-full-page .qr-display .payment-actions {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -1641,7 +1596,6 @@
             color: #00529C;
         }
 
-        /* Disabled overlay hint */
         #qr-full-page .qr-display .payment-actions .pay-btn .disabled-hint {
             font-size: 0.50rem;
             color: #aaa;
@@ -1698,7 +1652,6 @@
             box-shadow: none !important;
         }
 
-        /* QR page scan instruction */
         #qr-full-page .qr-scan-instruction {
             background: rgba(30, 142, 74, 0.04);
             border: 1px solid rgba(30, 142, 74, 0.08);
@@ -1718,9 +1671,6 @@
             font-size: 1.0rem;
         }
 
-        /* =============================================================
-                   MODALS – Clean (kept for other modals)
-                   ============================================================= */
         .modal {
             display: none;
             position: fixed;
@@ -1785,9 +1735,6 @@
             border-radius: 4px;
         }
 
-        /* =============================================================
-                   SLOT BOOKING UI – WinZO Style
-                   ============================================================= */
         .slot-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1976,7 +1923,6 @@
             color: #d72638;
         }
 
-        /* ─── Fullscreen Ad Overlay (Iframe) ─── */
         #ad-overlay {
             position: fixed;
             top: 0;
@@ -2068,7 +2014,6 @@
             transform: translateX(-50%) scale(0.97);
         }
 
-        /* ─── Slot booking responsive ─── */
         @media (max-width: 480px) {
             .slot-item {
                 width: 48px;
@@ -2134,9 +2079,6 @@
             }
         }
 
-        /* =============================================================
-                   WALLET – Professional Clean Layout
-                   ============================================================= */
         .wallet-balance-card {
             background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
             border: 1px solid var(--border);
@@ -2172,7 +2114,6 @@
             font-weight: 600;
         }
 
-        /* Withdrawable balance - prominent */
         .withdrawable-prominent {
             background: linear-gradient(135deg, #e8f5ed 0%, #f0faf4 100%);
             border: 2px solid #1e8e4a;
@@ -2205,7 +2146,6 @@
             color: #1e8e4a;
         }
 
-        /* Wallet action buttons row */
         .wallet-action-row {
             display: flex;
             gap: 10px;
@@ -2360,9 +2300,6 @@
             font-size: 1.1rem;
         }
 
-        /* =============================================================
-                   REFERRAL
-                   ============================================================= */
         .referral-card {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -2468,9 +2405,6 @@
             transform: translateY(-2px);
         }
 
-        /* =============================================================
-                   PROFILE – Professional
-                   ============================================================= */
         .profile-card {
             background: #ffffff;
             border-radius: var(--radius);
@@ -2637,9 +2571,6 @@
             color: #d72638;
         }
 
-        /* =============================================================
-                   NAV BAR – Clean
-                   ============================================================= */
         .nav-bar {
             display: flex;
             justify-content: space-around;
@@ -2706,9 +2637,6 @@
             font-weight: 700;
         }
 
-        /* =============================================================
-                   CONTACT / HELP – Legacy (kept for backup)
-                   ============================================================= */
         .contact-info-container {
             background: #ffffff;
             border-radius: var(--radius);
@@ -2791,9 +2719,6 @@
             background: #1e8e4a;
         }
 
-        /* =============================================================
-                   FORGOT PASSWORD ALERT
-                   ============================================================= */
         .fullscreen-alert {
             position: fixed;
             top: 0;
@@ -2865,9 +2790,6 @@
             border: 1px solid var(--border);
         }
 
-        /* =============================================================
-                   APP UPDATE MODAL
-                   ============================================================= */
         .app-update-modal .modal-content {
             max-width: 500px;
             text-align: center;
@@ -2915,9 +2837,6 @@
             box-shadow: 0 8px 28px rgba(26, 111, 181, 0.25);
         }
 
-        /* =============================================================
-                   AD MODAL – Legacy (kept for reference)
-                   ============================================================= */
         #in-app-ad-modal {
             display: none;
             position: fixed;
@@ -2986,9 +2905,6 @@
             box-shadow: 0 8px 32px rgba(30, 142, 74, 0.40);
         }
 
-        /* =============================================================
-                   DELETE CONFIRM
-                   ============================================================= */
         .delete-confirm-modal .modal-content {
             max-width: 420px;
             text-align: center;
@@ -3048,16 +2964,10 @@
             box-shadow: none !important;
         }
 
-        /* =============================================================
-                   ONBOARDING – REMOVED
-                   ============================================================= */
         #onboarding-screen {
             display: none !important;
         }
 
-        /* =============================================================
-                   CREDENTIALS
-                   ============================================================= */
         .credentials-box {
             background: #f5f7fa;
             padding: 20px;
@@ -3091,9 +3001,6 @@
             letter-spacing: 1px;
         }
 
-        /* =============================================================
-                   QR / UPI (legacy)
-                   ============================================================= */
         .qr-code-container {
             text-align: center;
             margin: 12px 0;
@@ -3165,9 +3072,6 @@
             background: #1e8e4a;
         }
 
-        /* =============================================================
-                   WITHDRAW POPUP – with logo
-                   ============================================================= */
         #withdraw-success-popup {
             position: fixed;
             top: 0;
@@ -3245,7 +3149,6 @@
             box-shadow: 0 8px 28px rgba(26, 111, 181, 0.25);
         }
 
-        /* Coin packages grid inside full page */
         .coin-packages-grid-full {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -3321,9 +3224,6 @@
             display: inline-block;
         }
 
-        /* =============================================================
-                   RESPONSIVE
-                   ============================================================= */
         @media (max-width: 768px) {
             .professional-auth-box {
                 max-width: 95%;
@@ -3708,9 +3608,6 @@
             }
         }
 
-        /* =============================================================
-                   UTILITIES
-                   ============================================================= */
         .text-center {
             text-align: center;
         }
@@ -3874,7 +3771,6 @@
             margin-right: 8px;
         }
 
-        /* ─── CREDENTIALS NOTIFICATION BADGE ─── */
         .cred-notification-badge {
             background: #d72638;
             color: #fff;
@@ -4054,7 +3950,7 @@
         </div>
 
         <!-- =============================================================
-        LOADING SCREEN – BLACK BACKGROUND (NO white circle)
+        LOADING SCREEN
         ============================================================= -->
         <div id="loading-screen">
             <div class="loading-logo">
@@ -4065,7 +3961,7 @@
         </div>
 
         <!-- =============================================================
-        AD MODAL – Legacy (kept for reference, but we use new overlay)
+        AD MODAL – Legacy
         ============================================================= -->
         <div id="in-app-ad-modal" style="display:none;">
             <div class="ad-icon"><i class="fas fa-gift"></i></div>
@@ -4078,7 +3974,7 @@
         </div>
 
         <!-- =============================================================
-        WITHDRAW SUCCESS POPUP – with logo
+        WITHDRAW SUCCESS POPUP
         ============================================================= -->
         <div id="withdraw-success-popup">
             <div class="popup-content">
@@ -4097,7 +3993,7 @@
         </div>
 
         <!-- =============================================================
-        FULL-SCREEN AD OVERLAY (IFRAME) – New
+        FULL-SCREEN AD OVERLAY (IFRAME)
         ============================================================= -->
         <div id="ad-overlay">
             <iframe id="ad-iframe" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
@@ -4145,7 +4041,7 @@
                         <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
                     </div>
 
-                    <!-- AD PLACEHOLDER 1: Home Top (320x50) -->
+                    <!-- AD PLACEHOLDER 1: Home Top -->
                     <div id="ad-home-top" class="ad-placeholder">
 
                         <script>
@@ -4167,16 +4063,14 @@
                     <div id="squad-tournaments" style="display:none;"></div>
                 </section>
 
-                <!-- 2. WALLET - REVAMPED -->
+                <!-- 2. WALLET -->
                 <section id="wallet-section" class="section" style="display:none;">
-                    <!-- Total Balance Card -->
                     <div class="wallet-balance-card">
                         <div class="balance-icon"><i class="fas fa-coins"></i></div>
                         <div class="balance-label">Total Coins</div>
                         <div class="balance-amount"><span id="wallet-balance-display">0</span></div>
                     </div>
 
-                    <!-- Withdrawable Balance - PROMINENT -->
                     <div class="withdrawable-prominent">
                         <div class="label">
                             <i class="fas fa-check-circle"></i>
@@ -4185,7 +4079,6 @@
                         <div class="amount" id="withdrawable-balance-display">0</div>
                     </div>
 
-                    <!-- AD PLACEHOLDER 2: Wallet Mid (300x250) -->
                     <div id="ad-wallet-mid" class="ad-placeholder">
 
                         <script>
@@ -4202,7 +4095,6 @@
 
                     </div>
 
-                    <!-- Action Buttons: Add Coins & Transaction History -->
                     <div class="wallet-action-row">
                         <button class="wallet-action-btn add-coins" onclick="openCoinPackagesPage()">
                             <i class="fas fa-plus-circle"></i> Add Coins
@@ -4212,7 +4104,6 @@
                         </button>
                     </div>
 
-                    <!-- Watch & Earn -->
                     <div class="wallet-panel" style="background:linear-gradient(135deg, #f0f6ff 0%, #fafbfc 100%); border-color:#b8cce0;">
                         <div class="panel-title" style="color:#1a4a7a;">
                             <i class="fas fa-tv"></i> Watch & Earn
@@ -4238,7 +4129,6 @@
                         </div>
                     </div>
 
-                    <!-- Withdraw Section -->
                     <div class="withdraw-section">
                         <div class="section-title"><i class="fas fa-credit-card"></i> Withdraw Funds</div>
                         <div class="withdrawable-info">
@@ -4363,7 +4253,7 @@
 
                 </section>
 
-                <!-- 5. CONTACT (Help & Support) – kept for backward compatibility -->
+                <!-- 5. CONTACT -->
                 <section id="contact-section" class="section" style="display:none;">
                     <div class="contact-info-container" style="margin-top:0;">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
@@ -4417,13 +4307,12 @@
         FULL PAGE SECTIONS
         ============================================================= -->
 
-        <!-- TOURNAMENT DETAILS FULL PAGE – AD MOVED OUTSIDE DYNAMIC CONTENT -->
+        <!-- TOURNAMENT DETAILS -->
         <div id="tournament-details-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-info-circle"></i> <span id="details-page-title">Tournament Details</span></div>
                 <button class="close-page-btn" onclick="closeDetailsPage()"><i class="fas fa-times"></i></button>
             </div>
-            <!-- AD PLACEHOLDER 3: Tournament Details (320x50) – MOVED OUTSIDE DYNAMIC BODY -->
             <div id="ad-details-banner" class="ad-placeholder" style="margin: 8px 16px 4px 16px; min-height: 65px;">
 
                 <script>
@@ -4444,7 +4333,7 @@
             </div>
         </div>
 
-        <!-- PRIVACY POLICY FULL PAGE -->
+        <!-- PRIVACY POLICY -->
         <div id="privacy-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-user-secret"></i> Privacy Policy</div>
@@ -4470,7 +4359,7 @@
             </div>
         </div>
 
-        <!-- TERMS & CONDITIONS FULL PAGE -->
+        <!-- TERMS & CONDITIONS -->
         <div id="terms-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-file-contract"></i> Terms &amp; Conditions</div>
@@ -4494,7 +4383,7 @@
             </div>
         </div>
 
-        <!-- HELP & SUPPORT FULL PAGE – REVAMPED -->
+        <!-- HELP & SUPPORT -->
         <div id="help-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-life-ring"></i> Help &amp; Support</div>
@@ -4558,9 +4447,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        COIN PACKAGES FULL PAGE
-        ============================================================= -->
+        <!-- COIN PACKAGES -->
         <div id="coin-packages-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-coins"></i> Add Coins</div>
@@ -4581,9 +4468,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        TRANSACTION HISTORY FULL PAGE
-        ============================================================= -->
+        <!-- TRANSACTION HISTORY -->
         <div id="transaction-history-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-history"></i> Transaction History</div>
@@ -4599,9 +4484,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        QR FULL PAGE – REVAMPED (Larger QR, Timer, UPI Buttons DISABLED)
-        ============================================================= -->
+        <!-- QR FULL PAGE -->
         <div id="qr-full-page" class="full-page-section">
             <div class="full-page-header">
                 <div class="page-title"><i class="fas fa-qrcode"></i> <span id="qr-page-title">Pay with UPI</span></div>
@@ -4613,7 +4496,7 @@
         </div>
 
         <!-- =============================================================
-        MODALS (kept for other modals)
+        MODALS
         ============================================================= -->
 
         <!-- Players -->
@@ -4730,9 +4613,6 @@
         const IMGBB_API_KEY = "db671a28c5c7d432622dc7e5bc74eecc";
         const LOGO_URL = "https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png";
 
-        // ─── ONESIGNAL REST API KEY (split into 3 parts – already defined above) ───
-        // REST_KEY, ONESIGNAL_APP_ID are already defined in the head section
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -4774,7 +4654,6 @@
         let walletBalanceInterval = null;
         const AUTO_LOGOUT_TIME = 24 * 60 * 60 * 1000;
 
-        // ─── Slot booking state ───
         let slotBookingState = {
             selectedTeam: null,
             selectedSlot: null,
@@ -4801,7 +4680,7 @@
                 best: true },
         ];
 
-        // ─── RENDER COIN PACKAGES (for wallet panel) ───
+        // ─── RENDER COIN PACKAGES ───
         function renderCoinPackages() {
             const grid = document.getElementById('coin-packages-grid');
             if (!grid) return;
@@ -5403,7 +5282,7 @@
                 showToast('Error: ' + e.message, 'error'); }
         }
 
-        // ─── QR FULL PAGE – REVAMPED with Timer (4 min), Larger QR, Disabled UPI Buttons ───
+        // ─── QR FULL PAGE ───
         let qrTimerInterval = null;
         let qrPollingInterval = null;
         let qrTimeLeft = 240;
@@ -5704,7 +5583,6 @@
             renderTournaments();
         }
 
-        // ─── FIX: Credentials visibility — always show for approved users ───
         function renderTournaments() {
             ['solo', 'duo', 'squad'].forEach(cat => {
                 const container = document.getElementById(`${cat}-tournaments`);
@@ -5749,7 +5627,6 @@
             let showJoin = true,
                 showCreds = false;
 
-            // ─── FIX: Always show credentials if user is approved ───
             if (isRegistered && isApproved) {
                 showCreds = true;
                 statusClass = 'status-approved';
@@ -5770,9 +5647,6 @@
                     tournamentStatus = 'Rejected';
                     showJoin = true; }
             }
-
-            // ─── Extra check: even if full, approved users should see credentials ───
-            // But we already set showCreds = true above for approved users, so it's fine.
 
             let tTime = tournament.conductingTime || 'TBA';
             if (tTime !== 'TBA' && tTime.includes(':')) {
@@ -5798,7 +5672,6 @@
                 `<div class="tournament-timer" id="tournament-timer-${tournament.id}"><div class="tournament-timer-label">Starts in:</div><div class="tournament-timer-display">Loading...</div></div>` :
                 '';
 
-            // ─── CREDENTIALS BADGE (if approved and credentials are set) ───
             let credBadge = '';
             if (showCreds && tournament.tournamentId && tournament.tournamentPassword) {
                 credBadge =
@@ -5845,7 +5718,7 @@
             return card;
         }
 
-        // ─── TOURNAMENT DETAILS FULL PAGE (Ad now outside dynamic content) ───
+        // ─── TOURNAMENT DETAILS ───
         function showTournamentDetails(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -5918,7 +5791,7 @@
             document.getElementById('tournament-details-page').style.display = 'none';
         }
 
-        // ─── PRIVACY, TERMS, HELP FULL PAGES ───
+        // ─── PRIVACY, TERMS, HELP ───
         function openPrivacyPage() {
             document.getElementById('privacy-page').style.display = 'block';
         }
@@ -5991,7 +5864,7 @@
                 showToast('Error loading registration data.', 'error'); }
         }
 
-        // ─── SLOT BOOKING: registerForTournament (WinZO-Style) ───
+        // ─── SLOT BOOKING ───
         async function registerForTournament(tournamentId) {
             if (!currentUser) return showToast("Please login to register.", 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
@@ -6439,7 +6312,7 @@
             }
         }
 
-        // ─── PAY TOURNAMENT ENTRY (using wallet) ───
+        // ─── PAY TOURNAMENT ENTRY ───
         async function payTournamentEntry(tournamentId, amount) {
             const uid = getCurrentUserId();
             const r = await fetch(`${BACKEND_BASE_URL}/api/payment/pay-tournament`, {
@@ -6529,7 +6402,7 @@
             }
         }
 
-        // ─── CONTACT (legacy) ───
+        // ─── CONTACT ───
         function openInstagram() {
             if (appConfig.instagramUrl) window.open(appConfig.instagramUrl, '_blank');
             else showToast('Instagram link not available', 'error');
@@ -6587,18 +6460,11 @@
                 snap.docChanges().forEach(change => {
                     if (change.type === 'modified') {
                         const data = change.doc.data();
-                        const oldData = change.doc.data(); // we don't have old data in snapshot
-                        // We'll check if tournamentId and tournamentPassword exist
-                        // and send notifications to registered users
-                        // We use a flag to avoid spamming
-                        const tId = change.doc.id;
                         if (data.tournamentId && data.tournamentPassword && data.credentialsNotified !==
                             true) {
-                            // Send notification to all registered users for this tournament
-                            sendCredentialsNotificationToRegistrants(tId, data.title || 'Tournament')
+                            sendCredentialsNotificationToRegistrants(change.doc.id, data.title || 'Tournament')
                                 .then(() => {
-                                    // Mark as notified to avoid resending
-                                    db.collection("tournaments").doc(tId).update({
+                                    db.collection("tournaments").doc(change.doc.id).update({
                                         credentialsNotified: true,
                                         credentialsNotifiedAt: firebase.firestore
                                             .FieldValue.serverTimestamp()
@@ -6637,10 +6503,9 @@
                 });
         }
 
-        // ─── ONESIGNAL NOTIFICATION: Send to all registrants of a tournament ───
+        // ─── ONESIGNAL NOTIFICATION: Send to all registrants ───
         async function sendCredentialsNotificationToRegistrants(tournamentId, tournamentTitle) {
             try {
-                // Fetch all approved users for this tournament
                 const regSnap = await db.collection("tournament_registrations")
                     .where("tournamentId", "==", tournamentId)
                     .where("status", "==", "approved")
@@ -6651,7 +6516,6 @@
                     return;
                 }
 
-                // Get user IDs
                 const userIds = regSnap.docs.map(doc => doc.data().userId).filter(Boolean);
 
                 if (userIds.length === 0) {
@@ -6661,8 +6525,6 @@
 
                 console.log(`Sending notifications to ${userIds.length} users for tournament: ${tournamentTitle}`);
 
-                // ─── Send via REST API to all users with the tag ───
-                // Using the tag approach: all users who registered have the tag "tour_${tournamentId}"
                 const notificationBody = {
                     app_id: ONESIGNAL_APP_ID,
                     contents: {
@@ -6679,7 +6541,6 @@
                         type: "credentials_released",
                         deep_link: `techno://tournament/${tournamentId}`
                     },
-                    // Optional: add a small delay and notification sound
                     android_channel_id: "b90e598b-ebac-4a6a-8bb7-1ea7e088976e"
                 };
 
@@ -6700,7 +6561,6 @@
 
                 console.log(`✅ Notification sent to ${result.recipients || userIds.length} recipients.`);
 
-                // ─── Also send a local toast notification to the current user if they are registered ───
                 if (currentUser && userIds.includes(currentUser.uid)) {
                     showToast(
                         `🔑 Credentials for "${tournamentTitle}" are now available! Check the tournament card.`,
@@ -6708,16 +6568,11 @@
                     );
                 }
 
-                // ─── Also send a second notification as a fallback (OneSignal allows multiple) ───
-                // But we'll just log success
-
             } catch (e) {
                 console.error('❌ Error sending credential notification:', e);
-                // Don't show error to user, just log
             }
         }
 
-        // ─── MANUAL TRIGGER: Send credentials notification (can be called from console) ───
         window.triggerCredentialsNotification = async function(tournamentId) {
             if (!tournamentId) return showToast('Please provide tournament ID', 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
@@ -6775,6 +6630,50 @@
                 resetAutoLogoutTimer));
         }
 
+        // =============================================================
+        //   [FIX] ONESIGNAL PLAYER ID SAVE TO FIRESTORE
+        //   అక్కడే ఉన్న OneSignal init తర్వాత player ID save అవుతుంది
+        //   ఇది User Panel కి మాత్రమే అవసరం — Staff Panel ఇప్పటికే ఉంది
+        // =============================================================
+        async function saveOneSignalPlayerId() {
+            const user = auth.currentUser;
+            if (!user) return;
+            try {
+                // OneSignal SDK v16: get the player ID
+                const playerId = await OneSignal.User.getOnesignalId();
+                if (!playerId) {
+                    console.log('⏳ OneSignal ID not ready yet');
+                    return;
+                }
+                // Save to Firestore users collection
+                await db.collection("users").doc(user.uid).update({
+                    oneSignalPlayerId: playerId,
+                    oneSignalUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log('✅ OneSignal player ID saved:', playerId);
+            } catch (error) {
+                console.warn('⚠️ Could not save OneSignal ID:', error);
+            }
+        }
+
+        // ─── OneSignal ready listener ───
+        // ఈ కోడ్ OneSignal init తర్వాత రన్ అవుతుంది
+        if (typeof OneSignalDeferred !== 'undefined') {
+            OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    // Wait for permission (optional)
+                    await OneSignal.Notifications.permission;
+                    // If user is already logged in, save ID
+                    if (auth.currentUser) {
+                        setTimeout(saveOneSignalPlayerId, 2000); // give time for ID to generate
+                    }
+                } catch (e) {
+                    console.warn('OneSignal ready error:', e);
+                }
+            });
+        }
+
+        // ─── INITIALIZE APP ───
         async function initializeApp(user, userData) {
             currentUser = user;
             document.getElementById('loading-screen').style.display = 'none';
@@ -6791,8 +6690,10 @@
             resetAutoLogoutTimer();
             setupActivityListeners();
 
+            // ─── OneSignal Player ID save after login (extra safety) ───
+            setTimeout(saveOneSignalPlayerId, 3000);
+
             // ─── Check if any tournament has credentials already but not notified ───
-            // This handles the case where credentials were added before the app started
             setTimeout(async () => {
                 try {
                     const snap = await db.collection("tournaments")
@@ -6867,7 +6768,7 @@
                 claimBtn.style.display = 'none'; }
         }
 
-        // ─── NEW: In-App Ad Browser (Iframe Overlay) ───
+        // ─── AD OVERLAY ───
         let adOverlayTimer = null;
         let adOverlaySeconds = 10;
 
@@ -7004,16 +6905,16 @@
         // ─── INITIAL RENDER ───
         renderCoinPackages();
         console.log('✅ TECHNO E-SPORTS — All features implemented.');
-        console.log('✅ 1. WinZO-Style Slot Booking System — FIXED: slot selection and form now work properly');
+        console.log('✅ 1. WinZO-Style Slot Booking System');
         console.log('✅ 2. OneSignal Tagging on slot booking');
-        console.log('✅ 3. In-App Ad Browser (Iframe Overlay) with 10s countdown');
-        console.log('✅ 4. Loading screen: black background, NO white circle around logo');
+        console.log('✅ 3. In-App Ad Browser (Iframe Overlay)');
+        console.log('✅ 4. Loading screen: black background');
         console.log('✅ 5. Help & Support: Revamped with WhatsApp and Email buttons');
         console.log('✅ 6. QR Page: UPI intent buttons DISABLED');
         console.log('✅ 7. QR Page: 4-minute timer');
-        console.log('✅ 8. CREDENTIALS FIX: Approved users can see ID/Pass even when FULL');
-        console.log('✅ 9. ONESIGNAL NOTIFICATIONS: REST API key added (split into 3 parts)');
-        console.log('✅ 10. Auto-send notifications when admin releases ID/Password for a tournament');
+        console.log('✅ 8. CREDENTIALS: Approved users can see ID/Pass');
+        console.log('✅ 9. ONESIGNAL NOTIFICATIONS: Player ID saved to Firestore');
+        console.log('✅ 10. Auto-send notifications when admin releases credentials');
         console.log('📌 To manually trigger: triggerCredentialsNotification("tournamentId")');
     </script>
 </body>
