@@ -30,7 +30,7 @@
     </script>
 
     <!-- =============================================================
-    ONESIGNAL REST API KEY — Split into 3 parts
+    ONESIGNAL REST API KEY — Split into 3 parts (as requested)
     ============================================================= -->
     <script>
         // ─── ONESIGNAL REST API KEY (split into 3 parts) ───
@@ -39,6 +39,7 @@
         const p3 = "5ikhgnghcx7asb3jwuownwsfitb4q";
         const ONESIGNAL_REST_KEY = p1 + p2 + p3;
         const ONESIGNAL_APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
+
         console.log('🔑 OneSignal REST Key loaded (split into 3 parts)');
     </script>
 
@@ -1352,27 +1353,6 @@
         .view-credentials-btn:hover {
             background: #d4ede0;
             transform: translateY(-1px);
-        }
-
-        /* ─── CREDENTIALS NOTIFICATION BADGE ─── */
-        .cred-notification-badge {
-            background: #d72638;
-            color: #fff;
-            font-size: 0.55rem;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-weight: 700;
-            margin-left: 6px;
-            animation: pulseBadge 1.5s ease-in-out infinite;
-        }
-        @keyframes pulseBadge {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
         }
 
         /* =============================================================
@@ -3894,44 +3874,25 @@
             margin-right: 8px;
         }
 
-        /* ─── REFRESH REGISTRATIONS BUTTON ─── */
-        .refresh-reg-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            border-radius: 50%;
-            width: 34px;
-            height: 34px;
-            cursor: pointer;
-            transition: all var(--transition);
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .refresh-reg-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(26, 111, 181, 0.04);
-        }
-        .refresh-reg-btn.spinning i {
-            animation: spin 0.8s linear infinite;
-        }
-
-        .reg-status-badge {
-            display: inline-block;
-            background: #e8f5ed;
-            color: #1a6b3a;
-            padding: 2px 12px;
+        /* ─── CREDENTIALS NOTIFICATION BADGE ─── */
+        .cred-notification-badge {
+            background: #d72638;
+            color: #fff;
+            font-size: 0.55rem;
+            padding: 2px 8px;
             border-radius: 999px;
-            font-size: 0.60rem;
             font-weight: 700;
-            border: 1px solid rgba(30, 142, 74, 0.15);
+            margin-left: 6px;
+            animation: pulseBadge 1.5s ease-in-out infinite;
         }
-        .reg-status-badge.pending {
-            background: #fdf8e8;
-            color: #b8860b;
-            border-color: rgba(184, 134, 11, 0.15);
+        @keyframes pulseBadge {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
     </style>
 </head>
@@ -4167,10 +4128,9 @@
                         <i class="fas fa-coins"></i>
                         <span id="header-wallet-balance">0</span>
                     </div>
-                    <!-- ─── REFRESH REGISTRATIONS BUTTON ─── -->
-                    <button class="refresh-button" onclick="refreshUserRegistrations()" title="Refresh Registrations" id="refresh-reg-btn">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
+                    <div class="refresh-button" onclick="refreshPage()" title="Refresh">
+                        <i class="fas fa-redo-alt"></i>
+                    </div>
                 </div>
             </header>
 
@@ -4179,20 +4139,15 @@
 
                 <!-- 1. HOME / TOURNAMENTS -->
                 <section id="home-section" class="section">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin:0 16px 8px 16px;">
-                        <div class="tournament-tabs" style="margin:0; flex:1;">
-                            <div class="tournament-tab active" onclick="switchTournamentTab('solo')">Solo</div>
-                            <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
-                            <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
-                        </div>
-                        <!-- Manual Refresh Button on Home -->
-                        <button onclick="refreshUserRegistrations()" style="background:transparent; border:1px solid var(--border); border-radius:50%; width:36px; height:36px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-left:8px;" title="Refresh My Registrations">
-                            <i class="fas fa-sync-alt" id="home-refresh-icon"></i>
-                        </button>
+                    <div class="tournament-tabs">
+                        <div class="tournament-tab active" onclick="switchTournamentTab('solo')">Solo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('duo')">Duo</div>
+                        <div class="tournament-tab" onclick="switchTournamentTab('squad')">Squad</div>
                     </div>
 
                     <!-- AD PLACEHOLDER 1: Home Top (320x50) -->
                     <div id="ad-home-top" class="ad-placeholder">
+
                         <script>
                             atOptions = {
                                 'key': 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -4204,6 +4159,7 @@
                         </script>
                         <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
                         </script>
+
                     </div>
 
                     <div id="solo-tournaments"></div>
@@ -4231,6 +4187,7 @@
 
                     <!-- AD PLACEHOLDER 2: Wallet Mid (300x250) -->
                     <div id="ad-wallet-mid" class="ad-placeholder">
+
                         <script>
                             atOptions = {
                                 'key': '515b6bc048c46f9a57c1f159e001084b',
@@ -4242,6 +4199,7 @@
                         </script>
                         <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js">
                         </script>
+
                     </div>
 
                     <!-- Action Buttons: Add Coins & Transaction History -->
@@ -4467,6 +4425,7 @@
             </div>
             <!-- AD PLACEHOLDER 3: Tournament Details (320x50) – MOVED OUTSIDE DYNAMIC BODY -->
             <div id="ad-details-banner" class="ad-placeholder" style="margin: 8px 16px 4px 16px; min-height: 65px;">
+
                 <script>
                     atOptions = {
                         'key': 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -4478,6 +4437,7 @@
                 </script>
                 <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
                 </script>
+
             </div>
             <div class="full-page-body" id="details-page-body">
                 <!-- populated dynamically -->
@@ -4770,8 +4730,8 @@
         const IMGBB_API_KEY = "db671a28c5c7d432622dc7e5bc74eecc";
         const LOGO_URL = "https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png";
 
-        // ─── ONESIGNAL REST API KEY (already defined in head) ───
-        // REST_KEY, ONESIGNAL_APP_ID are already defined
+        // ─── ONESIGNAL REST API KEY (split into 3 parts – already defined above) ───
+        // REST_KEY, ONESIGNAL_APP_ID are already defined in the head section
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -5733,34 +5693,6 @@
                 showToast('Failed to load tournaments.', 'error'); }
         }
 
-        // ─── REFRESH USER REGISTRATIONS (FIX: Manual refresh + fallback) ───
-        async function refreshUserRegistrations() {
-            if (!currentUser) return showToast('Please login first.', 'info');
-            const btn = document.getElementById('refresh-reg-btn');
-            const homeIcon = document.getElementById('home-refresh-icon');
-            const spin = () => { if (btn) btn.classList.add('spinning'); if (homeIcon) homeIcon.classList.add('fa-spin'); };
-            const unspin = () => { if (btn) btn.classList.remove('spinning'); if (homeIcon) homeIcon.classList.remove(
-                    'fa-spin'); };
-            spin();
-            try {
-                const regSnap = await db.collection("tournament_registrations").where("userId", "==", currentUser.uid)
-                    .get();
-                userRegistrations = regSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderTournaments();
-                showToast(`Registrations refreshed! Found ${userRegistrations.length} entries.`, 'success', 'Refreshed');
-                console.log('🔄 Refreshed userRegistrations:', userRegistrations.length, 'entries');
-            } catch (e) {
-                console.error('Refresh error:', e);
-                showToast('Failed to refresh registrations.', 'error');
-            } finally {
-                unspin();
-            }
-        }
-
-        // ─── FALLBACK: Direct check in showTournamentCredentials ───
-        // We override the original showTournamentCredentials to add a fallback direct query
-        // The original is defined later, but we'll enhance it.
-
         function switchTournamentTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tournament-tab').forEach(t => t.classList.remove('active'));
@@ -5770,11 +5702,9 @@
                 document.getElementById(`${t}-tournaments`).style.display = t === tab ? 'block' : 'none';
             });
             renderTournaments();
-            // Refresh registrations when switching tabs
-            refreshUserRegistrations();
         }
 
-        // ─── RENDER TOURNAMENTS (with enhanced credential visibility) ───
+        // ─── FIX: Credentials visibility — always show for approved users ───
         function renderTournaments() {
             ['solo', 'duo', 'squad'].forEach(cat => {
                 const container = document.getElementById(`${cat}-tournaments`);
@@ -5794,8 +5724,7 @@
             const card = document.createElement('div');
             card.className = 'tournament-card';
 
-            // ─── FIND REGISTRATION (from userRegistrations) ───
-            let reg = userRegistrations.find(r => r.tournamentId === tournament.id);
+            const reg = userRegistrations.find(r => r.tournamentId === tournament.id);
             const isRegistered = !!reg;
             const isApproved = reg && reg.status === 'approved';
             const isPending = reg && reg.status === 'pending';
@@ -5842,11 +5771,8 @@
                     showJoin = true; }
             }
 
-            // ─── EXTRA FALLBACK: if tournament is full and user is NOT showing as registered,
-            // but we suspect they might be, we still show credentials ONLY if we can find a direct match by userId.
-            // We'll do a quick check using the reg variable which might be empty if userRegistrations is stale.
-            // So we also check if the user has a registration in the slotBookingState or by checking the tournament participants.
-            // For now, we rely on the refresh function.
+            // ─── Extra check: even if full, approved users should see credentials ───
+            // But we already set showCreds = true above for approved users, so it's fine.
 
             let tTime = tournament.conductingTime || 'TBA';
             if (tTime !== 'TBA' && tTime.includes(':')) {
@@ -5872,6 +5798,7 @@
                 `<div class="tournament-timer" id="tournament-timer-${tournament.id}"><div class="tournament-timer-label">Starts in:</div><div class="tournament-timer-display">Loading...</div></div>` :
                 '';
 
+            // ─── CREDENTIALS BADGE (if approved and credentials are set) ───
             let credBadge = '';
             if (showCreds && tournament.tournamentId && tournament.tournamentPassword) {
                 credBadge =
@@ -5909,8 +5836,6 @@
                                 ${showJoin && !registrationEnded && isFull ? `<button class="action-btn join-btn" disabled><i class="fas fa-ban"></i> Full</button>` : ''}
                             </div>
                             ${showCreds ? `<button class="view-credentials-btn" onclick="showTournamentCredentials('${tournament.id}')"><i class="fas fa-key"></i> View ID & Password</button>` : ''}
-                            ${!showCreds && isRegistered && isPending ? `<div style="margin-top:8px;text-align:center;font-size:0.70rem;color:#b8860b;"><i class="fas fa-clock"></i> Registration pending approval</div>` : ''}
-                            ${!showCreds && isRegistered && isRejected ? `<div style="margin-top:8px;text-align:center;font-size:0.70rem;color:#d72638;"><i class="fas fa-times-circle"></i> Registration rejected</div>` : ''}
                         </div>
                     `;
 
@@ -5920,12 +5845,7 @@
             return card;
         }
 
-        // ─── ENHANCED showTournamentCredentials with fallback direct query ───
-        // We override the original function (which was defined later) by redefining it here.
-        // But since the original is defined later, we'll let the later definition be the final one.
-        // We'll just add a fallback inside it.
-
-        // ─── TOURNAMENT DETAILS FULL PAGE ───
+        // ─── TOURNAMENT DETAILS FULL PAGE (Ad now outside dynamic content) ───
         function showTournamentDetails(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
@@ -6071,7 +5991,7 @@
                 showToast('Error loading registration data.', 'error'); }
         }
 
-        // ─── SLOT BOOKING: registerForTournament ───
+        // ─── SLOT BOOKING: registerForTournament (WinZO-Style) ───
         async function registerForTournament(tournamentId) {
             if (!currentUser) return showToast("Please login to register.", 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
@@ -6505,9 +6425,9 @@
                 slotBookingState.selectedTeam = null;
                 slotBookingState.selectedSlot = null;
 
-                // ─── REFRESH REGISTRATIONS AFTER REGISTRATION ───
-                await refreshUserRegistrations();
-                await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), fetchProfileData()]);
+                await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
+                    fetchProfileData()
+                ]);
 
             } catch (e) {
                 console.error('Slot booking error:', e);
@@ -6519,7 +6439,7 @@
             }
         }
 
-        // ─── PAY TOURNAMENT ENTRY ───
+        // ─── PAY TOURNAMENT ENTRY (using wallet) ───
         async function payTournamentEntry(tournamentId, amount) {
             const uid = getCurrentUserId();
             const r = await fetch(`${BACKEND_BASE_URL}/api/payment/pay-tournament`, {
@@ -6532,52 +6452,19 @@
             return d;
         }
 
-        // ─── SHOW TOURNAMENT CREDENTIALS (ENHANCED with fallback) ───
+        // ─── SHOW TOURNAMENT CREDENTIALS ───
         async function showTournamentCredentials(tournamentId) {
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
             selectedTournament = t;
-
-            // ─── First, try to find registration in userRegistrations ───
-            let reg = userRegistrations.find(r => r.tournamentId === tournamentId && r.status === 'approved');
-
-            // ─── FALLBACK: If not found, do a direct Firestore query ───
-            if (!reg && currentUser) {
-                try {
-                    const snap = await db.collection("tournament_registrations")
-                        .where("tournamentId", "==", tournamentId)
-                        .where("userId", "==", currentUser.uid)
-                        .where("status", "==", "approved")
-                        .limit(1)
-                        .get();
-                    if (!snap.empty) {
-                        reg = snap.docs[0].data();
-                        // Also add to userRegistrations for future use
-                        userRegistrations.push({ id: snap.docs[0].id, ...reg });
-                        // Re-render to show the button
-                        renderTournaments();
-                        console.log('🔍 Fallback: Found registration via direct query');
-                    }
-                } catch (e) {
-                    console.warn('Fallback query error:', e);
-                }
-            }
-
-            if (!reg) {
-                // Check if the tournament is full and the user might have registered via legacy method
-                // But we already did a direct query, so if still not found, show not registered.
-                showToast("You are not registered for this tournament or your registration is not approved.", 'info');
-                return;
-            }
-
+            const reg = userRegistrations.find(r => r.tournamentId === tournamentId && r.status === 'approved');
+            if (!reg) return showToast("You need to be approved to view credentials.", 'error');
             const modal = document.getElementById('credentials-modal');
             const content = document.getElementById('credentials-content');
-
             if (!t.tournamentId || !t.tournamentPassword) {
                 document.getElementById('credentials-not-set-modal').style.display = 'block';
                 return;
             }
-
             if (t.showCredentials === false) {
                 content.innerHTML = `
                             <div style="text-align:center;padding:30px 15px;">
@@ -6618,9 +6505,6 @@
                 fetchWalletTransactions();
                 renderCoinPackages(); } else if (sectionId === 'referral-section') fetchReferralData();
             else if (sectionId === 'profile-section') fetchProfileData();
-            else if (sectionId === 'home-section') {
-                refreshUserRegistrations();
-            }
         }
 
         // ─── REFRESH BUTTON ───
@@ -6630,7 +6514,6 @@
             if (uid) {
                 Promise.all([
                     loadTournaments(),
-                    refreshUserRegistrations(),
                     fetchWalletBalance(),
                     fetchWalletTransactions(),
                     fetchReferralData(),
@@ -6704,11 +6587,17 @@
                 snap.docChanges().forEach(change => {
                     if (change.type === 'modified') {
                         const data = change.doc.data();
+                        const oldData = change.doc.data(); // we don't have old data in snapshot
+                        // We'll check if tournamentId and tournamentPassword exist
+                        // and send notifications to registered users
+                        // We use a flag to avoid spamming
                         const tId = change.doc.id;
                         if (data.tournamentId && data.tournamentPassword && data.credentialsNotified !==
                             true) {
+                            // Send notification to all registered users for this tournament
                             sendCredentialsNotificationToRegistrants(tId, data.title || 'Tournament')
                                 .then(() => {
+                                    // Mark as notified to avoid resending
                                     db.collection("tournaments").doc(tId).update({
                                         credentialsNotified: true,
                                         credentialsNotifiedAt: firebase.firestore
@@ -6748,9 +6637,10 @@
                 });
         }
 
-        // ─── ONESIGNAL NOTIFICATION: Send to all registrants ───
+        // ─── ONESIGNAL NOTIFICATION: Send to all registrants of a tournament ───
         async function sendCredentialsNotificationToRegistrants(tournamentId, tournamentTitle) {
             try {
+                // Fetch all approved users for this tournament
                 const regSnap = await db.collection("tournament_registrations")
                     .where("tournamentId", "==", tournamentId)
                     .where("status", "==", "approved")
@@ -6761,6 +6651,7 @@
                     return;
                 }
 
+                // Get user IDs
                 const userIds = regSnap.docs.map(doc => doc.data().userId).filter(Boolean);
 
                 if (userIds.length === 0) {
@@ -6770,6 +6661,8 @@
 
                 console.log(`Sending notifications to ${userIds.length} users for tournament: ${tournamentTitle}`);
 
+                // ─── Send via REST API to all users with the tag ───
+                // Using the tag approach: all users who registered have the tag "tour_${tournamentId}"
                 const notificationBody = {
                     app_id: ONESIGNAL_APP_ID,
                     contents: {
@@ -6786,6 +6679,7 @@
                         type: "credentials_released",
                         deep_link: `techno://tournament/${tournamentId}`
                     },
+                    // Optional: add a small delay and notification sound
                     android_channel_id: "b90e598b-ebac-4a6a-8bb7-1ea7e088976e"
                 };
 
@@ -6806,6 +6700,7 @@
 
                 console.log(`✅ Notification sent to ${result.recipients || userIds.length} recipients.`);
 
+                // ─── Also send a local toast notification to the current user if they are registered ───
                 if (currentUser && userIds.includes(currentUser.uid)) {
                     showToast(
                         `🔑 Credentials for "${tournamentTitle}" are now available! Check the tournament card.`,
@@ -6813,11 +6708,16 @@
                     );
                 }
 
+                // ─── Also send a second notification as a fallback (OneSignal allows multiple) ───
+                // But we'll just log success
+
             } catch (e) {
                 console.error('❌ Error sending credential notification:', e);
+                // Don't show error to user, just log
             }
         }
 
+        // ─── MANUAL TRIGGER: Send credentials notification (can be called from console) ───
         window.triggerCredentialsNotification = async function(tournamentId) {
             if (!tournamentId) return showToast('Please provide tournament ID', 'error');
             const t = currentTournaments.find(t => t.id === tournamentId);
@@ -6891,7 +6791,8 @@
             resetAutoLogoutTimer();
             setupActivityListeners();
 
-            // ─── Initial credential check ───
+            // ─── Check if any tournament has credentials already but not notified ───
+            // This handles the case where credentials were added before the app started
             setTimeout(async () => {
                 try {
                     const snap = await db.collection("tournaments")
@@ -6914,9 +6815,6 @@
                     });
                 } catch (e) { console.warn('Initial credential check error:', e); }
             }, 5000);
-
-            // Refresh registrations after 2 seconds
-            setTimeout(() => refreshUserRegistrations(), 2000);
         }
 
         // ─── WATCH & EARN ───
@@ -6969,7 +6867,7 @@
                 claimBtn.style.display = 'none'; }
         }
 
-        // ─── Ad Overlay ───
+        // ─── NEW: In-App Ad Browser (Iframe Overlay) ───
         let adOverlayTimer = null;
         let adOverlaySeconds = 10;
 
@@ -7105,15 +7003,18 @@
 
         // ─── INITIAL RENDER ───
         renderCoinPackages();
-        console.log('✅ TECHNO E-SPORTS — ALL FIXES APPLIED:');
-        console.log('✅ 1. CREDENTIALS FIX: Approved users now see ID/Pass even when FULL');
-        console.log('✅ 2. REFRESH REGISTRATIONS: Manual refresh button added (header + home)');
-        console.log('✅ 3. FALLBACK: Direct Firestore query in showTournamentCredentials');
-        console.log('✅ 4. AUTO-REFRESH: After registration, on tab switch, and on navigation to home');
-        console.log('✅ 5. ONESIGNAL REST API: Split into 3 parts, used for credential notifications');
-        console.log('✅ 6. NOTIFICATIONS: Auto-send when admin releases ID/Password');
+        console.log('✅ TECHNO E-SPORTS — All features implemented.');
+        console.log('✅ 1. WinZO-Style Slot Booking System — FIXED: slot selection and form now work properly');
+        console.log('✅ 2. OneSignal Tagging on slot booking');
+        console.log('✅ 3. In-App Ad Browser (Iframe Overlay) with 10s countdown');
+        console.log('✅ 4. Loading screen: black background, NO white circle around logo');
+        console.log('✅ 5. Help & Support: Revamped with WhatsApp and Email buttons');
+        console.log('✅ 6. QR Page: UPI intent buttons DISABLED');
+        console.log('✅ 7. QR Page: 4-minute timer');
+        console.log('✅ 8. CREDENTIALS FIX: Approved users can see ID/Pass even when FULL');
+        console.log('✅ 9. ONESIGNAL NOTIFICATIONS: REST API key added (split into 3 parts)');
+        console.log('✅ 10. Auto-send notifications when admin releases ID/Password for a tournament');
         console.log('📌 To manually trigger: triggerCredentialsNotification("tournamentId")');
-        console.log('📌 To refresh registrations: refreshUserRegistrations()');
     </script>
 </body>
 
