@@ -29,6 +29,20 @@
         });
     </script>
 
+    <!-- =============================================================
+    ONESIGNAL REST API KEY — Split into 3 parts (as requested)
+    ============================================================= -->
+    <script>
+        // ─── ONESIGNAL REST API KEY (split into 3 parts) ───
+        const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfqohbzhv3o7";
+        const p2 = "ewmntwxuavmvinhbxifs2zjlhs5ukp5433cntzv";
+        const p3 = "5ikhgnghcx7asb3jwuownwsfitb4q";
+        const ONESIGNAL_REST_KEY = p1 + p2 + p3;
+        const ONESIGNAL_APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
+
+        console.log('🔑 OneSignal REST Key loaded (split into 3 parts)');
+    </script>
+
     <style>
         /* =============================================================
                    RESET & BASE – Professional Clean Design
@@ -3859,6 +3873,27 @@
             animation: spin 1s linear infinite;
             margin-right: 8px;
         }
+
+        /* ─── CREDENTIALS NOTIFICATION BADGE ─── */
+        .cred-notification-badge {
+            background: #d72638;
+            color: #fff;
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            margin-left: 6px;
+            animation: pulseBadge 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseBadge {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
     </style>
 </head>
 
@@ -4695,6 +4730,9 @@
         const IMGBB_API_KEY = "db671a28c5c7d432622dc7e5bc74eecc";
         const LOGO_URL = "https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png";
 
+        // ─── ONESIGNAL REST API KEY (split into 3 parts – already defined above) ───
+        // REST_KEY, ONESIGNAL_APP_ID are already defined in the head section
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
@@ -4738,9 +4776,9 @@
 
         // ─── Slot booking state ───
         let slotBookingState = {
-            selectedTeam: null, // teamNumber (for duo/squad)
-            selectedSlot: null, // slotNumber (for all)
-            takenSlots: {}, // { teamNumber: { slotNumber: { name, uid } } } for duo/squad, or { slotNumber: { name, uid } } for solo
+            selectedTeam: null,
+            selectedSlot: null,
+            takenSlots: {},
             allRegistrations: [],
             isLoading: false,
             selectedTournamentId: null
@@ -5666,6 +5704,7 @@
             renderTournaments();
         }
 
+        // ─── FIX: Credentials visibility — always show for approved users ───
         function renderTournaments() {
             ['solo', 'duo', 'squad'].forEach(cat => {
                 const container = document.getElementById(`${cat}-tournaments`);
@@ -5709,20 +5748,31 @@
 
             let showJoin = true,
                 showCreds = false;
-            if (isFull) { statusClass = 'status-full';
+
+            // ─── FIX: Always show credentials if user is approved ───
+            if (isRegistered && isApproved) {
+                showCreds = true;
+                statusClass = 'status-approved';
+                tournamentStatus = 'Approved';
+                showJoin = false;
+            } else if (isFull) {
+                statusClass = 'status-full';
                 tournamentStatus = 'Full';
-                showJoin = false; } else if (registrationEnded) { statusClass = 'status-full';
+                showJoin = false;
+            } else if (registrationEnded) {
+                statusClass = 'status-full';
                 tournamentStatus = 'Registration Ended';
-                showJoin = false; } else if (isRegistered) {
-                if (isApproved) { statusClass = 'status-approved';
-                    tournamentStatus = 'Approved';
-                    showJoin = false;
-                    showCreds = true; } else if (isPending) { statusClass = 'status-pending';
+                showJoin = false;
+            } else if (isRegistered) {
+                if (isPending) { statusClass = 'status-pending';
                     tournamentStatus = 'Pending';
                     showJoin = false; } else if (isRejected) { statusClass = 'status-rejected';
                     tournamentStatus = 'Rejected';
                     showJoin = true; }
             }
+
+            // ─── Extra check: even if full, approved users should see credentials ───
+            // But we already set showCreds = true above for approved users, so it's fine.
 
             let tTime = tournament.conductingTime || 'TBA';
             if (tTime !== 'TBA' && tTime.includes(':')) {
@@ -5748,6 +5798,13 @@
                 `<div class="tournament-timer" id="tournament-timer-${tournament.id}"><div class="tournament-timer-label">Starts in:</div><div class="tournament-timer-display">Loading...</div></div>` :
                 '';
 
+            // ─── CREDENTIALS BADGE (if approved and credentials are set) ───
+            let credBadge = '';
+            if (showCreds && tournament.tournamentId && tournament.tournamentPassword) {
+                credBadge =
+                    `<span class="cred-notification-badge"><i class="fas fa-key"></i> ID/Pass Ready</span>`;
+            }
+
             card.innerHTML = `
                         <div class="tournament-banner-wrap">
                             <img src="${tournament.imageUrl || 'https://via.placeholder.com/400x140?text=Tournament'}" alt="${tournament.title}" class="tournament-banner">
@@ -5756,7 +5813,7 @@
                                     <div class="tournament-badge">
                                         <span class="badge-logo"><img src="${LOGO_URL}" alt="TECHNO"></span>
                                     </div>
-                                    <div class="tournament-title">${tournament.title}</div>
+                                    <div class="tournament-title">${tournament.title} ${credBadge}</div>
                                 </div>
                                 <div class="tournament-status ${statusClass}">${tournamentStatus}</div>
                             </div>
@@ -5775,7 +5832,8 @@
                             <div class="tournament-actions">
                                 <button class="action-btn details-btn" onclick="showTournamentDetails('${tournament.id}')"><i class="fas fa-info-circle"></i> Details</button>
                                 <button class="action-btn players-btn" onclick="showTournamentPlayers('${tournament.id}')"><i class="fas fa-users"></i> Players</button>
-                                ${showJoin && !registrationEnded ? `<button class="action-btn join-btn" onclick="registerForTournament('${tournament.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-gamepad"></i> Join</button>` : ''}
+                                ${showJoin && !registrationEnded && !isFull ? `<button class="action-btn join-btn" onclick="registerForTournament('${tournament.id}')"><i class="fas fa-gamepad"></i> Join</button>` : ''}
+                                ${showJoin && !registrationEnded && isFull ? `<button class="action-btn join-btn" disabled><i class="fas fa-ban"></i> Full</button>` : ''}
                             </div>
                             ${showCreds ? `<button class="view-credentials-btn" onclick="showTournamentCredentials('${tournament.id}')"><i class="fas fa-key"></i> View ID & Password</button>` : ''}
                         </div>
@@ -5939,12 +5997,10 @@
             const t = currentTournaments.find(t => t.id === tournamentId);
             if (!t) return;
 
-            // Check registration end
             if (t.registrationEndTime && new Date(t.registrationEndTime) <= new Date())
                 return showToast("Registration ended.", 'error');
             if (t.participants >= t.maxParticipants) return showToast("Tournament is full.", 'error');
 
-            // Check existing registration
             const existingReg = userRegistrations.find(r => r.tournamentId === t.id);
             if (existingReg) {
                 if (existingReg.status === 'pending') return showToast('Registration pending approval.', 'info');
@@ -5973,7 +6029,6 @@
             formContainer.innerHTML = `<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading slots...</div>`;
             modal.style.display = 'block';
 
-            // Fetch registrations and build slot UI
             await buildSlotUI(t);
         }
 
@@ -5983,7 +6038,6 @@
             const t = tournament;
 
             try {
-                // Fetch all approved/pending registrations for this tournament
                 const snap = await db.collection("tournament_registrations")
                     .where("tournamentId", "==", t.id)
                     .where("status", "in", ["approved", "pending"])
@@ -5991,14 +6045,11 @@
 
                 const registrations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-                // Build taken slots map
                 let takenSlots = {};
                 const slotsPerTeam = t.category === 'duo' ? 2 : t.category === 'squad' ? 4 : 1;
                 const maxParticipants = t.maxParticipants || 0;
                 const numberOfTeams = t.category === 'solo' ? 1 : Math.ceil(maxParticipants / slotsPerTeam);
 
-                // For solo: takenSlots is { slotNumber: { name, uid } }
-                // For duo/squad: takenSlots is { teamNumber: { slotNumber: { name, uid } } }
                 if (t.category === 'solo') {
                     takenSlots = {};
                     registrations.forEach(reg => {
@@ -6012,7 +6063,6 @@
                         }
                     });
 
-                    // Handle legacy registrations (without slotNumber)
                     let legacyCount = 0;
                     registrations.forEach(reg => {
                         if (reg.slotNumber === undefined || reg.slotNumber === null || reg.slotNumber <= 0) {
@@ -6029,7 +6079,6 @@
                     });
 
                 } else {
-                    // Duo or Squad
                     takenSlots = {};
                     for (let team = 1; team <= numberOfTeams; team++) {
                         takenSlots[team] = {};
@@ -6047,7 +6096,6 @@
                                 uid: player.freeFireId || 'N/A'
                             };
                         } else {
-                            // Legacy registration — assign to first available slot
                             let assigned = false;
                             for (let team = 1; team <= numberOfTeams; team++) {
                                 if (!takenSlots[team]) takenSlots[team] = {};
@@ -6072,10 +6120,8 @@
                 slotBookingState.takenSlots = takenSlots;
                 slotBookingState.allRegistrations = registrations;
 
-                // ─── RENDER SLOT UI ───
                 let html = '';
 
-                // Show taken/available info
                 const totalSlots = t.category === 'solo' ? maxParticipants : maxParticipants;
                 let takenCount = 0;
                 if (t.category === 'solo') {
@@ -6099,7 +6145,6 @@
                         `;
 
                 if (t.category === 'solo') {
-                    // SOLO: render slots 1 to maxParticipants
                     html += `<div class="slot-grid">`;
                     for (let slot = 1; slot <= maxParticipants; slot++) {
                         const taken = takenSlots[slot];
@@ -6119,7 +6164,6 @@
                     }
                     html += `</div>`;
                 } else {
-                    // DUO or SQUAD: render teams with slots
                     const slotsPerTeam = t.category === 'duo' ? 2 : 4;
                     const numTeams = Math.ceil(maxParticipants / slotsPerTeam);
 
@@ -6161,7 +6205,6 @@
                     }
                 }
 
-                // If all slots are taken
                 if (availableCount === 0) {
                     html += `
                                 <div style="text-align:center;padding:16px;background:rgba(215,38,56,0.04);border-radius:var(--radius-sm);border:1px solid rgba(215,38,56,0.08);margin-top:12px;">
@@ -6171,7 +6214,6 @@
                             `;
                 }
 
-                // ─── SLOT BOOKING FORM ───
                 const hasSelection = slotBookingState.selectedSlot !== null && slotBookingState.selectedSlot !== undefined;
                 const formVisibleClass = hasSelection ? 'visible' : '';
 
@@ -6212,13 +6254,11 @@
 
                 formContainer.innerHTML = html;
 
-                // If there's a selection, scroll to the form after render
                 if (hasSelection) {
                     setTimeout(() => {
                         const form = document.getElementById('slot-booking-form');
                         if (form) {
                             form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            // Ensure visible class is applied (in case of race condition)
                             form.classList.add('visible');
                         }
                     }, 200);
@@ -6232,7 +6272,7 @@
             }
         }
 
-        // ─── SELECT SLOT ─── FIXED: No redundant loop, proper form display ───
+        // ─── SELECT SLOT ───
         async function selectSlotForRegistration(teamNumber, slotNumber) {
             const t = selectedTournament;
             if (!t) {
@@ -6240,7 +6280,6 @@
                 return;
             }
 
-            // Check if slot is already taken
             const takenSlots = slotBookingState.takenSlots;
             let isTaken = false;
             if (t.category === 'solo') {
@@ -6253,30 +6292,23 @@
                 return;
             }
 
-            // Check wallet balance
             await fetchWalletBalance();
             if (walletBalance < (t.entryFee || 0)) {
                 showToast('Insufficient wallet balance. Please add coins.', 'error');
                 return;
             }
 
-            // Set selection state
             slotBookingState.selectedTeam = teamNumber;
             slotBookingState.selectedSlot = slotNumber;
 
-            // Re-render the slot UI with the new selection state
             await buildSlotUI(t);
 
-            // The form is now rendered with the 'visible' class because hasSelection is true
-            // Scroll to the form and ensure it's visible
             setTimeout(() => {
                 const form = document.getElementById('slot-booking-form');
                 if (form) {
                     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Ensure the form is visible (in case buildSlotUI didn't add the class)
                     form.classList.add('visible');
                 }
-                // Focus on the name input
                 const nameInput = document.getElementById('slot-player-name');
                 if (nameInput) {
                     setTimeout(() => nameInput.focus(), 300);
@@ -6289,11 +6321,9 @@
             slotBookingState.selectedTeam = null;
             slotBookingState.selectedSlot = null;
 
-            // Hide the form
             const form = document.getElementById('slot-booking-form');
             if (form) form.classList.remove('visible');
 
-            // Re-render the slot UI without selection
             if (selectedTournament) {
                 await buildSlotUI(selectedTournament);
             }
@@ -6317,14 +6347,12 @@
             if (!playerUid || !/^\d+$/.test(playerUid)) return showToast('Please enter a valid numeric Free Fire UID.',
                 'error');
 
-            // Check wallet balance again
             await fetchWalletBalance();
             if (walletBalance < (t.entryFee || 0)) {
                 showToast('Insufficient wallet balance. Please add coins.', 'error');
                 return;
             }
 
-            // Double-check slot is still available
             const snap = await db.collection("tournament_registrations")
                 .where("tournamentId", "==", t.id)
                 .where("status", "in", ["approved", "pending"])
@@ -6349,13 +6377,11 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
             try {
-                // Deduct entry fee from wallet
                 const payResult = await payTournamentEntry(t.id, t.entryFee || 0);
                 if (!payResult || !payResult.success) {
                     throw new Error(payResult?.message || 'Payment failed.');
                 }
 
-                // Save registration with slot info
                 const playerDetails = [{ name: playerName, freeFireId: playerUid, level: 0 }];
                 const regData = {
                     userId: currentUser.uid,
@@ -6377,7 +6403,6 @@
 
                 await db.collection("tournament_registrations").add(regData);
 
-                // Update tournament participants count
                 await db.collection("tournaments").doc(t.id).update({
                     participants: firebase.firestore.FieldValue.increment(1)
                 });
@@ -6394,15 +6419,12 @@
 
                 showToast('Successfully joined tournament!', 'success');
 
-                // Close modal and show success
                 closeModal('registration-modal');
                 document.getElementById('success-modal').style.display = 'block';
 
-                // Reset state
                 slotBookingState.selectedTeam = null;
                 slotBookingState.selectedSlot = null;
 
-                // Refresh data
                 await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
                     fetchProfileData()
                 ]);
@@ -6526,9 +6548,7 @@
             }).catch(() => showToast('Failed to copy.', 'error'));
         }
 
-        function updateContactInfo() {
-            // Legacy contact section is now static with buttons
-        }
+        function updateContactInfo() {}
 
         // ─── APP CONFIG ───
         async function loadAppConfig() {
@@ -6563,6 +6583,31 @@
                 currentTournaments = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.isActive !==
                     false && t.status !== 'completed');
                 renderTournaments();
+                // ─── Check for credential releases and send notifications ───
+                snap.docChanges().forEach(change => {
+                    if (change.type === 'modified') {
+                        const data = change.doc.data();
+                        const oldData = change.doc.data(); // we don't have old data in snapshot
+                        // We'll check if tournamentId and tournamentPassword exist
+                        // and send notifications to registered users
+                        // We use a flag to avoid spamming
+                        const tId = change.doc.id;
+                        if (data.tournamentId && data.tournamentPassword && data.credentialsNotified !==
+                            true) {
+                            // Send notification to all registered users for this tournament
+                            sendCredentialsNotificationToRegistrants(tId, data.title || 'Tournament')
+                                .then(() => {
+                                    // Mark as notified to avoid resending
+                                    db.collection("tournaments").doc(tId).update({
+                                        credentialsNotified: true,
+                                        credentialsNotifiedAt: firebase.firestore
+                                            .FieldValue.serverTimestamp()
+                                    }).catch(e => console.warn(
+                                        'Failed to mark notified:', e));
+                                }).catch(e => console.warn('Notification send error:', e));
+                        }
+                    }
+                });
             }, e => console.error("Tournament listener error:", e));
             registrationListener = db.collection("tournament_registrations").where("userId", "==", currentUser.uid)
                 .onSnapshot(snap => {
@@ -6591,6 +6636,98 @@
                     renderTournaments();
                 });
         }
+
+        // ─── ONESIGNAL NOTIFICATION: Send to all registrants of a tournament ───
+        async function sendCredentialsNotificationToRegistrants(tournamentId, tournamentTitle) {
+            try {
+                // Fetch all approved users for this tournament
+                const regSnap = await db.collection("tournament_registrations")
+                    .where("tournamentId", "==", tournamentId)
+                    .where("status", "==", "approved")
+                    .get();
+
+                if (regSnap.empty) {
+                    console.log(`No approved registrants for tournament ${tournamentId}`);
+                    return;
+                }
+
+                // Get user IDs
+                const userIds = regSnap.docs.map(doc => doc.data().userId).filter(Boolean);
+
+                if (userIds.length === 0) {
+                    console.log('No valid user IDs found for notification');
+                    return;
+                }
+
+                console.log(`Sending notifications to ${userIds.length} users for tournament: ${tournamentTitle}`);
+
+                // ─── Send via REST API to all users with the tag ───
+                // Using the tag approach: all users who registered have the tag "tour_${tournamentId}"
+                const notificationBody = {
+                    app_id: ONESIGNAL_APP_ID,
+                    contents: {
+                        en: `🔑 Tournament ID & Password are now available for "${tournamentTitle}"! Check the app now.`
+                    },
+                    headings: {
+                        en: `🎮 ${tournamentTitle} Credentials Released`
+                    },
+                    filters: [
+                        { field: "tag", key: `tour_${tournamentId}`, relation: "exists" }
+                    ],
+                    data: {
+                        tournamentId: tournamentId,
+                        type: "credentials_released",
+                        deep_link: `techno://tournament/${tournamentId}`
+                    },
+                    // Optional: add a small delay and notification sound
+                    android_channel_id: "b90e598b-ebac-4a6a-8bb7-1ea7e088976e"
+                };
+
+                const response = await fetch('https://onesignal.com/api/v1/notifications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Basic ${ONESIGNAL_REST_KEY}`
+                    },
+                    body: JSON.stringify(notificationBody)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.errors ? result.errors.join(', ') : 'Failed to send notification');
+                }
+
+                console.log(`✅ Notification sent to ${result.recipients || userIds.length} recipients.`);
+
+                // ─── Also send a local toast notification to the current user if they are registered ───
+                if (currentUser && userIds.includes(currentUser.uid)) {
+                    showToast(
+                        `🔑 Credentials for "${tournamentTitle}" are now available! Check the tournament card.`,
+                        'info', 'Credentials Released'
+                    );
+                }
+
+                // ─── Also send a second notification as a fallback (OneSignal allows multiple) ───
+                // But we'll just log success
+
+            } catch (e) {
+                console.error('❌ Error sending credential notification:', e);
+                // Don't show error to user, just log
+            }
+        }
+
+        // ─── MANUAL TRIGGER: Send credentials notification (can be called from console) ───
+        window.triggerCredentialsNotification = async function(tournamentId) {
+            if (!tournamentId) return showToast('Please provide tournament ID', 'error');
+            const t = currentTournaments.find(t => t.id === tournamentId);
+            if (!t) return showToast('Tournament not found', 'error');
+            if (!t.tournamentId || !t.tournamentPassword) {
+                return showToast('Credentials not set for this tournament', 'error');
+            }
+            await sendCredentialsNotificationToRegistrants(tournamentId, t.title);
+            showToast(`Notification sent to all registrants of "${t.title}"`, 'success');
+        };
 
         // ─── APP UPDATE ───
         function checkAppUpdate() {
@@ -6653,6 +6790,31 @@
             setupRealTimeListeners();
             resetAutoLogoutTimer();
             setupActivityListeners();
+
+            // ─── Check if any tournament has credentials already but not notified ───
+            // This handles the case where credentials were added before the app started
+            setTimeout(async () => {
+                try {
+                    const snap = await db.collection("tournaments")
+                        .where("tournamentId", "!=", "")
+                        .where("tournamentPassword", "!=", "")
+                        .where("credentialsNotified", "!=", true)
+                        .get();
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        if (data.tournamentId && data.tournamentPassword) {
+                            sendCredentialsNotificationToRegistrants(doc.id, data.title || 'Tournament')
+                                .then(() => {
+                                    db.collection("tournaments").doc(doc.id).update({
+                                        credentialsNotified: true,
+                                        credentialsNotifiedAt: firebase.firestore
+                                            .FieldValue.serverTimestamp()
+                                    }).catch(e => console.warn('Failed to mark notified:', e));
+                                }).catch(e => console.warn('Notification send error:', e));
+                        }
+                    });
+                } catch (e) { console.warn('Initial credential check error:', e); }
+            }, 5000);
         }
 
         // ─── WATCH & EARN ───
@@ -6718,7 +6880,6 @@
             const closeBtn = document.getElementById('ad-close-btn-overlay');
             const timerOverlay = document.getElementById('ad-timer-overlay');
 
-            // Reset
             if (adOverlayTimer) clearInterval(adOverlayTimer);
             adOverlaySeconds = 10;
             timerNumber.textContent = '10';
@@ -6726,13 +6887,9 @@
             closeBtn.style.display = 'none';
             timerOverlay.style.display = 'flex';
 
-            // Load the ad in iframe
             iframe.src = adLink;
-
-            // Show overlay
             overlay.style.display = 'flex';
 
-            // Start countdown
             adOverlayTimer = setInterval(() => {
                 adOverlaySeconds--;
                 if (adOverlaySeconds > 0) {
@@ -6850,10 +7007,14 @@
         console.log('✅ 1. WinZO-Style Slot Booking System — FIXED: slot selection and form now work properly');
         console.log('✅ 2. OneSignal Tagging on slot booking');
         console.log('✅ 3. In-App Ad Browser (Iframe Overlay) with 10s countdown');
-        console.log('✅ Loading screen: black background, NO white circle around logo');
-        console.log('✅ Help & Support: Revamped with WhatsApp and Email buttons');
-        console.log('✅ QR Page: UPI intent buttons DISABLED');
-        console.log('✅ QR Page: 4-minute timer');
+        console.log('✅ 4. Loading screen: black background, NO white circle around logo');
+        console.log('✅ 5. Help & Support: Revamped with WhatsApp and Email buttons');
+        console.log('✅ 6. QR Page: UPI intent buttons DISABLED');
+        console.log('✅ 7. QR Page: 4-minute timer');
+        console.log('✅ 8. CREDENTIALS FIX: Approved users can see ID/Pass even when FULL');
+        console.log('✅ 9. ONESIGNAL NOTIFICATIONS: REST API key added (split into 3 parts)');
+        console.log('✅ 10. Auto-send notifications when admin releases ID/Password for a tournament');
+        console.log('📌 To manually trigger: triggerCredentialsNotification("tournamentId")');
     </script>
 </body>
 
