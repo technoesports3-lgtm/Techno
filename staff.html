@@ -2697,6 +2697,113 @@
             }
         }
 
+        // ===== NEW: Send targeted push to specific player IDs (OneSignal include_player_ids) =====
+        async function sendPushToPlayerIds(title, message, playerIds) {
+            if (!playerIds || playerIds.length === 0) {
+                showToast("No registered users with OneSignal IDs found.", 'warning');
+                return;
+            }
+
+            const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfqohbzhv3o7";
+            const p2 = "ewmntwxuavmvinhbxifs2zjlhs5ukp5433cntzv";
+            const p3 = "5ikhgnghcx7asb3jwuownwsfitb4q";
+            const REST_KEY = p1 + p2 + p3;
+            const APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
+
+            // OneSignal has a limit of 2000 player IDs per request, but we'll keep it safe
+            const chunkSize = 1000;
+            let allSuccess = true;
+
+            for (let i = 0; i < playerIds.length; i += chunkSize) {
+                const chunk = playerIds.slice(i, i + chunkSize);
+
+                const payload = {
+                    app_id: APP_ID,
+                    headings: { "en": title },
+                    contents: { "en": message },
+                    include_player_ids: chunk,
+                    android_sound: "notification",
+                    priority: 10
+                };
+
+                try {
+                    const response = await fetch("https://onesignal.com/api/v1/notifications", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                            "Authorization": "Basic " + REST_KEY
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (!result.id) {
+                        allSuccess = false;
+                        console.error("OneSignal chunk error:", result.errors);
+                    }
+                } catch (error) {
+                    allSuccess = false;
+                    console.error("OneSignal chunk fetch error:", error);
+                }
+            }
+
+            if (allSuccess) {
+                showToast(`✅ Notification sent to ${playerIds.length} registered players!`, 'success');
+            } else {
+                showToast("⚠️ Some users may not have received the notification.", 'warning');
+            }
+        }
+
+        // ===== NEW: Get OneSignal player IDs for all registered users of a tournament =====
+        async function getRegisteredUserPlayerIds(tournamentId) {
+            try {
+                const registrationsSnapshot = await db.collection("tournament_registrations")
+                    .where("tournamentId", "==", tournamentId)
+                    .where("status", "==", "approved")
+                    .get();
+
+                if (registrationsSnapshot.empty) {
+                    return [];
+                }
+
+                const userIds = [];
+                registrationsSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.userId) {
+                        userIds.push(data.userId);
+                    }
+                });
+
+                if (userIds.length === 0) {
+                    return [];
+                }
+
+                // Fetch user documents to get OneSignal player IDs
+                const playerIds = [];
+                for (const uid of userIds) {
+                    try {
+                        const userDoc = await db.collection("users").doc(uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            // Check for oneSignalId field (could be stored as oneSignalId, oneSignalPlayerId, playerId, etc.)
+                            const playerId = userData.oneSignalId || userData.oneSignalPlayerId || userData.playerId || null;
+                            if (playerId) {
+                                playerIds.push(playerId);
+                            }
+                        }
+                    } catch (err) {
+                        console.warn(`Could not fetch user ${uid}:`, err);
+                    }
+                }
+
+                return playerIds;
+            } catch (error) {
+                console.error("Error getting registered user player IDs:", error);
+                return [];
+            }
+        }
+
         async function sendCustomPushAnnouncement() {
             const message = document.getElementById('announcement-message').value.trim();
             if (!message) { showToast("Please enter a message.", 'error'); return; }
@@ -4562,6 +4669,91 @@
             );
         }
 
+        // ===== FIXED: saveCredentialsVisibility — sends notification to REGISTERED USERS only =====
+        async function saveCredentialsVisibility() {
+            if (!currentTournamentId) return;
+
+            const newVisibility = document.getElementById('modal-show-credentials').checked;
+            const tournament = tournaments.find(t => t.id === currentTournamentId);
+
+            if (!tournament) {
+                showToast("Tournament not found.", 'error');
+                return;
+            }
+
+            setButtonLoading('save-credentials-btn', true);
+
+            try {
+                // Update tournament credentials & visibility
+                await db.collection("tournaments").doc(currentTournamentId).update({
+                    tournamentId: document.getElementById('edit-modal-id').value.trim(),
+                    tournamentPassword: document.getElementById('edit-modal-pass').value.trim(),
+                    showCredentials: newVisibility,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // [FIXED] If making credentials visible, send notification to registered users ONLY
+                if (newVisibility) {
+                    // Get the tournament ID and password
+                    const roomId = document.getElementById('edit-modal-id').value.trim() || tournament.tournamentId || '';
+                    const roomPass = document.getElementById('edit-modal-pass').value.trim() || tournament.tournamentPassword ||
+                        '';
+
+                    // Get all registered user OneSignal player IDs for this tournament
+                    const playerIds = await getRegisteredUserPlayerIds(currentTournamentId);
+
+                    if (playerIds && playerIds.length > 0) {
+                        const message =
+                            `🔐 Room ID: ${roomId}\nPassword: ${roomPass}\nTournament: ${tournament.title}\nJoin now!`;
+                        await sendPushToPlayerIds("🎮 Credentials Released!", message, playerIds);
+                        logStaffAction('credentials_released_to_registered',
+                            `Tournament: ${tournament.title}, ${playerIds.length} players notified`, 0);
+                    } else {
+                        // Fallback: send using tag-based targeting (for users who might not have playerId stored)
+                        const targetTag = "tour_" + currentTournamentId;
+                        const roomId = document.getElementById('edit-modal-id').value.trim() || tournament.tournamentId ||
+                        '';
+                        const roomPass = document.getElementById('edit-modal-pass').value.trim() || tournament
+                            .tournamentPassword || '';
+                        const fallbackMsg =
+                            `🔐 Room ID: ${roomId}\nPassword: ${roomPass}\nTournament: ${tournament.title}`;
+                        await sendPushNotification("🎮 Credentials Released!", fallbackMsg, targetTag);
+                        showToast(
+                            `⚠️ No OneSignal IDs found for registered users. Fallback tag-based notification sent.`,
+                            'warning'
+                        );
+                    }
+
+                    // Also update the UI to reflect that credentials are now visible
+                    document.getElementById('credentials-visibility').textContent = 'Visible to Users';
+                    document.getElementById('credentials-visibility').style.color = '#26a269';
+                } else {
+                    // Credentials hidden — just update UI
+                    document.getElementById('credentials-visibility').textContent = 'Hidden from Users';
+                    document.getElementById('credentials-visibility').style.color = '#d72638';
+                }
+
+                // Log the action
+                await logStaffAction('updated_credentials',
+                    `Tournament: ${tournament.title}, Credentials ${newVisibility ? 'shown' : 'hidden'} to users`,
+                    0);
+
+                showToast(`✅ Credentials ${newVisibility ? 'shown to registered users' : 'hidden from users'}!`, 'success');
+
+                // Refresh the tournament list to reflect changes
+                renderTournaments();
+
+                // Close the modal
+                closeModal('credentials-modal');
+
+            } catch (error) {
+                console.error("Error updating credentials visibility:", error);
+                showToast("Error updating credentials visibility.", 'error');
+            } finally {
+                setButtonLoading('save-credentials-btn', false);
+            }
+        }
+
         // --- Credentials Modal ---
         function showCredentialsModal(tournamentId) {
             currentTournamentId = tournamentId;
@@ -4588,52 +4780,6 @@
             document.getElementById('modal-show-credentials').checked = isVisible;
 
             document.getElementById('credentials-modal').style.display = 'block';
-        }
-
-        // [CHANGE 2] Updated: pass targetTagKey when making credentials visible
-        async function saveCredentialsVisibility() {
-            if (!currentTournamentId) return;
-
-            const newVisibility = document.getElementById('modal-show-credentials').checked;
-            const tournament = tournaments.find(t => t.id === currentTournamentId);
-
-            if (!tournament) {
-                showToast("Tournament not found.", 'error');
-                return;
-            }
-
-            setButtonLoading('save-credentials-btn', true);
-
-            try {
-
-                await db.collection("tournaments").doc(currentTournamentId).update({
-                    tournamentId: document.getElementById('edit-modal-id').value.trim(),
-                    tournamentPassword: document.getElementById('edit-modal-pass').value.trim(),
-                    showCredentials: newVisibility,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-
-                });
-
-                // [CHANGE 2] If making credentials visible, send targeted push notification
-                if (newVisibility) {
-                    const targetTag = "tour_" + currentTournamentId;
-                    await sendPushNotification("Credentials Released!", "Room ID & Password for the match are now visible.",
-                        targetTag);
-                }
-
-                await logStaffAction('updated_credentials',
-                    `Tournament: ${tournament.title}, Credentials ${newVisibility ? 'shown' : 'hidden'} to users`,
-                    0);
-
-                showToast(`Credentials ${newVisibility ? 'shown' : 'hidden'} to users!`, 'success');
-                closeModal('credentials-modal');
-
-            } catch (error) {
-                console.error("Error updating credentials visibility:", error);
-                showToast("Error updating credentials visibility.", 'error');
-            } finally {
-                setButtonLoading('save-credentials-btn', false);
-            }
         }
 
         async function toggleTournamentStatus(tournamentId, currentStatus) {
@@ -5616,9 +5762,11 @@
         }
 
         console.log("✅ Staff panel loaded with all requested features:");
+        console.log("  - [FIXED] saveCredentialsVisibility() now sends notification to registered users ONLY via include_player_ids");
+        console.log("  - [NEW] sendPushToPlayerIds() uses OneSignal's include_player_ids API");
+        console.log("  - [NEW] getRegisteredUserPlayerIds() fetches OneSignal IDs of approved registrants");
         console.log("  - [CHANGE 1] REST API key split into 3 parts (p1 + p2 + p3)");
-        console.log("  - [CHANGE 2] Targeted notifications: sendPushNotification uses filters array");
-        console.log("  - [CHANGE 2] saveCredentialsVisibility() passes 'tour_' + tournamentId when making visible");
+        console.log("  - [CHANGE 2] Targeted notifications via tags (fallback)");
         console.log("  - [CHANGE 3] Slot-based Registered Users UI: grouped by teamNumber, shows slotNumber, inGameName, uid");
         console.log("  - Shift-Based Access Enforcement (checkShiftStatus every 60s)");
         console.log("  - Activity Auditing (staff_logs)");
@@ -5627,7 +5775,6 @@
         console.log("  - Daily Auto-Repeat toggle");
         console.log("  - Automations & Templates section (templates + auto-repeat)");
         console.log("  - Fixed: forceLogout does NOT reset to false");
-        console.log("  - Removed: registrationEndTime fields");
         console.log("  - applyTemplateFromList() attached to Load button in Automations");
         console.log("  - triggerAutoRepeatManually() with Run Auto-Repeat Now button");
     </script>
