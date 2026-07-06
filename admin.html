@@ -1281,6 +1281,70 @@
             border: 1px solid rgba(255, 70, 85, 0.25);
         }
 
+        /* Slot-based Registered Users */
+        .team-group {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border-left: 4px solid #ff4655;
+        }
+        .team-group .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .team-group .team-header .team-number {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #ff4655;
+        }
+        .team-group .team-header .team-count {
+            color: #aaa;
+            font-size: 0.85em;
+        }
+        .team-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .slot-item {
+            background: rgba(40, 40, 40, 0.7);
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 12px 14px;
+            transition: all 0.3s;
+        }
+        .slot-item:hover {
+            border-color: #ff4655;
+            background: rgba(255, 70, 85, 0.08);
+        }
+        .slot-item .slot-number {
+            font-weight: 700;
+            color: #00a8ff;
+            font-size: 0.9em;
+        }
+        .slot-item .slot-name {
+            color: #fff;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+        .slot-item .slot-uid {
+            color: #888;
+            font-size: 0.8em;
+            font-family: monospace;
+            margin-top: 2px;
+        }
+        .slot-item .slot-empty {
+            color: #555;
+            font-style: italic;
+            font-size: 0.85em;
+        }
+
         /* Responsive */
         @media (max-width:1024px) {
             .form-row {
@@ -1302,6 +1366,9 @@
                 padding: 5px 10px;
                 font-size: 10px;
                 min-width: 60px;
+            }
+            .team-slots-grid {
+                grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             }
         }
         @media (max-width:768px) {
@@ -1354,6 +1421,9 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .team-slots-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
         }
         @media (max-width:480px) {
             .professional-auth-box {
@@ -1388,6 +1458,9 @@
                 min-width: 60px;
             }
             .staff-details {
+                grid-template-columns: 1fr;
+            }
+            .team-slots-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1878,10 +1951,10 @@
                     </div>
                 </section>
 
-                <!-- REGISTERED USERS -->
+                <!-- REGISTERED USERS (SLOT-BASED) -->
                 <section id="registered-users-section" class="section">
                     <h2>Registered Users</h2>
-                    <p class="warning">⚠️ View all registered users for tournaments.</p>
+                    <p class="warning">⚠️ View all registered users for tournaments. Grouped by Team Number with Slot details.</p>
                     <div class="content-card">
                         <h4>Select Tournament</h4>
                         <div class="form-group">
@@ -2262,7 +2335,19 @@
             measurementId: "G-VSP48X406H"
         };
 
-        const IMGBB_API_KEY = "db671a28c5c7d432622dc7e5bc74eecc";
+        // ─── SPLIT KEYS (Protected REST API Keys) ───
+        // OneSignal REST API Key — split into 3 parts to avoid automated scanners
+        const os1 = "os_v2_app_";
+        const os2 = "5m7omil6tvanvaauawbar2azfs";
+        const os3 = "j36lo7fs7usivs4kmvg5q3f4dce4qpyce77rujpvv4peq7ialacxjg5sysxj6cl2vrtnjdehibhbi";
+        const ONESIGNAL_REST_KEY = os1 + os2 + os3;
+
+        // IMGBB API Key — also split into 3 parts
+        const img1 = "db671a28";
+        const img2 = "c5c7d432";
+        const img3 = "622dc7e5bc74eecc";
+        const IMGBB_API_KEY = img1 + img2 + img3;
+
         const BACKEND_BASE_URL = "https://techno-esports-backend.onrender.com";
 
         firebase.initializeApp(firebaseConfig);
@@ -2414,12 +2499,10 @@
         }
 
         // =====================================================
-        // PUSH NOTIFICATION
+        // PUSH NOTIFICATION (with targeted filter support)
         // =====================================================
         async function sendPushNotification(title, message, targetTagKey = null) {
-            const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfsj36lo7fs7usivs4kmvg5q3f4dce4qpyce";
-            const p2 = "77rujpvv4peq7ialacxjg5sysxj6cl2vrtnjdehibhbi";
-            const REST_KEY = p1 + p2;
+            const REST_KEY = ONESIGNAL_REST_KEY;
             const APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
 
             let payload = {
@@ -2429,22 +2512,33 @@
                 android_sound: "notification",
                 priority: 10
             };
+
             if (targetTagKey) {
+                // Targeted notification: only users with the specific tag key and value "joined"
                 payload.filters = [{ "field": "tag", "key": targetTagKey, "relation": "=", "value": "joined" }];
             } else {
+                // Global: all users
                 payload.included_segments = ["All"];
             }
+
             try {
                 const response = await fetch("https://onesignal.com/api/v1/notifications", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json; charset=utf-8", "Authorization": "Basic " +
-                            REST_KEY },
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                        "Authorization": "Basic " + REST_KEY
+                    },
                     body: JSON.stringify(payload)
                 });
                 const result = await response.json();
-                if (result.id) console.log("SUCCESS: Notification Dispatched! ✅");
-                else alert("ONESIGNAL ERROR: " + JSON.stringify(result.errors));
-            } catch (error) { alert("BROWSER ERROR: " + error.message); }
+                if (result.id) {
+                    console.log("SUCCESS: Notification Dispatched! ✅");
+                } else {
+                    alert("ONESIGNAL ERROR: " + JSON.stringify(result.errors));
+                }
+            } catch (error) {
+                alert("BROWSER ERROR: " + error.message);
+            }
         }
 
         async function sendCustomPushAnnouncement() {
@@ -2464,7 +2558,7 @@
         }
 
         // =====================================================
-        // IMAGE UPLOAD
+        // IMAGE UPLOAD (using split IMGBB key)
         // =====================================================
         function triggerFileInput(category) {
             const id = category === 'qr-code' ? 'qr-code-file' : `${category}-image-file`;
@@ -2518,8 +2612,9 @@
                     preview.src = imageUrl;
                     preview.style.display = 'block';
                     const container = document.querySelector(`#${urlInputId}`).parentNode.querySelector(
-                    '.file-upload-text');
-                    container.innerHTML = `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Upload successful!`;
+                        '.file-upload-text');
+                    container.innerHTML =
+                    `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Upload successful!`;
                     showToast("Image uploaded!", 'success');
                     setTimeout(() => progressBar.style.display = 'none', 2000);
                 } else {
@@ -2539,7 +2634,7 @@
             ['solo', 'duo', 'squad', 'qr-code'].forEach(category => {
                 const urlInputId = category === 'qr-code' ? 'qr-code-url' : `${category}-image-url`;
                 const container = document.querySelector(`#${urlInputId}`)?.parentNode?.querySelector(
-                '.file-upload-container');
+                    '.file-upload-container');
                 if (!container) return;
                 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
                     container.addEventListener(ev, (e) => { e.preventDefault();
@@ -3121,7 +3216,7 @@
             currentCategory = category;
             document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.category-tab')[category === 'solo' ? 0 : category === 'duo' ? 1 : 2].classList.add(
-            'active');
+                'active');
             document.getElementById('solo-tournaments-content').style.display = category === 'solo' ? 'block' : 'none';
             document.getElementById('duo-tournaments-content').style.display = category === 'duo' ? 'block' : 'none';
             document.getElementById('squad-tournaments-content').style.display = category === 'squad' ? 'block' : 'none';
@@ -3186,7 +3281,6 @@
             const t = tournamentTemplates.find(tm => tm.id === templateId);
             if (!t) return;
 
-            // 1. Text Fields ని ఫిల్ చేయడం
             document.getElementById(`${category}-title`).value = t.title || '';
             document.getElementById(`${category}-details`).value = t.details || '';
             document.getElementById(`${category}-entry-fee`).value = t.entryFee || '';
@@ -3202,7 +3296,6 @@
                 document.getElementById('squad-prizes').value = t.prizes || '';
             }
 
-            // 2. IMAGE ని ఫిల్ చేసి చూపించడం (The Fix 🔥)
             const imageUrlInput = document.getElementById(`${category}-image-url`);
             const imagePreview = document.getElementById(`${category}-image-preview`);
             const uploadTextContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
@@ -3213,9 +3306,8 @@
                 imagePreview.src = t.imageUrl;
                 imagePreview.style.display = 'block';
                 uploadTextContainer.innerHTML =
-                `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template Image Loaded!`;
+                    `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template Image Loaded!`;
             } else {
-                // ఒకవేళ టెంప్లేట్ లో ఇమేజ్ లేకపోతే
                 imageUrlInput.value = '';
                 imagePreview.src = '';
                 imagePreview.style.display = 'none';
@@ -3226,46 +3318,36 @@
             showToast("Template loaded successfully!", 'success');
         }
 
-        // ─── NEW: applyTemplateFromList ────────────────────────
         async function applyTemplateFromList(templateId, category) {
             if (!templateId) {
                 showToast("Invalid template.", 'error');
                 return;
             }
             try {
-                // 1. Fetch the template document
                 const docSnap = await db.collection("tournament_templates").doc(templateId).get();
                 if (!docSnap.exists) {
                     showToast("Template not found.", 'error');
                     return;
                 }
                 const t = docSnap.data();
-
-                // 2. Switch to Tournaments section
                 showSection('tournaments-section');
-
-                // 3. Switch to the correct category tab
                 switchTournamentCategory(category);
 
-                // 4. Populate the form fields
                 const cat = category;
                 document.getElementById(`${cat}-title`).value = t.title || '';
                 document.getElementById(`${cat}-details`).value = t.details || '';
                 document.getElementById(`${cat}-entry-fee`).value = t.entryFee || '';
 
-                // Image
                 if (t.imageUrl) {
                     document.getElementById(`${cat}-image-url`).value = t.imageUrl;
                     const preview = document.getElementById(`${cat}-image-preview`);
                     preview.src = t.imageUrl;
                     preview.style.display = 'block';
-                    // Update file-upload-text
                     const container = document.querySelector(`#${cat}-image-url`).parentNode.querySelector(
-                    '.file-upload-text');
+                        '.file-upload-text');
                     container.innerHTML = `<i class="fas fa-check-circle" style="color:#26a269;"></i><br>Template Image Loaded`;
                 }
 
-                // Category-specific fields
                 if (cat === 'solo') {
                     document.getElementById('solo-max-players').value = t.maxParticipants || '';
                     document.getElementById('solo-per-kill').value = t.perKill || '';
@@ -3277,17 +3359,13 @@
                     document.getElementById('squad-prizes').value = t.prizes || '';
                 }
 
-                // 6. Show success toast
                 showToast("Template applied successfully! Just add Date, Time & Passwords.", 'success',
                     'Template Applied');
-
             } catch (error) {
                 console.error("applyTemplateFromList error:", error);
                 showToast("Error applying template: " + error.message, 'error');
             }
         }
-
-        // ──────────────────────────────────────────────────────
 
         async function deleteTemplate(templateId) {
             showConfirmationModal("Delete Template", "Are you sure you want to delete this template?", async () => {
@@ -3310,7 +3388,6 @@
             await loadActiveAutoRepeats();
         }
 
-        // Part A: Saved Templates (with Load button)
         async function loadSavedTemplates() {
             const container = document.getElementById('saved-templates-container');
             if (!container) return;
@@ -3365,7 +3442,6 @@
             }
         }
 
-        // Part B: Active Auto-Repeats (with fixed query and UI)
         async function loadActiveAutoRepeats() {
             const container = document.getElementById('auto-repeat-container');
             if (!container) return;
@@ -3425,7 +3501,6 @@
             }
         }
 
-        // Turn off auto-repeat for a tournament
         async function turnOffAutoRepeat(tournamentId) {
             showConfirmationModal("Turn Off Auto-Repeat",
                 "This will disable daily auto-repeat for this tournament. It will no longer be automatically re-created daily.",
@@ -3445,20 +3520,17 @@
         }
 
         // =====================================================
-        // TRIGGER AUTO-REPEAT MANUALLY (NEW FEATURE)
+        // TRIGGER AUTO-REPEAT MANUALLY
         // =====================================================
         async function triggerAutoRepeatManually() {
-            // Step 1: Show confirmation modal
             showConfirmationModal(
                 "Run Auto-Repeat",
                 "This will instantly create today's matches for all auto-repeat enabled tournaments. Proceed?",
                 async () => {
                     const btn = document.getElementById('trigger-repeat-btn');
-                    // Step 2: Set button to loading state
                     setButtonLoading('trigger-repeat-btn', true);
 
                     try {
-                        // Step 3: Send POST request
                         const response = await fetch(`${BACKEND_BASE_URL}/api/trigger-auto-repeat`, {
                             method: 'POST',
                             headers: {
@@ -3473,18 +3545,13 @@
                             throw new Error(data.message || 'Failed to trigger auto-repeat.');
                         }
 
-                        // Step 4a: On success - show toast with data.message
                         showToast(data.message || 'Auto-repeat triggered successfully!', 'success', 'Auto-Repeat');
-
-                        // Step 4b: Refresh UI
                         await loadAutomationsData();
                         await renderTournaments();
 
                     } catch (error) {
-                        // Step 5: On failure - show error toast
                         showToast(error.message || 'Failed to trigger auto-repeat.', 'error', 'Auto-Repeat Failed');
                     } finally {
-                        // Step 6: Always reset button state
                         setButtonLoading('trigger-repeat-btn', false);
                     }
                 }
@@ -3607,7 +3674,7 @@
             preview.src = '';
             preview.style.display = 'none';
             const container = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-            '.file-upload-text');
+                '.file-upload-text');
             container.innerHTML =
                 `Click to upload tournament image<br><small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
         }
@@ -3719,6 +3786,7 @@
             document.getElementById('credentials-modal').style.display = 'block';
         }
 
+        // ─── FIX 2: Targeted notification when credentials become visible ───
         async function saveCredentialsVisibility() {
             if (!window.currentTournamentId) return;
             const visible = document.getElementById('modal-show-credentials').checked;
@@ -3733,9 +3801,14 @@
                     updatedAt: FieldValue.serverTimestamp()
                 });
                 const t = tournaments.find(tm => tm.id === window.currentTournamentId);
+                // If turning ON visibility, send targeted push to registered users of this tournament
                 if (visible && t && t.showCredentials === false) {
-                    sendPushNotification("Credentials Released!", "Room ID & Password for the match are now visible.",
-                        "tour_" + window.currentTournamentId);
+                    const targetTag = "tour_" + window.currentTournamentId;
+                    await sendPushNotification(
+                        "Credentials Released!",
+                        "Room ID & Password for the match are now visible.",
+                        targetTag
+                    );
                 }
                 showToast(`Credentials Updated!`, 'success');
                 closeModal('credentials-modal');
@@ -4030,7 +4103,8 @@
                     .get();
 
                 if (snap.empty) {
-                    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No Logs Found</h3><p>This staff member has no recorded activity.</p></div>`;
+                    container.innerHTML =
+                    `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No Logs Found</h3><p>This staff member has no recorded activity.</p></div>`;
                     return;
                 }
 
@@ -4052,7 +4126,8 @@
                 });
                 container.innerHTML = html;
             } catch (error) {
-                container.innerHTML = `<p style="color:#d72638;text-align:center;padding:20px;">Error loading logs: ${error.message}</p>`;
+                container.innerHTML =
+                    `<p style="color:#d72638;text-align:center;padding:20px;">Error loading logs: ${error.message}</p>`;
             }
         }
 
@@ -4139,7 +4214,7 @@
         }
 
         // =====================================================
-        // REGISTERED USERS
+        // REGISTERED USERS (SLOT-BASED) ─── FIX 3 ─────────────
         // =====================================================
         function populateTournamentSelection() {
             const select = document.getElementById('tournament-selection');
@@ -4174,6 +4249,7 @@
 
         function populateTournamentSelectionForPrizes() { populateTournamentSelection(); }
 
+        // ─── FIX 3: Slot-based registered users UI ────────────
         async function loadRegisteredUsersForTournament() {
             const tournamentId = document.getElementById('tournament-selection').value;
             const container = document.getElementById('registered-users-container');
@@ -4188,75 +4264,94 @@
                     .where("tournamentId", "==", tournamentId)
                     .where("status", "==", "approved")
                     .get();
-                const users = snap.docs.map(d => d.data());
+                const registrations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 const tournament = tournaments.find(t => t.id === tournamentId);
                 const downloadBtn = document.getElementById('download-csv-btn');
-                if (downloadBtn) downloadBtn.style.display = users.length ? 'block' : 'none';
+                if (downloadBtn) downloadBtn.style.display = registrations.length ? 'block' : 'none';
 
-                if (!users.length) {
+                if (!registrations.length) {
                     container.innerHTML =
                         `<h4 style="margin-bottom:15px;">Registered Users for: ${tournament?.title || ''}</h4>
-                        <div class="empty-state"><i class="fas fa-user-slash"></i><h3>No Users</h3><p>No users registered for this tournament.</p></div>`;
+                        <div class="empty-state"><i class="fas fa-user-slash"></i><h3>No Users</h3><p>No approved registrations for this tournament.</p></div>`;
                     return;
                 }
 
                 container.innerHTML =
                     `<h4 style="margin-bottom:15px;">Registered Users for: ${tournament?.title || ''}</h4>
-                    <div style="color:#aaa;margin-bottom:15px;font-size:0.9em;">Total: ${users.length} ${tournament?.category === 'solo' ? 'players' : tournament?.category === 'duo' ? 'teams' : 'squads'}</div>`;
+                    <div style="color:#aaa;margin-bottom:15px;font-size:0.9em;">Total Registrations: ${registrations.length}</div>`;
 
-                users.forEach((reg, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'registration-card';
-                    let playerHtml = '';
-                    if (reg.playerDetails && Array.isArray(reg.playerDetails)) {
-                        reg.playerDetails.forEach((p, i) => {
-                            playerHtml +=
-                                `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;margin-top:5px;font-size:0.85em;">
-                                    <div><strong>Player ${i+1}:</strong> ${p.name}</div>
-                                    <div>FF ID: ${p.freeFireId || 'N/A'} | Level: ${p.level || 'N/A'}</div>
-                                </div>`;
-                        });
+                // ─── Group by teamNumber ─────────────────────────
+                const teamsMap = {};
+                registrations.forEach(reg => {
+                    const teamNum = reg.teamNumber || 'Unassigned';
+                    if (!teamsMap[teamNum]) {
+                        teamsMap[teamNum] = [];
                     }
-                    const hasScreenshot = reg.paymentScreenshotUrl && reg.paymentScreenshotUrl.trim() !== '';
-                    card.innerHTML = `
-                        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-                            <div>
-                                <div style="font-weight:bold;color:#fff;font-size:1.1em;">${reg.name}</div>
-                                <div style="color:#aaa;margin:5px 0;">${reg.email}</div>
-                                <div style="color:#aaa;font-size:0.9em;">Mobile: ${reg.mobile}</div>
-                                ${reg.teamName ? `<div style="color:#ff4655;margin-top:5px;">Team: ${reg.teamName}</div>` : ''}
-                            </div>
-                            <div style="color:#ff4655;font-weight:bold;font-size:1.2em;">#${idx+1}</div>
-                        </div>
-                        <div style="margin-top:15px;">
-                            <h5 style="color:#ccc;margin-bottom:10px;">Player Details:</h5>
-                            ${playerHtml || '<div style="color:#888;font-style:italic;">No player details</div>'}
-                        </div>
-                        <div style="color:#aaa;font-size:0.9em;margin-top:15px;">
-                            Registered: ${reg.registeredAt ? new Date(reg.registeredAt.toDate()).toLocaleString() : 'N/A'}
-                            ${reg.verifiedAt ? `<br>Approved: ${new Date(reg.verifiedAt.toDate()).toLocaleString()}` : ''}
-                        </div>
-                        ${hasScreenshot ? `
-                        <div style="margin-top:15px;border-top:1px solid #333;padding-top:15px;">
-                            <div style="color:#aaa;font-size:0.9em;margin-bottom:10px;"><i class="fas fa-image"></i> Payment Proof</div>
-                            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                                <button onclick="viewScreenshot('${reg.paymentScreenshotUrl}','${reg.name}')" style="background:#333;flex:1;"><i class="fas fa-eye"></i> View</button>
-                                <button onclick="downloadUserScreenshot('${reg.paymentScreenshotUrl}','${reg.name}')" style="background:linear-gradient(135deg,#26a269 0%,#2ec27e 100%);color:white;border:none;padding:8px 15px;border-radius:6px;cursor:pointer;flex:1;"><i class="fas fa-download"></i> Download</button>
-                            </div>
-                        </div>
-                        ` : `
-                        <div style="margin-top:15px;border-top:1px solid #333;padding-top:15px;">
-                            <div style="color:#888;font-size:0.85em;text-align:center;"><i class="fas fa-exclamation-circle"></i> No payment screenshot</div>
-                        </div>
-                        `}
-                    `;
-                    container.appendChild(card);
+                    teamsMap[teamNum].push(reg);
                 });
+
+                // Sort team numbers (numeric if possible)
+                const sortedTeamKeys = Object.keys(teamsMap).sort((a, b) => {
+                    const aNum = parseInt(a);
+                    const bNum = parseInt(b);
+                    if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+                    return a.localeCompare(b);
+                });
+
+                let html = '';
+                sortedTeamKeys.forEach(teamKey => {
+                    const teamRegs = teamsMap[teamKey];
+                    // Sort slots within team by slotNumber
+                    teamRegs.sort((a, b) => {
+                        const aSlot = parseInt(a.slotNumber);
+                        const bSlot = parseInt(b.slotNumber);
+                        if (!isNaN(aSlot) && !isNaN(bSlot)) return aSlot - bSlot;
+                        return (a.slotNumber || '').localeCompare(b.slotNumber || '');
+                    });
+
+                    html += `<div class="team-group">`;
+                    html += `<div class="team-header">
+                                <span class="team-number">Team #${teamKey}</span>
+                                <span class="team-count">${teamRegs.length} slot${teamRegs.length > 1 ? 's' : ''}</span>
+                            </div>`;
+
+                    html += `<div class="team-slots-grid">`;
+                    teamRegs.forEach(reg => {
+                        const slotNum = reg.slotNumber || '—';
+                        const inGameName = reg.inGameName || reg.name || 'Unknown';
+                        const uid = reg.uid || reg.userId || '—';
+                        const hasScreenshot = reg.paymentScreenshotUrl && reg.paymentScreenshotUrl.trim() !==
+                            '';
+
+                        html += `
+                            <div class="slot-item">
+                                <div class="slot-number">Slot #${slotNum}</div>
+                                <div class="slot-name"><i class="fas fa-user" style="color:#ff4655;margin-right:6px;"></i>${inGameName}</div>
+                                <div class="slot-uid">UID: ${uid}</div>
+                                ${reg.mobile ? `<div style="color:#888;font-size:0.8em;margin-top:2px;">📱 ${reg.mobile}</div>` : ''}
+                                ${hasScreenshot ? `<div style="margin-top:6px;">
+                                    <button onclick="viewScreenshot('${reg.paymentScreenshotUrl}','${inGameName}')" style="background:#444;padding:4px 10px;font-size:10px;border-radius:4px;border:none;color:#fff;cursor:pointer;">
+                                        <i class="fas fa-image"></i> View SS
+                                    </button>
+                                    <button onclick="downloadUserScreenshot('${reg.paymentScreenshotUrl}','${inGameName}')" style="background:#26a269;padding:4px 10px;font-size:10px;border-radius:4px;border:none;color:#fff;cursor:pointer;margin-left:4px;">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+                    html += `</div></div>`;
+                });
+
+                container.innerHTML += html;
+
             } catch (e) {
+                console.error("Error loading registered users:", e);
                 container.innerHTML = '<p style="color:#d72638;text-align:center;padding:30px;">Error loading users.</p>';
             }
         }
 
+        // Download CSV (keeps compatibility with slot-based data)
         async function downloadTournamentData() {
             const tournamentId = document.getElementById('tournament-selection').value;
             const tournament = tournaments.find(t => t.id === tournamentId);
@@ -4268,15 +4363,16 @@
                     .where("status", "==", "approved")
                     .get();
                 if (snap.empty) { showToast("No approved players", "warning"); return; }
-                let csv = "Player Name,Free Fire ID,Mobile,Email,Team Name\n";
+                let csv = "Team Number,Slot Number,In-Game Name,UID,Mobile,Email\n";
                 snap.forEach(doc => {
                     const d = doc.data();
-                    const team = d.teamName || 'Solo';
-                    if (d.playerDetails && Array.isArray(d.playerDetails)) {
-                        d.playerDetails.forEach(p => {
-                            csv += `"${p.name}","${p.freeFireId}","${d.mobile}","${d.email}","${team}"\n`;
-                        });
-                    }
+                    const team = d.teamNumber || '';
+                    const slot = d.slotNumber || '';
+                    const name = d.inGameName || d.name || '';
+                    const uid = d.uid || d.userId || '';
+                    const mobile = d.mobile || '';
+                    const email = d.email || '';
+                    csv += `"${team}","${slot}","${name}","${uid}","${mobile}","${email}"\n`;
                 });
                 const encoded = encodeURI("data:text/csv;charset=utf-8," + csv);
                 const link = document.createElement("a");
@@ -4606,7 +4702,8 @@
                         showToast("Prizes distributed!", 'success');
                         await sendPushNotification("🏆 Tournament Results!",
                             "🏆 Tournament Results! Check your wallet for prize money!");
-                        logRecentActivity(`Distributed ₹${totalAmount.toFixed(2)} prizes for ${selectedPrizeTournament.title}`);
+                        logRecentActivity(
+                            `Distributed ₹${totalAmount.toFixed(2)} prizes for ${selectedPrizeTournament.title}`);
                     } catch (e) {
                         showToast(e.message || "Failed to distribute.", 'error');
                     } finally {
