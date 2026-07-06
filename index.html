@@ -6002,7 +6002,6 @@
                 if (t.category === 'solo') {
                     takenSlots = {};
                     registrations.forEach(reg => {
-                        // Check if registration has slotNumber
                         const slotNum = reg.slotNumber;
                         if (slotNum !== undefined && slotNum !== null && slotNum > 0) {
                             const player = reg.playerDetails?.[0] || {};
@@ -6010,27 +6009,14 @@
                                 name: player.name || 'Player',
                                 uid: player.freeFireId || 'N/A'
                             };
-                        } else {
-                            // Legacy registration without slot — assign a slot based on order
-                            // We'll handle this by not marking it as taken, but instead showing a warning
-                            // Actually, for existing registrations without slot, we'll mark them as "taken" with a generic label
-                            // We'll assign them slots sequentially based on their registration order
-                            // For simplicity, we'll just count them and mark slots as taken
-                            // But we don't know their order, so we'll use a different approach: 
-                            // we'll mark the first N slots as taken where N is the number of legacy registrations
-                            // But this could conflict with new registrations. 
-                            // Instead, we'll generate a temporary slot number for each legacy registration
-                            // based on its index in the registrations array.
-                            // We'll do this after we've processed all registrations.
                         }
                     });
 
-                    // Now handle legacy registrations (without slotNumber)
+                    // Handle legacy registrations (without slotNumber)
                     let legacyCount = 0;
                     registrations.forEach(reg => {
                         if (reg.slotNumber === undefined || reg.slotNumber === null || reg.slotNumber <= 0) {
                             legacyCount++;
-                            // Find first available slot
                             let slot = 1;
                             while (takenSlots[slot]) slot++;
                             const player = reg.playerDetails?.[0] || {};
@@ -6118,7 +6104,6 @@
                     for (let slot = 1; slot <= maxParticipants; slot++) {
                         const taken = takenSlots[slot];
                         const isTaken = !!taken;
-                        // Check selection state
                         const isSelected = (slotBookingState.selectedSlot === slot && slotBookingState.selectedTeam ===
                             null);
                         html += `
@@ -6186,18 +6171,25 @@
                             `;
                 }
 
-                // Slot booking form (hidden initially, shown when slot is selected)
-                // Check if there's a selection to show the form by default
+                // ─── SLOT BOOKING FORM ───
                 const hasSelection = slotBookingState.selectedSlot !== null && slotBookingState.selectedSlot !== undefined;
                 const formVisibleClass = hasSelection ? 'visible' : '';
+
+                let selectionDisplay = '';
+                if (hasSelection) {
+                    if (t.category === 'solo') {
+                        selectionDisplay = `Slot ${slotBookingState.selectedSlot}`;
+                    } else {
+                        selectionDisplay =
+                            `Team ${slotBookingState.selectedTeam} • Slot ${slotBookingState.selectedSlot}`;
+                    }
+                }
 
                 html += `
                             <div class="slot-booking-form ${formVisibleClass}" id="slot-booking-form">
                                 <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;font-size:0.95rem;">
                                     <i class="fas fa-pen"></i> Book Slot
-                                    <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;">
-                                        ${hasSelection ? (t.category === 'solo' ? `Slot ${slotBookingState.selectedSlot}` : `Team ${slotBookingState.selectedTeam} • Slot ${slotBookingState.selectedSlot}`) : ''}
-                                    </span>
+                                    <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;">${selectionDisplay}</span>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
@@ -6220,12 +6212,16 @@
 
                 formContainer.innerHTML = html;
 
-                // If there's a selection, scroll to the form
+                // If there's a selection, scroll to the form after render
                 if (hasSelection) {
                     setTimeout(() => {
                         const form = document.getElementById('slot-booking-form');
-                        if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 300);
+                        if (form) {
+                            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Ensure visible class is applied (in case of race condition)
+                            form.classList.add('visible');
+                        }
+                    }, 200);
                 }
 
             } catch (e) {
@@ -6236,7 +6232,7 @@
             }
         }
 
-        // ─── SELECT SLOT ─── FIXED ───
+        // ─── SELECT SLOT ─── FIXED: No redundant loop, proper form display ───
         async function selectSlotForRegistration(teamNumber, slotNumber) {
             const t = selectedTournament;
             if (!t) {
@@ -6244,7 +6240,7 @@
                 return;
             }
 
-            // Check if slot is already taken (double-check using current state)
+            // Check if slot is already taken
             const takenSlots = slotBookingState.takenSlots;
             let isTaken = false;
             if (t.category === 'solo') {
@@ -6272,45 +6268,23 @@
             await buildSlotUI(t);
 
             // The form is now rendered with the 'visible' class because hasSelection is true
-            // But we need to make sure the form is visible and has the right info
-            const form = document.getElementById('slot-booking-form');
-            if (form) {
-                // Make sure it's visible (in case buildSlotUI didn't add the class)
-                form.classList.add('visible');
-
-                // Update the selection display
-                const display = document.getElementById('slot-selection-display');
-                if (display) {
-                    if (t.category === 'solo') {
-                        display.textContent = `Slot ${slotNumber}`;
-                    } else {
-                        display.textContent = `Team ${teamNumber} • Slot ${slotNumber}`;
-                    }
-                }
-
-                // Clear previous input values
-                const nameInput = document.getElementById('slot-player-name');
-                const uidInput = document.getElementById('slot-player-uid');
-                if (nameInput) nameInput.value = '';
-                if (uidInput) uidInput.value = '';
-
-                // Update button with correct fee
-                const btn = document.getElementById('slot-pay-btn');
-                if (btn) {
-                    btn.innerHTML =
-                        `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
-                }
-
-                // Scroll to form
-                setTimeout(() => {
+            // Scroll to the form and ensure it's visible
+            setTimeout(() => {
+                const form = document.getElementById('slot-booking-form');
+                if (form) {
                     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 200);
-            } else {
-                showToast('Form not found. Please try again.', 'error');
-            }
+                    // Ensure the form is visible (in case buildSlotUI didn't add the class)
+                    form.classList.add('visible');
+                }
+                // Focus on the name input
+                const nameInput = document.getElementById('slot-player-name');
+                if (nameInput) {
+                    setTimeout(() => nameInput.focus(), 300);
+                }
+            }, 200);
         }
 
-        // ─── CANCEL SLOT SELECTION ─── FIXED ───
+        // ─── CANCEL SLOT SELECTION ───
         async function cancelSlotSelection() {
             slotBookingState.selectedTeam = null;
             slotBookingState.selectedSlot = null;
@@ -6325,7 +6299,7 @@
             }
         }
 
-        // ─── PROCESS SLOT BOOKING ─── FIXED ───
+        // ─── PROCESS SLOT BOOKING ───
         async function processSlotBooking() {
             const t = selectedTournament;
             if (!t) return showToast('No tournament selected.', 'error');
@@ -6769,13 +6743,7 @@
                     timerNumber.textContent = '✓';
                     timerNumber.classList.add('complete');
                     closeBtn.style.display = 'block';
-                    // Keep timer overlay visible but show completion
                 }
-            }, 1000);
-
-            // Safety: if iframe doesn't load, still show timer
-            setTimeout(() => {
-                // If the iframe is still loading, we keep the timer going
             }, 1000);
         }
 
@@ -6783,17 +6751,14 @@
             const overlay = document.getElementById('ad-overlay');
             const iframe = document.getElementById('ad-iframe');
 
-            // Stop timer
             if (adOverlayTimer) {
                 clearInterval(adOverlayTimer);
                 adOverlayTimer = null;
             }
 
-            // Reset iframe
             iframe.src = 'about:blank';
             overlay.style.display = 'none';
 
-            // Increment ad count and update UI
             adsWatchedCount++;
             saveLocalAdCount();
             updateAdUI();
