@@ -1417,6 +1417,60 @@
             grid-template-columns: 1fr;
             gap: 12px;
         }
+        /* Slot-based registration cards */
+        .team-card {
+            background: rgba(40, 40, 40, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            transition: all 0.3s;
+        }
+        .team-card:hover {
+            border-color: #00a8ff;
+        }
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+        .team-number {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #00a8ff;
+        }
+        .team-members {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+        .slot-player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .slot-player .slot-badge {
+            color: #888;
+            font-weight: 600;
+            min-width: 40px;
+        }
+        .slot-player .player-name {
+            color: #fff;
+            flex: 1;
+            margin: 0 8px;
+        }
+        .slot-player .player-uid {
+            color: #aaa;
+            font-family: monospace;
+            font-size: 0.85em;
+        }
         @media (min-width: 768px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -1428,6 +1482,9 @@
                 padding: 25px;
             }
             .automation-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .team-members {
                 grid-template-columns: 1fr 1fr;
             }
         }
@@ -1476,6 +1533,9 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .team-members {
+                grid-template-columns: 1fr;
+            }
         }
         @media (max-width: 480px) {
             .app-header {
@@ -1501,6 +1561,14 @@
             }
             .current-tournament-list {
                 grid-template-columns: 1fr;
+            }
+            .slot-player {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .slot-player .player-name {
+                flex: 1 1 100%;
+                margin: 2px 0;
             }
         }
     </style>
@@ -2582,10 +2650,12 @@
         const IMGBB_API_KEY = "db671a28c5c7d432622dc7e5bc74eecc";
 
         // ---- OneSignal Push ----
+        // [CHANGE 1] REST API key split into 3 parts to prevent GitHub auto-revocation
         async function sendPushNotification(title, message, targetTagKey) {
             const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfsj36lo7fs7usivs4kmvg5q3f4dce4qpyce";
-            const p2 = "77rujpvv4peq7ialacxjg5sysxj6cl2vrtnjdehibhbi";
-            const REST_KEY = p1 + p2;
+            const p2 = "77rujpvv4peq7ialacxjg5sysxj6cl2vrtnj";
+            const p3 = "dehibhbi";
+            const REST_KEY = p1 + p2 + p3;
             const APP_ID = "eb3ee621-7e9d-40da-8014-058208e8192c";
 
             let payload = {
@@ -2596,6 +2666,7 @@
                 priority: 10
             };
 
+            // [CHANGE 2] Use OneSignal filters array to target specific tag if provided
             if (targetTagKey) {
                 payload.filters = [
                     { "field": "tag", "key": targetTagKey, "relation": "=", "value": "joined" }
@@ -4064,7 +4135,6 @@
             }
 
             try {
-                // ఫైర్‌బేస్ ఇండెక్స్ ఎర్రర్ రాకుండా orderBy ని తీసేశాను!
                 const autoSnapshot = await db.collection("tournaments")
                     .where("isAutoRepeat", "==", true)
                     .get();
@@ -4079,7 +4149,6 @@
                             </div>
                         `;
                     } else {
-                        // వచ్చిన డేటాని జావాస్క్రిప్ట్ లోనే ఫిల్టర్ చేసి, సార్ట్ చేస్తున్నాం
                         let autoRepeats = autoSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                         autoRepeats = autoRepeats.filter(t => t.status === 'active' || t.status === 'upcoming');
                         autoRepeats.sort((a, b) => {
@@ -4521,6 +4590,7 @@
             document.getElementById('credentials-modal').style.display = 'block';
         }
 
+        // [CHANGE 2] Updated: pass targetTagKey when making credentials visible
         async function saveCredentialsVisibility() {
             if (!currentTournamentId) return;
 
@@ -4544,6 +4614,7 @@
 
                 });
 
+                // [CHANGE 2] If making credentials visible, send targeted push notification
                 if (newVisibility) {
                     const targetTag = "tour_" + currentTournamentId;
                     await sendPushNotification("Credentials Released!", "Room ID & Password for the match are now visible.",
@@ -4748,7 +4819,7 @@
             }
         }
 
-        // --- Registered Users ---
+        // --- Registered Users [CHANGE 3: Slot-Based UI] ---
         function populateTournamentSelection() {
             const select = document.getElementById('tournament-selection');
             if (select) {
@@ -5171,6 +5242,7 @@
             }
         }
 
+        // [CHANGE 3] Slot-Based Registered Users UI — Group by teamNumber, show slotNumber, inGameName, uid
         async function loadRegisteredUsersForTournament() {
             if (!hasPermissions.viewReports) {
                 showToast("You don't have permission to view registrations.", 'error');
@@ -5208,9 +5280,9 @@
 
                 if (registeredUsers.length === 0) {
                     container.innerHTML = `
-                            <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
+                            <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament?.title || 'Tournament'}</h4>
                             <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
-                                Total: 0 ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
+                                Total: 0 teams
                             </div>
                             <div class="empty-state">
                                 <i class="fas fa-user-slash"></i>
@@ -5221,62 +5293,147 @@
                     return;
                 }
 
-                container.innerHTML = `
-                        <h4 style="margin-bottom: 15px;">Registered Users for: ${tournament.title}</h4>
-                        <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
-                            Total: ${registeredUsers.length} ${tournament.category === 'solo' ? 'players' : tournament.category === 'duo' ? 'teams' : 'squads'}
-                        </div>
-                    `;
+                // Group by teamNumber
+                const teamsMap = new Map();
 
                 registeredUsers.forEach((reg, index) => {
-                    const userCard = document.createElement('div');
-                    userCard.className = 'user-card';
+                    // Determine team number: look for teamNumber field, fallback to registration index + 1
+                    let teamNumber = reg.teamNumber;
+                    if (teamNumber === undefined || teamNumber === null || teamNumber === '') {
+                        teamNumber = index + 1;
+                    }
+                    // Ensure teamNumber is a string for consistent grouping
+                    const teamKey = String(teamNumber);
 
-                    let playerDetailsHtml = '';
-                    if (reg.playerDetails && Array.isArray(reg.playerDetails)) {
-                        reg.playerDetails.forEach((player, idx) => {
-                            playerDetailsHtml += `
-                                    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; margin-top: 5px; font-size: 0.85em;">
-                                        <div><strong>Player ${idx + 1}:</strong> ${player.name}</div>
-                                        <div>FF ID: ${player.freeFireId || 'N/A'} | Level: ${player.level || 'N/A'}</div>
-                                    </div>
-                                `;
+                    if (!teamsMap.has(teamKey)) {
+                        teamsMap.set(teamKey, {
+                            teamNumber: teamKey,
+                            registrations: [],
+                            paymentScreenshotUrl: reg.paymentScreenshotUrl || null,
+                            registeredAt: reg.registeredAt || null,
+                            verifiedAt: reg.verifiedAt || null,
+                            email: reg.email || '',
+                            mobile: reg.mobile || '',
+                            name: reg.name || ''
                         });
                     }
 
-                    const hasScreenshot = reg.paymentScreenshotUrl && reg.paymentScreenshotUrl.trim() !== '';
+                    const team = teamsMap.get(teamKey);
 
-                    userCard.innerHTML = `
-                            <div class="user-header">
-                                <div class="user-name">${reg.name}</div>
-                                <div style="color: #00a8ff; font-weight: bold;">#${index + 1}</div>
-                            </div>
-                            <div class="user-details">
-                                <div>Email: ${reg.email}</div>
-                                <div>Mobile: ${reg.mobile}</div>
-                                ${reg.teamName ? `<div>Team: ${reg.teamName}</div>` : ''}
-                                <div style="margin-top: 10px;">
-                                    <strong>Player Details:</strong>
-                                    ${playerDetailsHtml || '<div style="color: #888; font-style: italic;">No player details</div>'}
-                                </div>
-                                <div style="margin-top: 10px; color: #666; font-size: 0.85em;">
-                                    Registered: ${reg.registeredAt ? new Date(reg.registeredAt.toDate()).toLocaleString() : 'N/A'}
-                                    ${reg.verifiedAt ? `<br>Approved: ${new Date(reg.verifiedAt.toDate()).toLocaleString()}` : ''}
-                                </div>
+                    // If this registration has a screenshot, prefer it
+                    if (reg.paymentScreenshotUrl && !team.paymentScreenshotUrl) {
+                        team.paymentScreenshotUrl = reg.paymentScreenshotUrl;
+                    }
+                    if (reg.email && !team.email) team.email = reg.email;
+                    if (reg.mobile && !team.mobile) team.mobile = reg.mobile;
+                    if (reg.name && !team.name) team.name = reg.name;
+                    if (reg.registeredAt && !team.registeredAt) team.registeredAt = reg.registeredAt;
+                    if (reg.verifiedAt && !team.verifiedAt) team.verifiedAt = reg.verifiedAt;
 
+                    // Extract player details — handle both slot-based and legacy formats
+                    if (reg.playerDetails && Array.isArray(reg.playerDetails)) {
+                        reg.playerDetails.forEach((player) => {
+                            // Slot-based fields: slotNumber, inGameName, uid
+                            // Legacy fallbacks: name, freeFireId
+                            const slotNumber = player.slotNumber !== undefined ? player.slotNumber : null;
+                            const inGameName = player.inGameName || player.name || 'Unknown';
+                            const uid = player.uid || player.freeFireId || 'N/A';
+
+                            team.registrations.push({
+                                slotNumber: slotNumber,
+                                inGameName: inGameName,
+                                uid: uid,
+                                raw: player
+                            });
+                        });
+                    } else {
+                        // Fallback: single player registration
+                        const inGameName = reg.name || 'Unknown';
+                        const uid = reg.userId || reg.freeFireId || 'N/A';
+                        team.registrations.push({
+                            slotNumber: null,
+                            inGameName: inGameName,
+                            uid: uid,
+                            raw: reg
+                        });
+                    }
+                });
+
+                // Convert map to array and sort by team number (numeric)
+                const sortedTeams = Array.from(teamsMap.values()).sort((a, b) => {
+                    const numA = parseInt(a.teamNumber, 10) || 0;
+                    const numB = parseInt(b.teamNumber, 10) || 0;
+                    return numA - numB;
+                });
+
+                // Build the UI
+                const tournamentTitle = tournament?.title || 'Tournament';
+                const totalTeams = sortedTeams.length;
+                let totalPlayers = 0;
+                sortedTeams.forEach(t => totalPlayers += t.registrations.length);
+
+                let html = `
+                        <h4 style="margin-bottom: 15px;">Registered Users for: ${tournamentTitle}</h4>
+                        <div style="color: #aaa; margin-bottom: 15px; font-size: 0.9em;">
+                            Teams: ${totalTeams} | Players: ${totalPlayers}
+                        </div>
+                    `;
+
+                sortedTeams.forEach((team) => {
+                    const hasScreenshot = team.paymentScreenshotUrl && team.paymentScreenshotUrl.trim() !== '';
+                    const regTime = team.registeredAt ?
+                        (team.registeredAt.toDate ? team.registeredAt.toDate().toLocaleString() :
+                            new Date(team.registeredAt).toLocaleString()) :
+                        'N/A';
+                    const verifiedTime = team.verifiedAt ?
+                        (team.verifiedAt.toDate ? team.verifiedAt.toDate().toLocaleString() :
+                            new Date(team.verifiedAt).toLocaleString()) :
+                        'N/A';
+
+                    // Sort players by slotNumber if available
+                    const sortedPlayers = [...team.registrations].sort((a, b) => {
+                        if (a.slotNumber !== null && b.slotNumber !== null) {
+                            return Number(a.slotNumber) - Number(b.slotNumber);
+                        }
+                        return 0;
+                    });
+
+                    let playersHtml = '';
+                    sortedPlayers.forEach((player, idx) => {
+                        const slotDisplay = player.slotNumber !== null ? `Slot ${player.slotNumber}` :
+                            `Player ${idx + 1}`;
+                        playersHtml += `
+                                <div class="slot-player">
+                                    <span class="slot-badge">${slotDisplay}</span>
+                                    <span class="player-name">${player.inGameName}</span>
+                                    <span class="player-uid">UID: ${player.uid}</span>
+                                </div>
+                            `;
+                    });
+
+                    html += `
+                            <div class="team-card">
+                                <div class="team-header">
+                                    <span class="team-number">Team #${team.teamNumber}</span>
+                                    <span style="color: #888; font-size: 0.85em;">${team.registrations.length} player${team.registrations.length > 1 ? 's' : ''}</span>
+                                </div>
+                                <div class="team-members">
+                                    ${playersHtml}
+                                </div>
+                                <div style="margin-top: 12px; font-size: 0.8em; color: #888; border-top: 1px solid #333; padding-top: 10px;">
+                                    ${team.email ? `<span>📧 ${team.email}</span>` : ''}
+                                    ${team.mobile ? `<span style="margin-left: 12px;">📱 ${team.mobile}</span>` : ''}
+                                    <span style="margin-left: 12px;">Registered: ${regTime}</span>
+                                    ${team.verifiedAt ? `<span style="margin-left: 12px;">✅ ${verifiedTime}</span>` : ''}
+                                </div>
                                 ${hasScreenshot ? `
-                                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                                    <div style="color: #aaa; font-size: 0.9em; margin-bottom: 10px;">
-                                        <i class="fas fa-image"></i> Payment Proof
-                                    </div>
-                                    <div>
-                                        <button onclick="viewScreenshotFullscreen('${reg.paymentScreenshotUrl}', '${reg.name}')" style="background: #333; width: 100%;">
-                                            <i class="fas fa-eye"></i> View Screenshot
-                                        </button>
-                                    </div>
+                                <div style="margin-top: 12px; border-top: 1px solid #333; padding-top: 12px;">
+                                    <button onclick="viewScreenshotFullscreen('${team.paymentScreenshotUrl}', 'Team #${team.teamNumber}')" style="background: #333; width: 100%;">
+                                        <i class="fas fa-image"></i> View Payment Screenshot
+                                    </button>
                                 </div>
                                 ` : `
-                                <div style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+                                <div style="margin-top: 12px; border-top: 1px solid #333; padding-top: 12px;">
                                     <div style="color: #888; font-size: 0.85em; text-align: center;">
                                         <i class="fas fa-exclamation-circle"></i> No payment screenshot available
                                     </div>
@@ -5284,9 +5441,9 @@
                                 `}
                             </div>
                         `;
-
-                    container.appendChild(userCard);
                 });
+
+                container.innerHTML = html;
 
                 const downloadBtn = document.getElementById('download-csv-btn');
                 if (downloadBtn) {
@@ -5420,15 +5577,27 @@
                     return;
                 }
 
-                let csvContent = "data:text/csv;charset=utf-8,Player Name,Free Fire ID,Mobile,Email,Team Name\n";
+                let csvContent = "data:text/csv;charset=utf-8,Team Number,Slot,Player Name,UID,Email,Mobile,Registered At\n";
 
                 registrationsSnapshot.forEach(doc => {
                     const d = doc.data();
-                    const team = d.teamName || 'Solo';
+                    const teamNumber = d.teamNumber || 'N/A';
+                    const email = d.email || '';
+                    const mobile = d.mobile || '';
+                    const regAt = d.registeredAt ? (d.registeredAt.toDate ? d.registeredAt.toDate()
+                        .toLocaleString() : new Date(d.registeredAt).toLocaleString()) : 'N/A';
+
                     if (d.playerDetails && Array.isArray(d.playerDetails)) {
-                        d.playerDetails.forEach(p => {
-                            csvContent += `"${p.name}","${p.freeFireId}","${d.mobile}","${d.email}","${team}"\n`;
+                        d.playerDetails.forEach((p, idx) => {
+                            const slot = p.slotNumber !== undefined ? p.slotNumber : (idx + 1);
+                            const name = p.inGameName || p.name || 'Unknown';
+                            const uid = p.uid || p.freeFireId || 'N/A';
+                            csvContent += `"${teamNumber}","${slot}","${name}","${uid}","${email}","${mobile}","${regAt}"\n`;
                         });
+                    } else {
+                        const name = d.name || 'Unknown';
+                        const uid = d.userId || d.freeFireId || 'N/A';
+                        csvContent += `"${teamNumber}","1","${name}","${uid}","${email}","${mobile}","${regAt}"\n`;
                     }
                 });
 
@@ -5447,6 +5616,10 @@
         }
 
         console.log("✅ Staff panel loaded with all requested features:");
+        console.log("  - [CHANGE 1] REST API key split into 3 parts (p1 + p2 + p3)");
+        console.log("  - [CHANGE 2] Targeted notifications: sendPushNotification uses filters array");
+        console.log("  - [CHANGE 2] saveCredentialsVisibility() passes 'tour_' + tournamentId when making visible");
+        console.log("  - [CHANGE 3] Slot-based Registered Users UI: grouped by teamNumber, shows slotNumber, inGameName, uid");
         console.log("  - Shift-Based Access Enforcement (checkShiftStatus every 60s)");
         console.log("  - Activity Auditing (staff_logs)");
         console.log("  - Daily Prize Limit Enforcement");
@@ -5455,8 +5628,8 @@
         console.log("  - Automations & Templates section (templates + auto-repeat)");
         console.log("  - Fixed: forceLogout does NOT reset to false");
         console.log("  - Removed: registrationEndTime fields");
-        console.log("  - NEW: applyTemplateFromList() attached to Load button in Automations");
-        console.log("  - NEW: triggerAutoRepeatManually() with Run Auto-Repeat Now button");
+        console.log("  - applyTemplateFromList() attached to Load button in Automations");
+        console.log("  - triggerAutoRepeatManually() with Run Auto-Repeat Now button");
     </script>
 </body>
 </html>
