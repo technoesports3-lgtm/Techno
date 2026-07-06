@@ -6118,6 +6118,7 @@
                     for (let slot = 1; slot <= maxParticipants; slot++) {
                         const taken = takenSlots[slot];
                         const isTaken = !!taken;
+                        // Check selection state
                         const isSelected = (slotBookingState.selectedSlot === slot && slotBookingState.selectedTeam ===
                             null);
                         html += `
@@ -6186,11 +6187,17 @@
                 }
 
                 // Slot booking form (hidden initially, shown when slot is selected)
+                // Check if there's a selection to show the form by default
+                const hasSelection = slotBookingState.selectedSlot !== null && slotBookingState.selectedSlot !== undefined;
+                const formVisibleClass = hasSelection ? 'visible' : '';
+
                 html += `
-                            <div class="slot-booking-form" id="slot-booking-form">
+                            <div class="slot-booking-form ${formVisibleClass}" id="slot-booking-form">
                                 <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;font-size:0.95rem;">
                                     <i class="fas fa-pen"></i> Book Slot
-                                    <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;"></span>
+                                    <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;">
+                                        ${hasSelection ? (t.category === 'solo' ? `Slot ${slotBookingState.selectedSlot}` : `Team ${slotBookingState.selectedTeam} • Slot ${slotBookingState.selectedSlot}`) : ''}
+                                    </span>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
@@ -6213,6 +6220,14 @@
 
                 formContainer.innerHTML = html;
 
+                // If there's a selection, scroll to the form
+                if (hasSelection) {
+                    setTimeout(() => {
+                        const form = document.getElementById('slot-booking-form');
+                        if (form) form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                }
+
             } catch (e) {
                 console.error('Build slot UI error:', e);
                 formContainer.innerHTML =
@@ -6221,12 +6236,15 @@
             }
         }
 
-        // ─── SELECT SLOT ───
-        function selectSlotForRegistration(teamNumber, slotNumber) {
+        // ─── SELECT SLOT ─── FIXED ───
+        async function selectSlotForRegistration(teamNumber, slotNumber) {
             const t = selectedTournament;
-            if (!t) return;
+            if (!t) {
+                showToast('No tournament selected.', 'error');
+                return;
+            }
 
-            // Check if slot is already taken (double-check)
+            // Check if slot is already taken (double-check using current state)
             const takenSlots = slotBookingState.takenSlots;
             let isTaken = false;
             if (t.category === 'solo') {
@@ -6240,18 +6258,27 @@
             }
 
             // Check wallet balance
+            await fetchWalletBalance();
             if (walletBalance < (t.entryFee || 0)) {
                 showToast('Insufficient wallet balance. Please add coins.', 'error');
                 return;
             }
 
+            // Set selection state
             slotBookingState.selectedTeam = teamNumber;
             slotBookingState.selectedSlot = slotNumber;
 
-            // Update UI
+            // Re-render the slot UI with the new selection state
+            await buildSlotUI(t);
+
+            // The form is now rendered with the 'visible' class because hasSelection is true
+            // But we need to make sure the form is visible and has the right info
             const form = document.getElementById('slot-booking-form');
             if (form) {
+                // Make sure it's visible (in case buildSlotUI didn't add the class)
                 form.classList.add('visible');
+
+                // Update the selection display
                 const display = document.getElementById('slot-selection-display');
                 if (display) {
                     if (t.category === 'solo') {
@@ -6260,79 +6287,55 @@
                         display.textContent = `Team ${teamNumber} • Slot ${slotNumber}`;
                     }
                 }
+
                 // Clear previous input values
-                document.getElementById('slot-player-name').value = '';
-                document.getElementById('slot-player-uid').value = '';
-                // Update button
+                const nameInput = document.getElementById('slot-player-name');
+                const uidInput = document.getElementById('slot-player-uid');
+                if (nameInput) nameInput.value = '';
+                if (uidInput) uidInput.value = '';
+
+                // Update button with correct fee
                 const btn = document.getElementById('slot-pay-btn');
                 if (btn) {
                     btn.innerHTML =
                         `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
                 }
+
+                // Scroll to form
+                setTimeout(() => {
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 200);
+            } else {
+                showToast('Form not found. Please try again.', 'error');
             }
-
-            // Scroll to form
-            setTimeout(() => {
-                const formEl = document.getElementById('slot-booking-form');
-                if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 200);
-
-            // Update slot grid to show selection
-            const allSlots = document.querySelectorAll('.slot-item');
-            allSlots.forEach(el => el.classList.remove('selected'));
-            // Find the selected slot and add 'selected' class
-            const slotItems = document.querySelectorAll('.slot-item');
-            let idx = 0;
-            for (let el of slotItems) {
-                // We need to find the selected slot by its position
-                // Since we don't have a direct mapping, we'll use the onclick attribute
-                // But we can just re-render the whole thing with the selection state
-                // Actually, let's just rebuild the UI with the selection state
-                // For simplicity, we'll rebuild the entire slot UI
-                // But to avoid flicker, we'll just update the class on the selected slot
-                // We'll use a simpler approach: re-render the slot grid
-                // Let's just rebuild the UI
-                buildSlotUI(selectedTournament);
-            }
-
-            // Re-focus on the form after re-render
-            setTimeout(() => {
-                const formEl = document.getElementById('slot-booking-form');
-                if (formEl) {
-                    formEl.classList.add('visible');
-                    const display = document.getElementById('slot-selection-display');
-                    if (display) {
-                        if (t.category === 'solo') {
-                            display.textContent = `Slot ${slotNumber}`;
-                        } else {
-                            display.textContent = `Team ${teamNumber} • Slot ${slotNumber}`;
-                        }
-                    }
-                    document.getElementById('slot-player-name').focus();
-                }
-            }, 100);
         }
 
-        // ─── CANCEL SLOT SELECTION ───
-        function cancelSlotSelection() {
+        // ─── CANCEL SLOT SELECTION ─── FIXED ───
+        async function cancelSlotSelection() {
             slotBookingState.selectedTeam = null;
             slotBookingState.selectedSlot = null;
+
+            // Hide the form
             const form = document.getElementById('slot-booking-form');
             if (form) form.classList.remove('visible');
-            // Rebuild UI to clear selection state
+
+            // Re-render the slot UI without selection
             if (selectedTournament) {
-                buildSlotUI(selectedTournament);
+                await buildSlotUI(selectedTournament);
             }
         }
 
-        // ─── PROCESS SLOT BOOKING ───
+        // ─── PROCESS SLOT BOOKING ─── FIXED ───
         async function processSlotBooking() {
             const t = selectedTournament;
             if (!t) return showToast('No tournament selected.', 'error');
 
             const team = slotBookingState.selectedTeam;
             const slot = slotBookingState.selectedSlot;
-            if (slot === null || slot === undefined) return showToast('Please select a slot first.', 'error');
+            if (slot === null || slot === undefined) {
+                showToast('Please select a slot first.', 'error');
+                return;
+            }
 
             const playerName = document.getElementById('slot-player-name').value.trim();
             const playerUid = document.getElementById('slot-player-uid').value.trim();
@@ -6363,7 +6366,7 @@
 
             if (slotTaken) {
                 showToast('This slot was just taken by someone else! Please pick another.', 'error');
-                buildSlotUI(t);
+                await buildSlotUI(t);
                 return;
             }
 
@@ -6398,7 +6401,7 @@
                     registeredAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                const ref = await db.collection("tournament_registrations").add(regData);
+                await db.collection("tournament_registrations").add(regData);
 
                 // Update tournament participants count
                 await db.collection("tournaments").doc(t.id).update({
@@ -6417,6 +6420,7 @@
 
                 showToast('Successfully joined tournament!', 'success');
 
+                // Close modal and show success
                 closeModal('registration-modal');
                 document.getElementById('success-modal').style.display = 'block';
 
@@ -6424,6 +6428,7 @@
                 slotBookingState.selectedTeam = null;
                 slotBookingState.selectedSlot = null;
 
+                // Refresh data
                 await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), loadTournaments(),
                     fetchProfileData()
                 ]);
@@ -6433,7 +6438,8 @@
                 showToast(e.message || 'Failed to book slot.', 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
+                btn.innerHTML =
+                `<i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})`;
             }
         }
 
@@ -6876,7 +6882,7 @@
         // ─── INITIAL RENDER ───
         renderCoinPackages();
         console.log('✅ TECHNO E-SPORTS — All features implemented.');
-        console.log('✅ 1. WinZO-Style Slot Booking System');
+        console.log('✅ 1. WinZO-Style Slot Booking System — FIXED: slot selection and form now work properly');
         console.log('✅ 2. OneSignal Tagging on slot booking');
         console.log('✅ 3. In-App Ad Browser (Iframe Overlay) with 10s countdown');
         console.log('✅ Loading screen: black background, NO white circle around logo');
