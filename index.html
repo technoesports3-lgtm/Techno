@@ -15,24 +15,7 @@
     <script src="https://accounts.google.com/gsi/client" async defer>
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer>
-    </script>
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-                appId: "eb3ee621-7e9d-40da-8014-058208e8192c",
-            });
-            if (!OneSignal.Notifications.permission) {
-                await OneSignal.Notifications.requestPermission();
-            }
-            console.log('✅ OneSignal initialized');
-        });
-    </script>
 
-    <!-- =============================================================
-    ONESIGNAL REST API KEY — Split into 3 parts
-    ============================================================= -->
     <script>
         const p1 = "os_v2_app_5m7omil6tvanvaauawbar2azfqohbzhv3o7";
         const p2 = "ewmntwxuavmvinhbxifs2zjlhs5ukp5433cntzv";
@@ -43,9 +26,7 @@
     </script>
 
     <style>
-        /* =============================================================
-                   RESET & BASE – Professional Clean Design
-                   ============================================================= */
+        /* ===== RESET & BASE ===== */
         * {
             -webkit-tap-highlight-color: transparent !important;
             box-sizing: border-box;
@@ -3797,9 +3778,7 @@
 
     <div class="app-container">
 
-        <!-- =============================================================
-        TOAST
-        ============================================================= -->
+        <!-- ===== TOAST ===== -->
         <div id="toast-notification" class="toast-notification">
             <div class="toast-close" onclick="hideToast()">&times;</div>
             <div class="toast-content">
@@ -3813,9 +3792,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        APP UPDATE MODAL
-        ============================================================= -->
+        <!-- ===== APP UPDATE MODAL ===== -->
         <div id="app-update-modal" class="modal app-update-modal">
             <div class="modal-content">
                 <div class="app-update-icon">
@@ -3830,9 +3807,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        AUTH SECTION
-        ============================================================= -->
+        <!-- ===== AUTH SECTION ===== -->
         <div id="professional-auth-section" class="professional-auth-container" style="display:none;">
 
             <div class="professional-auth-box">
@@ -3927,9 +3902,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        FORGOT PASSWORD ALERT
-        ============================================================= -->
+        <!-- ===== FORGOT PASSWORD ALERT ===== -->
         <div id="forgot-password-alert" class="fullscreen-alert">
             <div class="fullscreen-alert-content">
                 <h3 style="color:var(--text-primary);">Forgotten Password</h3>
@@ -3949,9 +3922,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        LOADING SCREEN
-        ============================================================= -->
+        <!-- ===== LOADING SCREEN ===== -->
         <div id="loading-screen">
             <div class="loading-logo">
                 <img src="https://i.ibb.co/N63GPg0L/Screenshot-2026-07-01-080013.png" alt="TECHNO E-SPORTS">
@@ -3960,9 +3931,7 @@
             <div class="loading-spinner-large"></div>
         </div>
 
-        <!-- =============================================================
-        AD MODAL – Legacy
-        ============================================================= -->
+        <!-- ===== AD MODAL ===== -->
         <div id="in-app-ad-modal" style="display:none;">
             <div class="ad-icon"><i class="fas fa-gift"></i></div>
             <h2>Sponsor Ad Running</h2>
@@ -3973,9 +3942,7 @@
             </button>
         </div>
 
-        <!-- =============================================================
-        WITHDRAW SUCCESS POPUP
-        ============================================================= -->
+        <!-- ===== WITHDRAW SUCCESS POPUP ===== -->
         <div id="withdraw-success-popup">
             <div class="popup-content">
                 <div class="popup-logo">
@@ -3992,9 +3959,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        FULL-SCREEN AD OVERLAY (IFRAME)
-        ============================================================= -->
+        <!-- ===== FULL-SCREEN AD OVERLAY ===== -->
         <div id="ad-overlay">
             <iframe id="ad-iframe" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
             <div class="ad-timer-overlay" id="ad-timer-overlay">
@@ -4006,9 +3971,7 @@
             </button>
         </div>
 
-        <!-- =============================================================
-        MAIN APP
-        ============================================================= -->
+        <!-- ===== MAIN APP ===== -->
         <div id="main-app" style="display:none;">
 
             <!-- HEADER -->
@@ -4043,7 +4006,6 @@
 
                     <!-- AD PLACEHOLDER 1: Home Top -->
                     <div id="ad-home-top" class="ad-placeholder">
-
                         <script>
                             atOptions = {
                                 'key': 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -4055,7 +4017,6 @@
                         </script>
                         <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
                         </script>
-
                     </div>
 
                     <div id="solo-tournaments"></div>
@@ -4080,7 +4041,6 @@
                     </div>
 
                     <div id="ad-wallet-mid" class="ad-placeholder">
-
                         <script>
                             atOptions = {
                                 'key': '515b6bc048c46f9a57c1f159e001084b',
@@ -4092,7 +4052,6 @@
                         </script>
                         <script src="https://www.highperformanceformat.com/515b6bc048c46f9a57c1f159e001084b/invoke.js">
                         </script>
-
                     </div>
 
                     <div class="wallet-action-row">
@@ -4303,9 +4262,7 @@
             </footer>
         </div>
 
-        <!-- =============================================================
-        FULL PAGE SECTIONS
-        ============================================================= -->
+        <!-- ===== FULL PAGE SECTIONS ===== -->
 
         <!-- TOURNAMENT DETAILS -->
         <div id="tournament-details-page" class="full-page-section">
@@ -4314,7 +4271,6 @@
                 <button class="close-page-btn" onclick="closeDetailsPage()"><i class="fas fa-times"></i></button>
             </div>
             <div id="ad-details-banner" class="ad-placeholder" style="margin: 8px 16px 4px 16px; min-height: 65px;">
-
                 <script>
                     atOptions = {
                         'key': 'a2762df83e8e3d85eb4b7680f93f3429',
@@ -4326,7 +4282,6 @@
                 </script>
                 <script src="https://www.highperformanceformat.com/a2762df83e8e3d85eb4b7680f93f3429/invoke.js">
                 </script>
-
             </div>
             <div class="full-page-body" id="details-page-body">
                 <!-- populated dynamically -->
@@ -4495,9 +4450,7 @@
             </div>
         </div>
 
-        <!-- =============================================================
-        MODALS
-        ============================================================= -->
+        <!-- ===== MODALS ===== -->
 
         <!-- Players -->
         <div id="players-modal" class="modal">
@@ -4596,7 +4549,7 @@
 
 
     <!-- =============================================================
-    JAVASCRIPT
+    JAVASCRIPT — FIXED AUTHENTICATION LOOP
     ============================================================= -->
     <script>
         // ─── FIREBASE CONFIG ───
@@ -4617,7 +4570,6 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ─── BUG 1 FIX: Enable Offline Persistence ───
         db.enablePersistence().catch(function(err) {
             console.log("Firebase Persistence Error:", err.code);
         });
@@ -4669,6 +4621,8 @@
         };
 
         let currentForgotPasswordLanguage = 'english';
+        let isInitializing = false; // prevent multiple init calls
+        let appInitialized = false;
 
         const forgotPasswordMessages = {
             english: { title: "If you forget your password:", message: "Create a new account with a new email address." },
@@ -4708,7 +4662,6 @@
                     `).join('');
         }
 
-        // ─── RENDER COIN PACKAGES FULL PAGE ───
         function renderCoinPackagesFull() {
             const grid = document.getElementById('coin-packages-full-grid');
             if (!grid) return;
@@ -4724,7 +4677,6 @@
                     `).join('');
         }
 
-        // ─── FULL PAGE: Coin Packages ───
         function openCoinPackagesPage() {
             renderCoinPackagesFull();
             document.getElementById('coin-packages-page').style.display = 'block';
@@ -4738,7 +4690,6 @@
             initiateUpiPayment(amount);
         }
 
-        // ─── FULL PAGE: Transaction History ───
         function openTransactionHistoryPage() {
             renderFullTransactionHistory();
             document.getElementById('transaction-history-page').style.display = 'block';
@@ -5046,6 +4997,8 @@
             if (registrationListener) registrationListener();
             if (appConfigListener) appConfigListener();
             if (appUpdateListener) appUpdateListener();
+            appInitialized = false;
+            isInitializing = false;
             auth.signOut().then(() => showToast("Logged out", 'success')).catch(e => console.error(e));
         }
 
@@ -5263,7 +5216,12 @@
         }
 
         async function loadWalletAndReferralData() {
-            await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), fetchReferralData(), fetchProfileData()]);
+            try {
+                await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), fetchReferralData(), fetchProfileData()]);
+            } catch (e) {
+                console.error('loadWalletAndReferralData error:', e);
+                // DON'T throw — we want the app to continue even if this fails
+            }
         }
 
         // ─── UPI PAYMENT ───
@@ -6285,7 +6243,6 @@
                     participants: firebase.firestore.FieldValue.increment(1)
                 });
 
-                // ─── BUG 3 FIX: Bulletproof OneSignal Tagging ───
                 try {
                     if (typeof OneSignal !== 'undefined') {
                         OneSignal.sendTag("tour_" + t.id, "joined");
@@ -6437,9 +6394,7 @@
                 const doc = await db.collection("app_config").doc("main").get();
                 if (doc.exists) { appConfig = { ...appConfig, ...doc.data() };
                     document.getElementById('auth-slogan').textContent = appConfig.appName || "TECHNO E-SPORTS";
-                    updateContactInfo();
-                    showToast("App configuration loaded.", 'success'); } else showToast("App config not found.",
-                    'info');
+                    updateContactInfo(); } else { console.log("App config not found, using defaults."); }
             } catch (e) { console.error("Load app config error:", e); }
         }
 
@@ -6451,7 +6406,7 @@
                     document.getElementById('auth-slogan').textContent = appConfig.appName || "TECHNO E-SPORTS";
                     updateContactInfo(); if (appConfig.isAppBlocked) { showAppUpdateModal();
                         document.getElementById('main-app').style.display = 'none'; } }
-            });
+            }, err => console.warn('app_config listener error:', err));
             appUpdateListener = db.collection("app_update").doc("current").onSnapshot(doc => {
                 if (doc.exists) { const d = doc.data(); if (d.isBlocked) { appConfig.isAppBlocked = true;
                         appConfig.appUpdateMessage = d.message || "App update required.";
@@ -6459,12 +6414,11 @@
                         appConfig.appUpdateTitle = d.title || "App Update Required";
                         showAppUpdateModal();
                         document.getElementById('main-app').style.display = 'none'; } }
-            });
+            }, err => console.warn('app_update listener error:', err));
             tournamentListener = db.collection("tournaments").onSnapshot(snap => {
                 currentTournaments = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(t => t.isActive !==
                     false && t.status !== 'completed');
                 renderTournaments();
-                // ─── Check for credential releases and send notifications ───
                 snap.docChanges().forEach(change => {
                     if (change.type === 'modified') {
                         const data = change.doc.data();
@@ -6508,10 +6462,10 @@
                         }
                     });
                     renderTournaments();
-                });
+                }, e => console.warn('registration listener error:', e));
         }
 
-        // ─── ONESIGNAL NOTIFICATION: Send to all registrants ───
+        // ─── ONESIGNAL NOTIFICATION ───
         async function sendCredentialsNotificationToRegistrants(tournamentId, tournamentTitle) {
             try {
                 const regSnap = await db.collection("tournament_registrations")
@@ -6638,92 +6592,82 @@
                 resetAutoLogoutTimer));
         }
 
-        // =============================================================
-        //   [FIX] ONESIGNAL PLAYER ID SAVE TO FIRESTORE
-        //   అక్కడే ఉన్న OneSignal init తర్వాత player ID save అవుతుంది
-        //   ఇది User Panel కి మాత్రమే అవసరం — Staff Panel ఇప్పటికే ఉంది
-        // =============================================================
-        async function saveOneSignalPlayerId() {
-            const user = auth.currentUser;
-            if (!user) return;
+        // ─── ONESIGNAL PLAYER ID SAVE ───
+        function saveOneSignalPlayerId() {
             try {
-                // OneSignal SDK v16: get the player ID
-                const playerId = await OneSignal.User.getOnesignalId();
-                if (!playerId) {
-                    console.log('⏳ OneSignal ID not ready yet');
-                    return;
-                }
-                // Save to Firestore users collection
-                await db.collection("users").doc(user.uid).update({
-                    oneSignalPlayerId: playerId,
-                    oneSignalUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                console.log('✅ OneSignal player ID saved:', playerId);
-            } catch (error) {
-                console.warn('⚠️ Could not save OneSignal ID:', error);
-            }
-        }
-
-        // ─── OneSignal ready listener ───
-        // ఈ కోడ్ OneSignal init తర్వాత రన్ అవుతుంది
-        if (typeof OneSignalDeferred !== 'undefined') {
-            OneSignalDeferred.push(async function(OneSignal) {
-                try {
-                    // Wait for permission (optional)
-                    await OneSignal.Notifications.permission;
-                    // If user is already logged in, save ID
-                    if (auth.currentUser) {
-                        setTimeout(saveOneSignalPlayerId, 2000); // give time for ID to generate
-                    }
-                } catch (e) {
-                    console.warn('OneSignal ready error:', e);
-                }
-            });
-        }
-
-        // ─── INITIALIZE APP ───
-        async function initializeApp(user, userData) {
-            currentUser = user;
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('professional-auth-section').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            await loadAppConfig();
-            if (checkAppUpdate()) { document.getElementById('main-app').style.display = 'none'; return; }
-            showSection('home-section', document.querySelector('.nav-item'));
-            await loadTournaments();
-            await loadWalletAndReferralData();
-            if (walletBalanceInterval) clearInterval(walletBalanceInterval);
-            walletBalanceInterval = setInterval(fetchWalletBalance, 15000);
-            setupRealTimeListeners();
-            resetAutoLogoutTimer();
-            setupActivityListeners();
-
-            // ─── OneSignal Player ID save after login (extra safety) ───
-            setTimeout(saveOneSignalPlayerId, 3000);
-
-            // ─── Check if any tournament has credentials already but not notified ───
-            setTimeout(async () => {
-                try {
-                    const snap = await db.collection("tournaments")
-                        .where("tournamentId", "!=", "")
-                        .where("tournamentPassword", "!=", "")
-                        .where("credentialsNotified", "!=", true)
-                        .get();
-                    snap.forEach(doc => {
-                        const data = doc.data();
-                        if (data.tournamentId && data.tournamentPassword) {
-                            sendCredentialsNotificationToRegistrants(doc.id, data.title || 'Tournament')
-                                .then(() => {
-                                    db.collection("tournaments").doc(doc.id).update({
-                                        credentialsNotified: true,
-                                        credentialsNotifiedAt: firebase.firestore
-                                            .FieldValue.serverTimestamp()
-                                    }).catch(e => console.warn('Failed to mark notified:', e));
-                                }).catch(e => console.warn('Notification send error:', e));
+                if (window.plugins && window.plugins.OneSignal && currentUser) {
+                    window.plugins.OneSignal.getDeviceState(function(state) {
+                        if (state && state.userId) {
+                            db.collection("users").doc(currentUser.uid).update({
+                                oneSignalPlayerId: state.userId,
+                                oneSignalUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            }).catch(e => console.warn('Failed to save OneSignal player ID:', e));
+                            console.log('✅ Native OneSignal player ID saved:', state.userId);
                         }
                     });
-                } catch (e) { console.warn('Initial credential check error:', e); }
-            }, 5000);
+                }
+            } catch (e) { console.warn('saveOneSignalPlayerId error:', e); }
+        }
+
+        // ─── INITIALIZE APP (with safe error handling) ───
+        async function initializeApp(user, userData) {
+            if (isInitializing || appInitialized) {
+                console.log('App already initializing or initialized, skipping.');
+                return;
+            }
+            isInitializing = true;
+            try {
+                currentUser = user;
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('professional-auth-section').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                await loadAppConfig();
+                if (checkAppUpdate()) {
+                    document.getElementById('main-app').style.display = 'none';
+                    isInitializing = false;
+                    return;
+                }
+                showSection('home-section', document.querySelector('.nav-item'));
+                await loadTournaments();
+                await loadWalletAndReferralData();
+                if (walletBalanceInterval) clearInterval(walletBalanceInterval);
+                walletBalanceInterval = setInterval(fetchWalletBalance, 15000);
+                setupRealTimeListeners();
+                resetAutoLogoutTimer();
+                setupActivityListeners();
+                setTimeout(saveOneSignalPlayerId, 3000);
+                setTimeout(async () => {
+                    try {
+                        const snap = await db.collection("tournaments")
+                            .where("tournamentId", "!=", "")
+                            .where("tournamentPassword", "!=", "")
+                            .where("credentialsNotified", "!=", true)
+                            .get();
+                        snap.forEach(doc => {
+                            const data = doc.data();
+                            if (data.tournamentId && data.tournamentPassword) {
+                                sendCredentialsNotificationToRegistrants(doc.id, data.title || 'Tournament')
+                                    .then(() => {
+                                        db.collection("tournaments").doc(doc.id).update({
+                                            credentialsNotified: true,
+                                            credentialsNotifiedAt: firebase.firestore
+                                                .FieldValue.serverTimestamp()
+                                        }).catch(e => console.warn('Failed to mark notified:',
+                                        e));
+                                    }).catch(e => console.warn('Notification send error:', e));
+                            }
+                        });
+                    } catch (e) { console.warn('Initial credential check error:', e); }
+                }, 5000);
+                appInitialized = true;
+                console.log('✅ App initialized successfully.');
+            } catch (e) {
+                console.error('❌ InitializeApp error:', e);
+                showToast('Failed to initialize app. Please refresh.', 'error');
+                // DON'T sign out here — let the user retry
+            } finally {
+                isInitializing = false;
+            }
         }
 
         // ─── WATCH & EARN ───
@@ -6866,65 +6810,113 @@
                 btn.innerHTML = '<i class="fas fa-gift"></i> CLAIM 1 COIN'; }
         }
 
-        // ─── AUTH STATE ───
+        // ─── AUTH STATE — FIXED ───
         auth.onAuthStateChanged(async user => {
             authStateChecked = true;
+
             if (user) {
-                // ─── BUG 2 FIX: Immediately hide auth section ───
+                // User is logged in — hide auth section and show loading while we init
                 document.getElementById('professional-auth-section').style.display = 'none';
+                document.getElementById('loading-screen').style.display = 'flex';
+
                 try {
                     const doc = await db.collection("users").doc(user.uid).get();
                     const data = doc.data() || {};
-                    if (data.isBlocked) { auth.signOut();
-                        showToast("Your account has been blocked.", 'error'); return; }
-                    currentUser = user;
-                    await loadAppConfig();
-                    if (checkAppUpdate()) { document.getElementById('loading-screen').style.display = 'none'; return; }
-                    initializeApp(user, data);
-                } catch (e) { console.error(e);
-                    auth.signOut(); }
+
+                    if (data.isBlocked) {
+                        await auth.signOut();
+                        showToast("Your account has been blocked.", 'error');
+                        document.getElementById('loading-screen').style.display = 'none';
+                        document.getElementById('professional-auth-section').style.display = 'flex';
+                        return;
+                    }
+
+                    // Now initialize the app (this will hide loading and show main app)
+                    await initializeApp(user, data);
+
+                } catch (e) {
+                    console.error('Auth state handler error:', e);
+                    // If we can't load user data, sign out and show auth
+                    try { await auth.signOut(); } catch (_) {}
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('professional-auth-section').style.display = 'flex';
+                    showToast('Error loading user data. Please try again.', 'error');
+                }
             } else {
-                // ─── BUG 2 FIX: Only show auth section when user is null ───
-                if (localStorage.getItem('techno_intro_seen')) {
-                    currentUser = null;
+                // User is NOT logged in — show auth section
+                // Only show auth if we're not already initialized
+                if (appInitialized) {
+                    // We were initialized but user logged out — clean up
+                    appInitialized = false;
+                    isInitializing = false;
                     stopAllTimers();
                     if (autoLogoutTimer) clearTimeout(autoLogoutTimer);
                     if (walletBalanceInterval) clearInterval(walletBalanceInterval);
-                    if (tournamentListener) tournamentListener();
-                    if (registrationListener) registrationListener();
-                    if (appConfigListener) appConfigListener();
-                    if (appUpdateListener) appUpdateListener();
-                    document.getElementById('loading-screen').style.display = 'none';
-                    document.getElementById('main-app').style.display = 'none';
-                    document.getElementById('professional-auth-section').style.display = 'flex';
+                    if (tournamentListener) { tournamentListener();
+                        tournamentListener = null; }
+                    if (registrationListener) { registrationListener();
+                        registrationListener = null; }
+                    if (appConfigListener) { appConfigListener();
+                        appConfigListener = null; }
+                    if (appUpdateListener) { appUpdateListener();
+                        appUpdateListener = null; }
                 }
+
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'none';
+                document.getElementById('professional-auth-section').style.display = 'flex';
             }
         });
 
-        // ─── FALLBACK TIMEOUT (Modified to avoid flashing auth screen) ───
+        // ─── FALLBACK: If auth state doesn't resolve quickly, show auth ───
         setTimeout(() => {
             if (!authStateChecked) {
                 document.getElementById('loading-screen').style.display = 'none';
-                // Do NOT show auth section here; we only show it in the else block above
-                // If auth still hasn't resolved, we keep the loading screen hidden but don't force auth
-                // Optionally we can show a retry button, but we keep it minimal.
+                // Only show auth if user is actually null (safety check)
+                if (!auth.currentUser) {
+                    document.getElementById('professional-auth-section').style.display = 'flex';
+                }
             }
         }, 3000);
 
         // ─── INITIAL RENDER ───
         renderCoinPackages();
-        console.log('✅ TECHNO E-SPORTS — All features implemented.');
-        console.log('✅ 1. WinZO-Style Slot Booking System');
-        console.log('✅ 2. OneSignal Tagging on slot booking');
-        console.log('✅ 3. In-App Ad Browser (Iframe Overlay)');
-        console.log('✅ 4. Loading screen: black background');
-        console.log('✅ 5. Help & Support: Revamped with WhatsApp and Email buttons');
-        console.log('✅ 6. QR Page: UPI intent buttons DISABLED');
-        console.log('✅ 7. QR Page: 4-minute timer');
-        console.log('✅ 8. CREDENTIALS: Approved users can see ID/Pass');
-        console.log('✅ 9. ONESIGNAL NOTIFICATIONS: Player ID saved to Firestore');
-        console.log('✅ 10. Auto-send notifications when admin releases credentials');
-        console.log('📌 To manually trigger: triggerCredentialsNotification("tournamentId")');
+        console.log('✅ TECHNO E-SPORTS — AUTH FIX APPLIED.');
+        console.log('🔐 Authentication loop fixed: login now stays logged in.');
+    </script>
+    <!-- ===== ONESIGNAL NATIVE (CAPACITOR / CORDOVA) ===== -->
+    <script>
+        document.addEventListener("deviceready", function() {
+            if (window.plugins && window.plugins.OneSignal) {
+                window.plugins.OneSignal.setAppId("eb3ee621-7e9d-40da-8014-058208e8192c");
+                window.plugins.OneSignal.promptForPushNotificationsWithUserResponse(function(accepted) {
+                    console.log("User accepted notifications: " + accepted);
+                });
+                window.plugins.OneSignal.getDeviceState(function(state) {
+                    if (state && state.userId && currentUser) {
+                        db.collection("users").doc(currentUser.uid).update({
+                            oneSignalPlayerId: state.userId,
+                            oneSignalUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        console.log('✅ Native OneSignal player ID saved:', state.userId);
+                    }
+                });
+            } else {
+                console.warn('OneSignal plugin not loaded. Are you running in a browser?');
+            }
+        }, false);
+
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push = function(fn) {
+            if (window.plugins && window.plugins.OneSignal) {
+                fn({
+                    sendTag: function(key, value) {
+                        window.plugins.OneSignal.sendTag(key, value);
+                        console.log('✅ Native tag sent:', key, value);
+                    }
+                });
+            }
+        };
     </script>
 </body>
 
