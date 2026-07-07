@@ -4617,6 +4617,11 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // ─── BUG 1 FIX: Enable Offline Persistence ───
+        db.enablePersistence().catch(function(err) {
+            console.log("Firebase Persistence Error:", err.code);
+        });
+
         let currentUser = null;
         let appConfig = {
             authImageUrl: LOGO_URL,
@@ -6280,12 +6285,15 @@
                     participants: firebase.firestore.FieldValue.increment(1)
                 });
 
-                // ─── ONESIGNAL TAGGING ───
+                // ─── BUG 3 FIX: Bulletproof OneSignal Tagging ───
                 try {
-                    window.OneSignalDeferred.push(function(OneSignal) {
+                    if (typeof OneSignal !== 'undefined') {
                         OneSignal.sendTag("tour_" + t.id, "joined");
-                    });
-                    console.log('✅ OneSignal tag sent: tour_' + t.id + ' = joined');
+                    } else if (typeof OneSignalDeferred !== 'undefined') {
+                        OneSignalDeferred.push(function(OneSignal) {
+                            OneSignal.sendTag("tour_" + t.id, "joined");
+                        });
+                    }
                 } catch (e) {
                     console.warn('OneSignal tagging failed:', e);
                 }
@@ -6862,6 +6870,8 @@
         auth.onAuthStateChanged(async user => {
             authStateChecked = true;
             if (user) {
+                // ─── BUG 2 FIX: Immediately hide auth section ───
+                document.getElementById('professional-auth-section').style.display = 'none';
                 try {
                     const doc = await db.collection("users").doc(user.uid).get();
                     const data = doc.data() || {};
@@ -6874,6 +6884,7 @@
                 } catch (e) { console.error(e);
                     auth.signOut(); }
             } else {
+                // ─── BUG 2 FIX: Only show auth section when user is null ───
                 if (localStorage.getItem('techno_intro_seen')) {
                     currentUser = null;
                     stopAllTimers();
@@ -6890,15 +6901,13 @@
             }
         });
 
+        // ─── FALLBACK TIMEOUT (Modified to avoid flashing auth screen) ───
         setTimeout(() => {
             if (!authStateChecked) {
                 document.getElementById('loading-screen').style.display = 'none';
-                if (localStorage.getItem('techno_intro_seen')) {
-                    document.getElementById('professional-auth-section').style.display = 'flex';
-                } else {
-                    localStorage.setItem('techno_intro_seen', 'true');
-                    document.getElementById('professional-auth-section').style.display = 'flex';
-                }
+                // Do NOT show auth section here; we only show it in the else block above
+                // If auth still hasn't resolved, we keep the loading screen hidden but don't force auth
+                // Optionally we can show a retry button, but we keep it minimal.
             }
         }, 3000);
 
