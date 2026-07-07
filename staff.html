@@ -3952,10 +3952,12 @@
             }
         }
 
+        // ============================================================
+        // [FIXED] ROBUST TEMPLATE LOADING FUNCTION – loadTemplate (dropdown)
+        // ============================================================
         async function loadTemplate(category) {
             const select = document.getElementById(`${category}-template-select`);
             const templateId = select.value;
-
             if (!templateId) return;
 
             try {
@@ -3964,60 +3966,20 @@
                     showToast("Template not found.", 'error');
                     return;
                 }
-
                 const data = doc.data();
-
-                // Load image URL if present
-                if (data.imageUrl) {
-                    document.getElementById(`${category}-image-url`).value = data.imageUrl;
-                    const preview = document.getElementById(`${category}-image-preview`);
-                    preview.src = data.imageUrl;
-                    preview.style.display = 'block';
-                    const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-                        '.file-upload-text');
-                    uploadContainer.innerHTML = `<i class="fas fa-check-circle" style="color: #26a269;"></i><br>Template image loaded`;
-                }
-
-                if (category === 'solo') {
-                    document.getElementById('solo-title').value = data.title || '';
-                    document.getElementById('solo-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('solo-details').value = data.details || '';
-                    document.getElementById('solo-max-players').value = data.maxParticipants || 0;
-                    document.getElementById('solo-per-kill').value = data.perKill || '0';
-                    document.getElementById('solo-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('solo-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('solo-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('solo-tournament-status').value = data.status || 'active';
-                } else if (category === 'duo') {
-                    document.getElementById('duo-title').value = data.title || '';
-                    document.getElementById('duo-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('duo-details').value = data.details || '';
-                    document.getElementById('duo-max-teams').value = data.maxParticipants || 0;
-                    document.getElementById('duo-prizes').value = data.prizes || '';
-                    document.getElementById('duo-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('duo-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('duo-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('duo-tournament-status').value = data.status || 'active';
-                } else if (category === 'squad') {
-                    document.getElementById('squad-title').value = data.title || '';
-                    document.getElementById('squad-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('squad-details').value = data.details || '';
-                    document.getElementById('squad-max-squads').value = data.maxParticipants || 0;
-                    document.getElementById('squad-prizes').value = data.prizes || '';
-                    document.getElementById('squad-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('squad-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('squad-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('squad-tournament-status').value = data.status || 'active';
-                }
-
-                showToast(`Template "${data.templateName || data.title}" loaded!`, 'success');
+                // Call the shared mapping function
+                applyTemplateData(category, data);
+                // Also set the select value to this template (already done)
+                showToast(`Template "${data.templateName || data.title}" applied successfully!`, 'success');
             } catch (error) {
                 console.error("Error loading template:", error);
-                showToast("Error loading template.", 'error');
+                showToast("Failed to load template.", 'error');
             }
         }
 
-        // ===== NEW: applyTemplateFromList - called from Automations "Load" button =====
+        // ============================================================
+        // [FIXED] ROBUST TEMPLATE LOADING FUNCTION – applyTemplateFromList (Automations)
+        // ============================================================
         async function applyTemplateFromList(templateId, category) {
             if (!templateId) {
                 showToast("Invalid template ID.", 'error');
@@ -4025,85 +3987,81 @@
             }
 
             try {
-                // 1. Fetch the template from Firestore
                 const doc = await db.collection("tournament_templates").doc(templateId).get();
                 if (!doc.exists) {
                     showToast("Template not found.", 'error');
                     return;
                 }
-
                 const data = doc.data();
 
-                // 2. Show tournaments section
+                // Switch to tournaments section and correct category tab
                 showSection('tournaments-section');
-
-                // 3. Switch to the correct category tab
                 switchTournamentCategory(category);
 
-                // 4. Fill all respective form inputs
-                if (category === 'solo') {
-                    document.getElementById('solo-title').value = data.title || '';
-                    document.getElementById('solo-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('solo-details').value = data.details || '';
-                    document.getElementById('solo-max-players').value = data.maxParticipants || 0;
-                    document.getElementById('solo-per-kill').value = data.perKill || '0';
-                    document.getElementById('solo-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('solo-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('solo-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('solo-tournament-status').value = data.status || 'active';
-                } else if (category === 'duo') {
-                    document.getElementById('duo-title').value = data.title || '';
-                    document.getElementById('duo-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('duo-details').value = data.details || '';
-                    document.getElementById('duo-max-teams').value = data.maxParticipants || 0;
-                    document.getElementById('duo-prizes').value = data.prizes || '';
-                    document.getElementById('duo-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('duo-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('duo-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('duo-tournament-status').value = data.status || 'active';
-                } else if (category === 'squad') {
-                    document.getElementById('squad-title').value = data.title || '';
-                    document.getElementById('squad-entry-fee').value = data.entryFee || 0;
-                    document.getElementById('squad-details').value = data.details || '';
-                    document.getElementById('squad-max-squads').value = data.maxParticipants || 0;
-                    document.getElementById('squad-prizes').value = data.prizes || '';
-                    document.getElementById('squad-tournament-id').value = data.tournamentId || '';
-                    document.getElementById('squad-tournament-password').value = data.tournamentPassword || '';
-                    document.getElementById('squad-show-credentials').checked = data.showCredentials !== false;
-                    document.getElementById('squad-tournament-status').value = data.status || 'active';
-                }
+                // Apply data to the form
+                applyTemplateData(category, data);
 
-                // 5. Fill imageUrl input, update preview, show block, change upload text
-                if (data.imageUrl) {
-                    document.getElementById(`${category}-image-url`).value = data.imageUrl;
-                    const preview = document.getElementById(`${category}-image-preview`);
-                    preview.src = data.imageUrl;
-                    preview.style.display = 'block';
-                    const uploadContainer = document.querySelector(`#${category}-image-url`).parentNode.querySelector(
-                        '.file-upload-text');
-                    if (uploadContainer) {
-                        uploadContainer.innerHTML =
-                            `<i class="fas fa-check-circle" style="color: #26a269;"></i><br>Template image loaded`;
-                    }
-                }
-
-                // 6. Show success toast with advice to add date and time
-                const templateName = data.templateName || data.title || 'Template';
-                showToast(
-                    `✅ "${templateName}" loaded! Please add the Conducted Date and Time before creating the tournament.`,
-                    'success',
-                    'Template Applied'
-                );
-
-                // Also update the template select dropdown to match (for consistency)
+                // Also update the dropdown select to match
                 const select = document.getElementById(`${category}-template-select`);
                 if (select) {
                     select.value = templateId;
                 }
 
+                showToast(`Template "${data.templateName || data.title}" applied successfully!`, 'success');
             } catch (error) {
                 console.error("Error applying template:", error);
-                showToast("Failed to load template. Please try again.", 'error');
+                showToast("Failed to load template.", 'error');
+            }
+        }
+
+        // ============================================================
+        // SHARED HELPER: applyTemplateData(category, data)
+        // Forcefully maps every field to the DOM
+        // ============================================================
+        function applyTemplateData(category, data) {
+            // Base fields
+            document.getElementById(`${category}-title`).value = data.title || '';
+            document.getElementById(`${category}-entry-fee`).value = data.entryFee || 0;
+            document.getElementById(`${category}-details`).value = data.details || '';
+            document.getElementById(`${category}-tournament-id`).value = data.tournamentId || '';
+            document.getElementById(`${category}-tournament-password`).value = data.tournamentPassword || '';
+
+            // Conditional fields
+            if (category === 'solo') {
+                document.getElementById('solo-max-players').value = data.maxParticipants || 0;
+                document.getElementById('solo-per-kill').value = data.perKill || '0';
+                document.getElementById('solo-show-credentials').checked = data.showCredentials !== false;
+                document.getElementById('solo-tournament-status').value = data.status || 'active';
+            } else if (category === 'duo') {
+                document.getElementById('duo-max-teams').value = data.maxParticipants || 0;
+                document.getElementById('duo-prizes').value = data.prizes || '';
+                document.getElementById('duo-show-credentials').checked = data.showCredentials !== false;
+                document.getElementById('duo-tournament-status').value = data.status || 'active';
+            } else if (category === 'squad') {
+                document.getElementById('squad-max-squads').value = data.maxParticipants || 0;
+                document.getElementById('squad-prizes').value = data.prizes || '';
+                document.getElementById('squad-show-credentials').checked = data.showCredentials !== false;
+                document.getElementById('squad-tournament-status').value = data.status || 'active';
+            }
+
+            // Image: update URL, preview, file-upload-text
+            const imageUrl = data.imageUrl || '';
+            document.getElementById(`${category}-image-url`).value = imageUrl;
+            const preview = document.getElementById(`${category}-image-preview`);
+            const uploadText = document.querySelector(`#${category}-image-url`).parentNode.querySelector('.file-upload-text');
+
+            if (imageUrl) {
+                preview.src = imageUrl;
+                preview.style.display = 'block';
+                if (uploadText) {
+                    uploadText.innerHTML = `<i class="fas fa-check-circle" style="color: #26a269;"></i><br>Template image loaded`;
+                }
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+                if (uploadText) {
+                    uploadText.innerHTML = `Click to upload tournament image<br><small>Supported: JPG, PNG, WebP (Max: 5MB)</small>`;
+                }
             }
         }
 
@@ -5775,7 +5733,8 @@
         console.log("  - Daily Auto-Repeat toggle");
         console.log("  - Automations & Templates section (templates + auto-repeat)");
         console.log("  - Fixed: forceLogout does NOT reset to false");
-        console.log("  - applyTemplateFromList() attached to Load button in Automations");
+        console.log("  - [FIXED] applyTemplateFromList() and loadTemplate() now robustly map all fields");
+        console.log("  - [FIXED] Image loading: URL, preview, and file-upload-text updated");
         console.log("  - triggerAutoRepeatManually() with Run Auto-Repeat Now button");
     </script>
 </body>
