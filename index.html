@@ -4856,14 +4856,21 @@
         }
 
         async function startGoogleAuth(mode) {
-            const isSignup = mode === 'signup';
-            const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
-            const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
-            sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
-            if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
-            else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
-            setButtonLoading(buttonId, true);
-            const provider = new firebase.auth.GoogleAuthProvider();
+    const isSignup = mode === 'signup';
+    const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
+    const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
+    sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
+    if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
+    else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+    setButtonLoading(buttonId, true);
+
+    // App (Android) లో ఉంటే, native Google Sign-In వాడండి
+    if (window.AndroidGoogleAuth) {
+        window.AndroidGoogleAuth.signIn();
+        return;
+    }
+
+    const provider = new firebase.auth.GoogleAuthProvider();
             try {
                 const result = await auth.signInWithPopup(provider);
                 if (result?.user) {
@@ -4907,6 +4914,35 @@
             }
         }
         handleGoogleRedirectResult();
+
+        // ─── ANDROID NATIVE GOOGLE SIGN-IN BRIDGE ───
+window.onAndroidGoogleSignIn = async function(idToken, email, name) {
+    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+    const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
+    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+    try {
+        const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+        const result = await auth.signInWithCredential(credential);
+        if (result?.user) {
+            await ensureGoogleUserProfile(result.user, mode, referral);
+            document.getElementById('professional-auth-section').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'flex';
+        }
+    } catch (error) {
+        showToast(error.message || 'Google auth failed.', 'error');
+    } finally {
+        setButtonLoading(buttonId, false);
+        sessionStorage.removeItem(GOOGLE_AUTH_MODE_KEY);
+        sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+    }
+};
+
+window.onAndroidGoogleSignInError = function(error) {
+    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+    showToast('Google sign-in failed: ' + error, 'error');
+    setButtonLoading(buttonId, false);
+};
 
         // ─── SIGNUP / LOGIN ───
         async function handleProfessionalSignup() {
