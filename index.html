@@ -4944,6 +4944,24 @@ window.onAndroidGoogleSignInError = function(error) {
     setButtonLoading(buttonId, false);
 };
 
+         // ─── NATIVE ONESIGNAL PLAYER ID SAVE ───
+window.onNativeOneSignalId = function(playerId) {
+    window._pendingOneSignalId = playerId;
+    if (auth.currentUser) {
+        db.collection("users").doc(auth.currentUser.uid).update({
+            oneSignalId: playerId
+        }).catch(e => console.warn('OneSignal ID save failed:', e));
+    }
+};
+
+auth.onAuthStateChanged(function(user) {
+    if (user && window._pendingOneSignalId) {
+        db.collection("users").doc(user.uid).update({
+            oneSignalId: window._pendingOneSignalId
+        }).catch(e => console.warn('OneSignal ID save failed:', e));
+    }
+});
+
         // ─── SIGNUP / LOGIN ───
         async function handleProfessionalSignup() {
             const username = document.getElementById('signup-username').value.trim();
@@ -6761,23 +6779,23 @@ window.onAndroidGoogleSignInError = function(error) {
         let adOverlaySeconds = 10;
 
         function startAd() {
-            const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
+    const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
 
-            const overlay = document.getElementById('ad-overlay');
-            const iframe = document.getElementById('ad-iframe');
-            const timerNumber = document.getElementById('ad-timer-number');
-            const closeBtn = document.getElementById('ad-close-btn-overlay');
-            const timerOverlay = document.getElementById('ad-timer-overlay');
+    const overlay = document.getElementById('ad-overlay');
+    const timerNumber = document.getElementById('ad-timer-number');
+    const closeBtn = document.getElementById('ad-close-btn-overlay');
+    const timerOverlay = document.getElementById('ad-timer-overlay');
 
-            if (adOverlayTimer) clearInterval(adOverlayTimer);
-            adOverlaySeconds = 10;
-            timerNumber.textContent = '10';
-            timerNumber.classList.remove('complete');
-            closeBtn.style.display = 'none';
-            timerOverlay.style.display = 'flex';
+    if (adOverlayTimer) clearInterval(adOverlayTimer);
+    adOverlaySeconds = 10;
+    timerNumber.textContent = '10';
+    timerNumber.classList.remove('complete');
+    closeBtn.style.display = 'none';
+    timerOverlay.style.display = 'flex';
 
-            iframe.src = adLink;
-            overlay.style.display = 'flex';
+    // Smart Link  external browser  open , iframe 
+    window.open(adLink, '_blank');
+    overlay.style.display = 'flex';
 
             adOverlayTimer = setInterval(() => {
                 adOverlaySeconds--;
