@@ -6793,6 +6793,15 @@ auth.onAuthStateChanged(function(user) {
     closeBtn.style.display = 'none';
     timerOverlay.style.display = 'flex';
 
+    // App — professional in-app browser (Custom Tab) 
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
+        window.Capacitor.Plugins.Browser.open({ url: adLink });
+    } else {
+        // Normal website (browser), fallback 
+        window.open(adLink, '_blank');
+    }
+    overlay.style.display = 'flex';
+
     // Smart Link  external browser  open , iframe 
     window.open(adLink, '_blank');
     overlay.style.display = 'flex';
