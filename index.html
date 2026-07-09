@@ -4915,8 +4915,7 @@
         }
         handleGoogleRedirectResult();
 
-        // ─── ANDROID NATIVE GOOGLE SIGN-IN BRIDGE ───
-window.onAndroidGoogleSignIn = async function(idToken, email, name) {
+       window.onAndroidGoogleSignIn = async function(idToken, email, name) {
     const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
     const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
     const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
@@ -4927,6 +4926,14 @@ window.onAndroidGoogleSignIn = async function(idToken, email, name) {
             await ensureGoogleUserProfile(result.user, mode, referral);
             document.getElementById('professional-auth-section').style.display = 'none';
             document.getElementById('loading-screen').style.display = 'flex';
+
+            setTimeout(() => {
+                const mainApp = document.getElementById('main-app');
+                if (mainApp && mainApp.style.display !== 'block' && auth.currentUser) {
+                    console.warn('Stuck detected, forcing re-init');
+                    location.reload();
+                }
+            }, 6000);
         }
     } catch (error) {
         showToast(error.message || 'Google auth failed.', 'error');
@@ -4936,7 +4943,6 @@ window.onAndroidGoogleSignIn = async function(idToken, email, name) {
         sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
     }
 };
-
 window.onAndroidGoogleSignInError = function(error) {
     const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
     const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
@@ -6802,10 +6808,7 @@ auth.onAuthStateChanged(function(user) {
     }
     overlay.style.display = 'flex';
 
-    // Smart Link  external browser  open , iframe 
-    window.open(adLink, '_blank');
-    overlay.style.display = 'flex';
-
+    
             adOverlayTimer = setInterval(() => {
                 adOverlaySeconds--;
                 if (adOverlaySeconds > 0) {
