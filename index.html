@@ -3908,9 +3908,9 @@
                 <h3 style="color:var(--text-primary);">Forgotten Password</h3>
                 <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:14px;">Select language:</p>
                 <div class="language-selector">
-                    <button class="language-btn active" onclick="switchForgotPasswordLanguage('english', event)">English</button>
-                    <button class="language-btn" onclick="switchForgotPasswordLanguage('hindi', event)">हिंदी</button>
-                    <button class="language-btn" onclick="switchForgotPasswordLanguage('telugu', event)">తెలుగు</button>
+                    <button class="language-btn active" onclick="switchForgotPasswordLanguage('english')">English</button>
+                    <button class="language-btn" onclick="switchForgotPasswordLanguage('hindi')">हिंदी</button>
+                    <button class="language-btn" onclick="switchForgotPasswordLanguage('telugu')">తెలుగు</button>
                 </div>
                 <div class="message-content" id="forgot-password-message">
                     <div>
@@ -4040,9 +4040,6 @@
                         <div class="amount" id="withdrawable-balance-display">0</div>
                     </div>
 
-                    <!-- 🟢 FIX 1: Added coin packages grid for wallet -->
-                    <div id="coin-packages-grid" class="coin-packages-grid-full" style="margin-top:12px;"></div>
-
                     <div id="ad-wallet-mid" class="ad-placeholder">
                         <script>
                             atOptions = {
@@ -4065,9 +4062,6 @@
                             <i class="fas fa-history"></i> Transactions
                         </button>
                     </div>
-
-                    <!-- 🟢 FIX 2: Added transactions list container -->
-                    <div id="wallet-transactions-list" style="margin-top:12px;"></div>
 
                     <div class="wallet-panel" style="background:linear-gradient(135deg, #f0f6ff 0%, #fafbfc 100%); border-color:#b8cce0;">
                         <div class="panel-title" style="color:#1a4a7a;">
@@ -4647,7 +4641,7 @@
 
         // ─── RENDER COIN PACKAGES ───
         function renderCoinPackages() {
-            const grid = document.getElementById('coin-packages-grid'); // now exists
+            const grid = document.getElementById('coin-packages-grid');
             if (!grid) return;
             grid.innerHTML = COIN_PACKAGES.map(pkg => `
                         <div onclick="initiateUpiPayment(${pkg.price})"
@@ -4814,18 +4808,10 @@
             document.getElementById('forgot-password-alert').style.display = 'none';
         }
 
-        // 🟢 FIX 3: Added event parameter
-        function switchForgotPasswordLanguage(lang, event) {
+        function switchForgotPasswordLanguage(lang) {
             currentForgotPasswordLanguage = lang;
             document.querySelectorAll('.language-btn').forEach(b => b.classList.remove('active'));
-            if (event && event.target) {
-                event.target.classList.add('active');
-            } else {
-                // fallback: find the button with matching text
-                document.querySelectorAll('.language-btn').forEach(btn => {
-                    if (btn.textContent.toLowerCase().includes(lang)) btn.classList.add('active');
-                });
-            }
+            event.target.classList.add('active');
             const msg = forgotPasswordMessages[lang];
             document.getElementById('forgot-password-message').innerHTML =
                 `<div><p style="margin:0;color:var(--primary);font-weight:700;">${msg.title}</p><p style="margin:10px 0 0 0;">${msg.message}</p></div>`;
@@ -4870,20 +4856,21 @@
         }
 
         async function startGoogleAuth(mode) {
-            const isSignup = mode === 'signup';
-            const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
-            const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
-            sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
-            if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
-            else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
-            setButtonLoading(buttonId, true);
+    const isSignup = mode === 'signup';
+    const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
+    const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
+    sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
+    if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
+    else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+    setButtonLoading(buttonId, true);
 
-            if (window.AndroidGoogleAuth) {
-                window.AndroidGoogleAuth.signIn();
-                return;
-            }
+    // App (Android) లో ఉంటే, native Google Sign-In వాడండి
+    if (window.AndroidGoogleAuth) {
+        window.AndroidGoogleAuth.signIn();
+        return;
+    }
 
-            const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
             try {
                 const result = await auth.signInWithPopup(provider);
                 if (result?.user) {
@@ -4928,57 +4915,58 @@
         }
         handleGoogleRedirectResult();
 
-        window.onAndroidGoogleSignIn = async function(idToken, email, name) {
-            const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
-            const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
-            const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
-            try {
-                const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
-                const result = await auth.signInWithCredential(credential);
-                if (result?.user) {
-                    await ensureGoogleUserProfile(result.user, mode, referral);
-                    document.getElementById('professional-auth-section').style.display = 'none';
-                    document.getElementById('loading-screen').style.display = 'flex';
-                    setTimeout(() => {
-                        const mainApp = document.getElementById('main-app');
-                        if (mainApp && mainApp.style.display !== 'block' && auth.currentUser) {
-                            console.warn('Stuck detected, forcing re-init');
-                            location.reload();
-                        }
-                    }, 6000);
+       window.onAndroidGoogleSignIn = async function(idToken, email, name) {
+    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+    const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
+    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+    try {
+        const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+        const result = await auth.signInWithCredential(credential);
+        if (result?.user) {
+            await ensureGoogleUserProfile(result.user, mode, referral);
+            document.getElementById('professional-auth-section').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'flex';
+
+            setTimeout(() => {
+                const mainApp = document.getElementById('main-app');
+                if (mainApp && mainApp.style.display !== 'block' && auth.currentUser) {
+                    console.warn('Stuck detected, forcing re-init');
+                    location.reload();
                 }
-            } catch (error) {
-                showToast(error.message || 'Google auth failed.', 'error');
-            } finally {
-                setButtonLoading(buttonId, false);
-                sessionStorage.removeItem(GOOGLE_AUTH_MODE_KEY);
-                sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
-            }
-        };
-        window.onAndroidGoogleSignInError = function(error) {
-            const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
-            const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
-            showToast('Google sign-in failed: ' + error, 'error');
-            setButtonLoading(buttonId, false);
-        };
+            }, 6000);
+        }
+    } catch (error) {
+        showToast(error.message || 'Google auth failed.', 'error');
+    } finally {
+        setButtonLoading(buttonId, false);
+        sessionStorage.removeItem(GOOGLE_AUTH_MODE_KEY);
+        sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+    }
+};
+window.onAndroidGoogleSignInError = function(error) {
+    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+    showToast('Google sign-in failed: ' + error, 'error');
+    setButtonLoading(buttonId, false);
+};
 
-        // ─── NATIVE ONESIGNAL PLAYER ID SAVE ───
-        window.onNativeOneSignalId = function(playerId) {
-            window._pendingOneSignalId = playerId;
-            if (auth.currentUser) {
-                db.collection("users").doc(auth.currentUser.uid).update({
-                    oneSignalId: playerId
-                }).catch(e => console.warn('OneSignal ID save failed:', e));
-            }
-        };
+         // ─── NATIVE ONESIGNAL PLAYER ID SAVE ───
+window.onNativeOneSignalId = function(playerId) {
+    window._pendingOneSignalId = playerId;
+    if (auth.currentUser) {
+        db.collection("users").doc(auth.currentUser.uid).update({
+            oneSignalId: playerId
+        }).catch(e => console.warn('OneSignal ID save failed:', e));
+    }
+};
 
-        auth.onAuthStateChanged(function(user) {
-            if (user && window._pendingOneSignalId) {
-                db.collection("users").doc(user.uid).update({
-                    oneSignalId: window._pendingOneSignalId
-                }).catch(e => console.warn('OneSignal ID save failed:', e));
-            }
-        });
+auth.onAuthStateChanged(function(user) {
+    if (user && window._pendingOneSignalId) {
+        db.collection("users").doc(user.uid).update({
+            oneSignalId: window._pendingOneSignalId
+        }).catch(e => console.warn('OneSignal ID save failed:', e));
+    }
+});
 
         // ─── SIGNUP / LOGIN ───
         async function handleProfessionalSignup() {
@@ -5171,7 +5159,7 @@
         }
 
         function renderWalletTransactions() {
-            const container = document.getElementById('wallet-transactions-list'); // now exists
+            const container = document.getElementById('wallet-transactions-list');
             if (!container) return;
             if (!walletTransactions.length) {
                 container.innerHTML = '<p style="color:var(--text-muted);text-align:center;">No transactions found.</p>';
@@ -6797,27 +6785,30 @@
         let adOverlaySeconds = 10;
 
         function startAd() {
-            const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
+    const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
 
-            const overlay = document.getElementById('ad-overlay');
-            const timerNumber = document.getElementById('ad-timer-number');
-            const closeBtn = document.getElementById('ad-close-btn-overlay');
-            const timerOverlay = document.getElementById('ad-timer-overlay');
+    const overlay = document.getElementById('ad-overlay');
+    const timerNumber = document.getElementById('ad-timer-number');
+    const closeBtn = document.getElementById('ad-close-btn-overlay');
+    const timerOverlay = document.getElementById('ad-timer-overlay');
 
-            if (adOverlayTimer) clearInterval(adOverlayTimer);
-            adOverlaySeconds = 10;
-            timerNumber.textContent = '10';
-            timerNumber.classList.remove('complete');
-            closeBtn.style.display = 'none';
-            timerOverlay.style.display = 'flex';
+    if (adOverlayTimer) clearInterval(adOverlayTimer);
+    adOverlaySeconds = 10;
+    timerNumber.textContent = '10';
+    timerNumber.classList.remove('complete');
+    closeBtn.style.display = 'none';
+    timerOverlay.style.display = 'flex';
 
-            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
-                window.Capacitor.Plugins.Browser.open({ url: adLink });
-            } else {
-                window.open(adLink, '_blank');
-            }
-            overlay.style.display = 'flex';
+    // App — professional in-app browser (Custom Tab) 
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
+        window.Capacitor.Plugins.Browser.open({ url: adLink });
+    } else {
+        // Normal website (browser), fallback 
+        window.open(adLink, '_blank');
+    }
+    overlay.style.display = 'flex';
 
+    
             adOverlayTimer = setInterval(() => {
                 adOverlaySeconds--;
                 if (adOverlaySeconds > 0) {
@@ -6890,6 +6881,7 @@
             authStateChecked = true;
 
             if (user) {
+                // User is logged in — hide auth section and show loading while we init
                 document.getElementById('professional-auth-section').style.display = 'none';
                 document.getElementById('loading-screen').style.display = 'flex';
 
@@ -6905,17 +6897,22 @@
                         return;
                     }
 
+                    // Now initialize the app (this will hide loading and show main app)
                     await initializeApp(user, data);
 
                 } catch (e) {
                     console.error('Auth state handler error:', e);
+                    // If we can't load user data, sign out and show auth
                     try { await auth.signOut(); } catch (_) {}
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('professional-auth-section').style.display = 'flex';
                     showToast('Error loading user data. Please try again.', 'error');
                 }
             } else {
+                // User is NOT logged in — show auth section
+                // Only show auth if we're not already initialized
                 if (appInitialized) {
+                    // We were initialized but user logged out — clean up
                     appInitialized = false;
                     isInitializing = false;
                     stopAllTimers();
@@ -6941,6 +6938,7 @@
         setTimeout(() => {
             if (!authStateChecked) {
                 document.getElementById('loading-screen').style.display = 'none';
+                // Only show auth if user is actually null (safety check)
                 if (!auth.currentUser) {
                     document.getElementById('professional-auth-section').style.display = 'flex';
                 }
