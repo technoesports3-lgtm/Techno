@@ -2424,15 +2424,19 @@
                     </div>
                 </section>
 
-                <!-- Prize Distribution Section -->
+                <!-- ============================================================ -->
+                <!-- PRIZE DISTRIBUTION SECTION — REVAMPED                          -->
+                <!-- Removed 1st, 2nd, 3rd fixed prize inputs.                     -->
+                <!-- Dynamic UI rendered by renderPrizeDistributionPlayers()        -->
+                <!-- ============================================================ -->
                 <section id="prize-distribution-section" class="section">
                     <div class="content-card">
                         <div class="content-header">
-                            <h3>Prize Distribution</h3>
+                            <h3><i class="fas fa-trophy"></i> Prize Distribution</h3>
                         </div>
                         <div class="content-body">
                             <div style="color: #00a8ff; background: rgba(0, 168, 255, 0.1); border: 1px solid rgba(0, 168, 255, 0.35); padding: 10px; border-radius: 6px; margin-bottom: 15px;">
-                                <i class="fas fa-info-circle"></i> Step 1: Select tournament. Step 2: Enter kills/positions. Step 3: Configure place prizes. Step 4: Preview and distribute.
+                                <i class="fas fa-info-circle"></i> Step 1: Select tournament. Step 2: Enter kills / team stats. Step 3: Preview and distribute.
                             </div>
 
                             <div class="form-group">
@@ -2443,24 +2447,12 @@
                             </div>
                             <div id="prize-tournament-details" style="display:none; margin-bottom:12px; color:#ccc; background: rgba(0,0,0,0.25); border:1px solid #333; border-radius:8px; padding:10px;"></div>
 
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
-                                <div class="form-group">
-                                    <label>1st Prize (₹)</label>
-                                    <input type="number" id="first-prize-amount" min="0" value="0" oninput="recalculatePrizePreview()">
-                                </div>
-                                <div class="form-group">
-                                    <label>2nd Prize (₹)</label>
-                                    <input type="number" id="second-prize-amount" min="0" value="0" oninput="recalculatePrizePreview()">
-                                </div>
-                                <div class="form-group">
-                                    <label>3rd Prize (₹)</label>
-                                    <input type="number" id="third-prize-amount" min="0" value="0" oninput="recalculatePrizePreview()">
-                                </div>
-                            </div>
+                            <!-- PER-KILL READONLY (kept) -->
                             <div style="margin-bottom:12px; color:#aaa;">
                                 Per Kill Prize: <strong id="per-kill-readonly" style="color:#00a8ff;">₹0.00</strong>
                             </div>
 
+                            <!-- DYNAMIC PLAYERS / TEAMS CONTAINER -->
                             <div id="prize-distribution-players-container">
                                 <div class="empty-state">
                                     <i class="fas fa-trophy"></i>
@@ -2469,6 +2461,7 @@
                                 </div>
                             </div>
 
+                            <!-- PREVIEW CONTAINER -->
                             <div id="prize-preview-container" style="display: none; margin-top: 15px; background: rgba(0,0,0,0.25); border: 1px solid #333; border-radius: 8px; padding: 12px;">
                                 <h4 style="margin-top: 0; color: #00a8ff;">Prize Preview</h4>
                                 <div id="prize-preview-list" style="margin-bottom: 10px;"></div>
@@ -2477,6 +2470,7 @@
                                     <strong id="prize-preview-total" style="color: #00a8ff;">₹0.00</strong>
                                 </div>
                             </div>
+
                             <button id="preview-prizes-btn" onclick="recalculatePrizePreview()" style="width:100%; margin-top:12px; background: #333;">
                                 <i class="fas fa-eye"></i> Preview Prizes
                             </button>
@@ -2843,8 +2837,16 @@
         let tournamentListener = null;
         let userListener = null;
         let authStateChecked = false;
-        let prizeDistributionPlayers = [];
-        let selectedPrizeTournament = null;
+
+        // --------------------------------------------------------------
+        // PRIZE DISTRIBUTION STATE — REVAMPED
+        // --------------------------------------------------------------
+        let selectedPrizeTournament = null; // tournament doc
+        let prizeMode = 'solo'; // 'solo' | 'team'
+        // For SOLO: array of { userId, name, uid, kills, extraPrize, amount, registrationId }
+        let prizeSoloPlayers = [];
+        // For TEAM (DUO/SQUAD): array of { teamNumber, players: [...], teamKills, teamPrize, individualAmounts: [...], registrationId }
+        let prizeTeams = [];
         let allWithdrawals = [];
         let currentWithdrawalFilter = 'all';
         let recentActivity = [];
@@ -4961,9 +4963,15 @@
             });
         }
 
+        // ================================================================
+        // PRIZE DISTRIBUTION — REVAMPED
+        // ================================================================
+
         function resetPrizeDistributionSection() {
-            prizeDistributionPlayers = [];
+            prizeSoloPlayers = [];
+            prizeTeams = [];
             selectedPrizeTournament = null;
+            prizeMode = 'solo';
 
             const playersContainer = document.getElementById('prize-distribution-players-container');
             const previewContainer = document.getElementById('prize-preview-container');
@@ -5016,21 +5024,29 @@
             }
 
             selectedPrizeTournament = tournaments.find(t => t.id === tournamentId) || null;
+            if (!selectedPrizeTournament) {
+                showToast("Tournament not found.", 'error');
+                return;
+            }
+
+            const cat = (selectedPrizeTournament.category || '').toLowerCase();
+            prizeMode = (cat === 'solo') ? 'solo' : 'team';
+
             playersContainer.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Loading approved players...</p>';
             const detailsEl = document.getElementById('prize-tournament-details');
             const perKillReadonly = document.getElementById('per-kill-readonly');
 
-            if (selectedPrizeTournament && detailsEl) {
-                const perKillAmount = Number(selectedPrizeTournament.perKill || 0);
+            const perKillAmount = Number(selectedPrizeTournament.perKill || 0);
+            if (detailsEl) {
                 detailsEl.style.display = 'block';
                 detailsEl.innerHTML = `
                         <strong style="color:#00a8ff;">${selectedPrizeTournament.title}</strong><br>
-                        Category: ${String(selectedPrizeTournament.category || '').toUpperCase()} |
+                        Category: ${cat.toUpperCase()} |
                         Entry Fee: ₹${Number(selectedPrizeTournament.entryFee || 0).toFixed(2)} |
                         Per Kill: ₹${perKillAmount.toFixed(2)}
                     `;
-                if (perKillReadonly) perKillReadonly.textContent = `₹${perKillAmount.toFixed(2)}`;
             }
+            if (perKillReadonly) perKillReadonly.textContent = `₹${perKillAmount.toFixed(2)}`;
 
             try {
                 const registrationsSnapshot = await db.collection("tournament_registrations")
@@ -5038,41 +5054,105 @@
                     .where("status", "==", "approved")
                     .get();
 
+                if (registrationsSnapshot.empty) {
+                    playersContainer.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-user-slash"></i>
+                                <h3>No Approved Players</h3>
+                                <p>No approved players found for this tournament.</p>
+                            </div>
+                        `;
+                    distributeBtn.style.display = 'none';
+                    return;
+                }
+
                 const registrations = registrationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const flattenedPlayers = [];
 
-                registrations.forEach((reg, registrationIndex) => {
-                    if (Array.isArray(reg.playerDetails) && reg.playerDetails.length > 0) {
-                        reg.playerDetails.forEach((player, playerIndex) => {
-                            flattenedPlayers.push({
-                                key: `${reg.id}_${playerIndex}`,
-                                registrationId: reg.id,
-                                userId: reg.userId || '',
-                                name: player?.name || reg.name || `Player ${registrationIndex + 1}`,
-                                freeFireId: player?.freeFireId || 'N/A',
-                                kills: 0,
-                                position: 'none',
-                                amount: 0
+                if (prizeMode === 'solo') {
+                    // --- SOLO: flatten each player as an individual ---
+                    const soloPlayers = [];
+                    registrations.forEach((reg, idx) => {
+                        if (Array.isArray(reg.playerDetails) && reg.playerDetails.length > 0) {
+                            reg.playerDetails.forEach((p, pIdx) => {
+                                soloPlayers.push({
+                                    userId: reg.userId || '',
+                                    name: p?.inGameName || p?.name || reg.name || `Player ${idx+1}`,
+                                    uid: p?.uid || p?.freeFireId || 'N/A',
+                                    kills: 0,
+                                    extraPrize: 0,
+                                    amount: 0,
+                                    registrationId: reg.id,
+                                    teamNumber: reg.teamNumber || null
+                                });
                             });
-                        });
-                    } else {
-                        flattenedPlayers.push({
-                            key: `${reg.id}_0`,
-                            registrationId: reg.id,
-                            userId: reg.userId || '',
-                            name: reg.name || `Player ${registrationIndex + 1}`,
-                            freeFireId: 'N/A',
-                            kills: 0,
-                            position: 'none',
-                            amount: 0
-                        });
-                    }
-                });
+                        } else {
+                            soloPlayers.push({
+                                userId: reg.userId || '',
+                                name: reg.name || `Player ${idx+1}`,
+                                uid: reg.userId || 'N/A',
+                                kills: 0,
+                                extraPrize: 0,
+                                amount: 0,
+                                registrationId: reg.id,
+                                teamNumber: reg.teamNumber || null
+                            });
+                        }
+                    });
+                    prizeSoloPlayers = soloPlayers;
+                    prizeTeams = [];
+                } else {
+                    // --- TEAM (DUO / SQUAD): group by teamNumber ---
+                    const teamsMap = new Map();
+                    registrations.forEach((reg) => {
+                        let teamNum = reg.teamNumber;
+                        if (teamNum === undefined || teamNum === null || teamNum === '') {
+                            // fallback: use registration id or index
+                            teamNum = reg.id.slice(-4);
+                        }
+                        const key = String(teamNum);
+                        if (!teamsMap.has(key)) {
+                            teamsMap.set(key, {
+                                teamNumber: key,
+                                players: [],
+                                registrationId: reg.id,
+                                teamKills: 0,
+                                teamPrize: 0,
+                                individualAmounts: []
+                            });
+                        }
+                        const team = teamsMap.get(key);
+                        if (Array.isArray(reg.playerDetails) && reg.playerDetails.length > 0) {
+                            reg.playerDetails.forEach((p) => {
+                                team.players.push({
+                                    userId: reg.userId || '',
+                                    name: p?.inGameName || p?.name || reg.name || 'Unknown',
+                                    uid: p?.uid || p?.freeFireId || 'N/A',
+                                    slotNumber: p?.slotNumber || null
+                                });
+                            });
+                        } else {
+                            team.players.push({
+                                userId: reg.userId || '',
+                                name: reg.name || 'Unknown',
+                                uid: reg.userId || 'N/A',
+                                slotNumber: null
+                            });
+                        }
+                    });
+                    prizeTeams = Array.from(teamsMap.values());
+                    // Sort teams by teamNumber numerically
+                    prizeTeams.sort((a, b) => {
+                        const na = parseInt(a.teamNumber, 10) || 0;
+                        const nb = parseInt(b.teamNumber, 10) || 0;
+                        return na - nb;
+                    });
+                    prizeSoloPlayers = [];
+                }
 
-                prizeDistributionPlayers = flattenedPlayers;
                 renderPrizeDistributionPlayers();
-                distributeBtn.style.display = flattenedPlayers.length > 0 ? 'block' : 'none';
+                distributeBtn.style.display = 'block';
                 recalculatePrizePreview();
+
             } catch (error) {
                 console.error("Error loading prize distribution players:", error);
                 playersContainer.innerHTML = '<p style="color: #d72638; text-align:center; padding:20px;">Failed to load players.</p>';
@@ -5083,181 +5163,286 @@
             const container = document.getElementById('prize-distribution-players-container');
             if (!container) return;
 
-            if (!prizeDistributionPlayers.length) {
-                container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-user-slash"></i>
-                            <h3>No Approved Players</h3>
-                            <p>No approved players found for this tournament.</p>
+            const perKillAmount = Number(selectedPrizeTournament?.perKill || 0);
+
+            if (prizeMode === 'solo') {
+                // --- SOLO: table with Name, UID, Kills (input), Extra Prize (input) ---
+                if (!prizeSoloPlayers.length) {
+                    container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-user-slash"></i>
+                                <h3>No Players</h3>
+                                <p>No approved solo players found.</p>
+                            </div>
+                        `;
+                    return;
+                }
+
+                let html = `
+                        <div style="color:#aaa; margin-bottom:10px;">
+                            Players: ${prizeSoloPlayers.length} | Per Kill: <span style="color:#00a8ff; font-weight:600;">₹${perKillAmount}</span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Player Name</th>
+                                        <th>UID</th>
+                                        <th>Kills <span style="font-weight:400; color:#888;">(input)</span></th>
+                                        <th>Extra Prize ₹ <span style="font-weight:400; color:#888;">(input)</span></th>
+                                        <th>Total Prize</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+
+                prizeSoloPlayers.forEach((p, idx) => {
+                    html += `
+                            <tr>
+                                <td>${p.name}</td>
+                                <td>${p.uid}</td>
+                                <td>
+                                    <input type="number" min="0" value="${p.kills}" onchange="updateSoloPlayer(${idx}, 'kills', this.value)" style="min-width:70px;">
+                                </td>
+                                <td>
+                                    <input type="number" min="0" value="${p.extraPrize}" onchange="updateSoloPlayer(${idx}, 'extraPrize', this.value)" style="min-width:70px;">
+                                </td>
+                                <td style="color:#00a8ff; font-weight:700;">₹${Number(p.amount || 0).toFixed(2)}</td>
+                            </tr>
+                        `;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
                         </div>
                     `;
-                return;
+                container.innerHTML = html;
+
+            } else {
+                // --- TEAM (DUO/SQUAD): group by teamNumber ---
+                if (!prizeTeams.length) {
+                    container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-users-slash"></i>
+                                <h3>No Teams</h3>
+                                <p>No approved teams found.</p>
+                            </div>
+                        `;
+                    return;
+                }
+
+                let html = `
+                        <div style="color:#aaa; margin-bottom:10px;">
+                            Teams: ${prizeTeams.length} | Per Kill: <span style="color:#00a8ff; font-weight:600;">₹${perKillAmount}</span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Team #</th>
+                                        <th>Players</th>
+                                        <th>Total Team Kills <span style="font-weight:400; color:#888;">(input)</span></th>
+                                        <th>Total Team Prize ₹ <span style="font-weight:400; color:#888;">(input)</span></th>
+                                        <th>Each Player</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+
+                prizeTeams.forEach((team, idx) => {
+                    const playerNames = team.players.map(p => p.name).join(', ');
+                    const indivAmounts = team.individualAmounts || [];
+                    const displayAmounts = indivAmounts.length ? indivAmounts.map(a => `₹${a.toFixed(2)}`).join(', ') :
+                        '—';
+
+                    html += `
+                            <tr>
+                                <td><strong style="color:#00a8ff;">#${team.teamNumber}</strong></td>
+                                <td style="font-size:0.85em;">${playerNames}</td>
+                                <td>
+                                    <input type="number" min="0" value="${team.teamKills}" onchange="updateTeamField(${idx}, 'teamKills', this.value)" style="min-width:70px;">
+                                </td>
+                                <td>
+                                    <input type="number" min="0" value="${team.teamPrize}" onchange="updateTeamField(${idx}, 'teamPrize', this.value)" style="min-width:70px;">
+                                </td>
+                                <td style="color:#00a8ff; font-weight:700;">${displayAmounts}</td>
+                            </tr>
+                        `;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                container.innerHTML = html;
             }
 
-            const perKillAmount = Number(selectedPrizeTournament?.perKill || 0);
-            const perKillText = Number.isFinite(perKillAmount) ? perKillAmount : 0;
-
-            container.innerHTML = `
-                    <div style="color:#aaa; margin-bottom:10px;">
-                        Players: ${prizeDistributionPlayers.length} | Per Kill: <span style="color:#00a8ff; font-weight:600;">₹${perKillText}</span>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Player</th>
-                                    <th>FF UID</th>
-                                    <th>Kills</th>
-                                    <th>Position</th>
-                                    <th>Total Prize</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${prizeDistributionPlayers.map((player, idx) => `
-                                    <tr>
-                                        <td>${player.name}</td>
-                                        <td>${player.freeFireId}</td>
-                                        <td>
-                                            <input type="number" min="0" value="${player.kills}" onchange="updatePlayerKills(${idx}, this.value)" style="min-width:90px;">
-                                        </td>
-                                        <td>
-                                            <select onchange="updatePlayerPosition(${idx}, this.value)" style="min-width:120px;">
-                                                <option value="none" ${player.position === 'none' ? 'selected' : ''}>None</option>
-                                                <option value="1st" ${player.position === '1st' ? 'selected' : ''}>1st</option>
-                                                <option value="2nd" ${player.position === '2nd' ? 'selected' : ''}>2nd</option>
-                                                <option value="3rd" ${player.position === '3rd' ? 'selected' : ''}>3rd</option>
-                                            </select>
-                                        </td>
-                                        <td style="color:#00a8ff; font-weight:700;">₹${Number(player.amount || 0).toFixed(2)}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-
+            // Also sync match-results container if visible
             const matchContainer = document.getElementById('match-results-players-container');
             if (matchContainer && document.getElementById('match-results-section')?.style.display === 'block') {
                 matchContainer.innerHTML = container.innerHTML;
             }
         }
 
-        function updatePlayerKills(index, killsValue) {
-            const kills = Math.max(0, Number(killsValue || 0));
-            if (!prizeDistributionPlayers[index]) return;
-            prizeDistributionPlayers[index].kills = kills;
+        // ---- SOLO player update ----
+        function updateSoloPlayer(index, field, value) {
+            if (!prizeSoloPlayers[index]) return;
+            const num = Math.max(0, Number(value) || 0);
+            if (field === 'kills') prizeSoloPlayers[index].kills = num;
+            else if (field === 'extraPrize') prizeSoloPlayers[index].extraPrize = num;
             recalculatePrizePreview();
         }
 
-        function updatePlayerPosition(index, positionValue) {
-            if (!prizeDistributionPlayers[index]) return;
-            prizeDistributionPlayers[index].position = positionValue || 'none';
+        // ---- TEAM field update ----
+        function updateTeamField(index, field, value) {
+            if (!prizeTeams[index]) return;
+            const num = Math.max(0, Number(value) || 0);
+            if (field === 'teamKills') prizeTeams[index].teamKills = num;
+            else if (field === 'teamPrize') prizeTeams[index].teamPrize = num;
             recalculatePrizePreview();
         }
 
-        function getPositionPrize(position) {
-            const first = Number(document.getElementById('first-prize-amount')?.value || 0);
-            const second = Number(document.getElementById('second-prize-amount')?.value || 0);
-            const third = Number(document.getElementById('third-prize-amount')?.value || 0);
-            if (position === '1st') return first;
-            if (position === '2nd') return second;
-            if (position === '3rd') return third;
-            return 0;
-        }
-
+        // ================================================================
+        // RECALCULATE PRIZE PREVIEW — REVAMPED
+        // ================================================================
         function recalculatePrizePreview() {
-            if (!prizeDistributionPlayers.length) return;
-
             const perKillAmount = Math.max(0, Number(selectedPrizeTournament?.perKill || 0));
             const previewContainer = document.getElementById('prize-preview-container');
             const previewList = document.getElementById('prize-preview-list');
             const previewTotal = document.getElementById('prize-preview-total');
 
-            const positionTaken = { '1st': null, '2nd': null, '3rd': null };
             let total = 0;
             let previewRows = '';
 
-            prizeDistributionPlayers.forEach((player, idx) => {
-                if (player.position !== 'none' && positionTaken[player.position] !== null && positionTaken[player
-                        .position] !== idx) {
-                    player.position = 'none';
-                } else if (player.position !== 'none') {
-                    positionTaken[player.position] = idx;
-                }
+            if (prizeMode === 'solo') {
+                // SOLO: Amount = (Kills * PerKill) + Extra Prize
+                prizeSoloPlayers.forEach((p, idx) => {
+                    const killAmount = Number(p.kills || 0) * perKillAmount;
+                    const extra = Number(p.extraPrize || 0);
+                    const amount = killAmount + extra;
+                    p.amount = amount;
+                    total += amount;
 
-                const killPrize = Number(player.kills || 0) * perKillAmount;
-                const positionPrize = getPositionPrize(player.position);
-                const totalPrize = killPrize + positionPrize;
-                player.amount = totalPrize;
-                total += totalPrize;
+                    previewRows += `
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #333;">
+                                <span style="color:#ddd;">${p.name} (${p.kills} kills${extra > 0 ? ` + ₹${extra} extra` : ''})</span>
+                                <span style="color:#00a8ff; font-weight:600;">₹${amount.toFixed(2)}</span>
+                            </div>
+                        `;
+                });
+            } else {
+                // TEAM (DUO/SQUAD): Team Total = (Team Kills * PerKill) + Team Prize
+                // Distribute equally: Individual Amount = Team Total / teamPlayers.length
+                prizeTeams.forEach((team) => {
+                    const teamKillAmount = Number(team.teamKills || 0) * perKillAmount;
+                    const teamPrize = Number(team.teamPrize || 0);
+                    const teamTotal = teamKillAmount + teamPrize;
+                    const playerCount = team.players.length || 1;
+                    const individualAmount = teamTotal / playerCount;
 
-                previewRows += `
-                        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #333;">
-                            <span style="color:#ddd;">${player.name} (${player.kills} Kills${player.position && player.position !== 'none' ? `, ${player.position}` : ''})</span>
-                            <span style="color:#00a8ff; font-weight:600;">₹${totalPrize.toFixed(2)}</span>
-                        </div>
-                    `;
-            });
+                    team.individualAmounts = team.players.map(() => individualAmount);
 
-            renderPrizeDistributionPlayers();
+                    // Show team-level preview
+                    const playerNames = team.players.map(p => p.name).join(', ');
+                    previewRows += `
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #333; background:rgba(0,168,255,0.05);">
+                                <span style="color:#ddd; font-weight:600;">Team #${team.teamNumber} — ${playerNames}</span>
+                                <span style="color:#00a8ff; font-weight:600;">₹${teamTotal.toFixed(2)} (₹${individualAmount.toFixed(2)} each)</span>
+                            </div>
+                        `;
+
+                    // Show individual breakdown per player
+                    team.players.forEach((p, i) => {
+                        previewRows += `
+                                <div style="display:flex; justify-content:space-between; padding:4px 0 4px 20px; border-bottom:1px solid #222; font-size:0.9em;">
+                                    <span style="color:#aaa;">↳ ${p.name}</span>
+                                    <span style="color:#8af;">₹${individualAmount.toFixed(2)}</span>
+                                </div>
+                            `;
+                    });
+
+                    total += teamTotal;
+                });
+            }
 
             previewList.innerHTML = previewRows || '<div style="color:#888;">No prize data</div>';
             previewTotal.textContent = `₹${total.toFixed(2)}`;
             previewContainer.style.display = 'block';
+
+            // Also re-render the table to show updated amounts
+            renderPrizeDistributionPlayers();
         }
 
-        // ---- DISTRIBUTE PRIZES with Daily Limit ----
+        // ================================================================
+        // DISTRIBUTE PRIZES — REVAMPED with daily limit check
+        // ================================================================
         async function distributePrizes() {
-            if (!selectedPrizeTournament || !prizeDistributionPlayers.length) {
-                showToast("Please select tournament and players first.", 'error');
+            if (!selectedPrizeTournament) {
+                showToast("Please select a tournament first.", 'error');
                 return;
             }
 
+            // Build winners array from current state
+            let winners = [];
+
+            if (prizeMode === 'solo') {
+                winners = prizeSoloPlayers
+                    .filter(p => Number(p.amount || 0) > 0)
+                    .map(p => ({
+                        userId: p.userId,
+                        amount: Number(p.amount || 0),
+                        kills: Number(p.kills || 0),
+                        extraPrize: Number(p.extraPrize || 0)
+                    }));
+            } else {
+                // TEAM mode: each player gets individualAmount
+                prizeTeams.forEach(team => {
+                    const indivAmounts = team.individualAmounts || [];
+                    team.players.forEach((p, idx) => {
+                        const amt = Number(indivAmounts[idx] || 0);
+                        if (amt > 0) {
+                            winners.push({
+                                userId: p.userId,
+                                amount: amt,
+                                kills: Number(team.teamKills || 0),
+                                extraPrize: 0, // team prize already distributed
+                                teamNumber: team.teamNumber
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (!winners.length) {
+                showToast("No players with positive prize amount. Enter kills/prizes first.", 'error');
+                return;
+            }
+
+            // Check for missing userId
+            const missing = winners.filter(w => !w.userId);
+            if (missing.length) {
+                showToast(`⚠️ ${missing.length} player(s) missing userId. Cannot distribute.`, 'error');
+                return;
+            }
+
+            const totalAmount = winners.reduce((sum, w) => sum + Number(w.amount || 0), 0);
             const dailyLimit = Number(staffData.dailyPrizeLimit || 0);
+
+            // Check daily limit before showing confirmation
             if (dailyLimit > 0) {
                 const todayDistributed = await getTodayDistributedAmount(currentStaff.uid);
-                const newTotalAmount = prizeDistributionPlayers.reduce((sum, p) => sum + Number(p.amount || 0), 0);
-
-                if (todayDistributed + newTotalAmount > dailyLimit) {
+                if (todayDistributed + totalAmount > dailyLimit) {
                     showToast(
-                        `Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}. Cannot distribute ₹${newTotalAmount.toFixed(2)}.`,
+                        `❌ Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}. Cannot distribute ₹${totalAmount.toFixed(2)}.`,
                         'error'
                     );
                     return;
                 }
             }
 
-            const distributeBtn = document.getElementById('distribute-prizes-btn');
-            const resultContainer = document.getElementById('distribution-result-container');
-
-            const winners = prizeDistributionPlayers
-                .filter(player => Number(player.amount || 0) > 0 || Number(player.kills || 0) > 0 || (player.position &&
-                    player.position !== 'none'))
-                .map(player => ({
-                    userId: player.userId,
-                    amount: Number(player.amount || 0),
-                    position: player.position === '1st' ? 1 : player.position === '2nd' ? 2 : player.position === '3rd' ?
-                        3 : null,
-                    kills: Number(player.kills || 0)
-                }));
-
-            if (!winners.length) {
-                showToast("Add at least kills or winner positions before distributing.", 'error');
-                return;
-            }
-
-            if (winners.some(w => !w.userId)) {
-                showToast("Some players have missing user ID; cannot distribute.", 'error');
-                return;
-            }
-
-            const payload = {
-                tournamentId: selectedPrizeTournament.id,
-                winners
-            };
-
-            const totalAmount = winners.reduce((sum, w) => sum + Number(w.amount || 0), 0);
-
+            // Build confirmation message
             let confirmMsg =
                 `Are you sure? This will add money to <strong>${winners.length}</strong> players' wallets.`;
             if (dailyLimit > 0) {
@@ -5271,15 +5456,19 @@
                 "Confirm Prize Distribution",
                 confirmMsg,
                 async () => {
+                    const distributeBtn = document.getElementById('distribute-prizes-btn');
+                    const resultContainer = document.getElementById('distribution-result-container');
+
                     distributeBtn.disabled = true;
                     distributeBtn.innerHTML = '<span class="loading-spinner"></span> Distributing...';
 
                     try {
+                        // Re-check daily limit (in case it changed)
                         if (dailyLimit > 0) {
                             const todayDistributed = await getTodayDistributedAmount(currentStaff.uid);
                             if (todayDistributed + totalAmount > dailyLimit) {
                                 showToast(
-                                    `Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}`,
+                                    `❌ Daily Prize Limit Exceeded! Today: ₹${todayDistributed.toFixed(2)} / ₹${dailyLimit.toFixed(2)}`,
                                     'error'
                                 );
                                 distributeBtn.disabled = false;
@@ -5287,6 +5476,17 @@
                                 return;
                             }
                         }
+
+                        // Prepare payload for backend
+                        const payload = {
+                            tournamentId: selectedPrizeTournament.id,
+                            winners: winners.map(w => ({
+                                userId: w.userId,
+                                amount: w.amount,
+                                kills: w.kills || 0,
+                                position: null // not using position-based prizes anymore
+                            }))
+                        };
 
                         const response = await fetch(`${BACKEND_BASE_URL}/api/tournament/distribute-prizes`, {
                             method: 'POST',
@@ -5299,6 +5499,7 @@
                             throw new Error(data.message || 'Prize distribution failed.');
                         }
 
+                        // Mark tournament as completed
                         await db.collection("tournaments").doc(selectedPrizeTournament.id).update({
                             status: 'completed',
                             updatedAt: FieldValue.serverTimestamp()
@@ -5322,6 +5523,9 @@
                         resultContainer.style.display = 'block';
                         showToast("Prizes distributed successfully!", 'success');
 
+                        // Refresh the prize section
+                        await loadPrizeDistributionPlayers();
+
                     } catch (error) {
                         console.error("Error distributing prizes:", error);
                         showToast(error.message || "Failed to distribute prizes.", 'error');
@@ -5333,6 +5537,7 @@
             );
         }
 
+        // ---- Match Results sync ----
         async function loadMatchResultsPlayers() {
             const matchSelect = document.getElementById('match-results-tournament-selection');
             const prizeSelect = document.getElementById('prize-tournament-selection');
@@ -5401,12 +5606,10 @@
                 const teamsMap = new Map();
 
                 registeredUsers.forEach((reg, index) => {
-                    // Determine team number: look for teamNumber field, fallback to registration index + 1
                     let teamNumber = reg.teamNumber;
                     if (teamNumber === undefined || teamNumber === null || teamNumber === '') {
                         teamNumber = index + 1;
                     }
-                    // Ensure teamNumber is a string for consistent grouping
                     const teamKey = String(teamNumber);
 
                     if (!teamsMap.has(teamKey)) {
@@ -5424,7 +5627,6 @@
 
                     const team = teamsMap.get(teamKey);
 
-                    // If this registration has a screenshot, prefer it
                     if (reg.paymentScreenshotUrl && !team.paymentScreenshotUrl) {
                         team.paymentScreenshotUrl = reg.paymentScreenshotUrl;
                     }
@@ -5434,11 +5636,8 @@
                     if (reg.registeredAt && !team.registeredAt) team.registeredAt = reg.registeredAt;
                     if (reg.verifiedAt && !team.verifiedAt) team.verifiedAt = reg.verifiedAt;
 
-                    // Extract player details — handle both slot-based and legacy formats
                     if (reg.playerDetails && Array.isArray(reg.playerDetails)) {
                         reg.playerDetails.forEach((player) => {
-                            // Slot-based fields: slotNumber, inGameName, uid
-                            // Legacy fallbacks: name, freeFireId
                             const slotNumber = player.slotNumber !== undefined ? player.slotNumber : null;
                             const inGameName = player.inGameName || player.name || 'Unknown';
                             const uid = player.uid || player.freeFireId || 'N/A';
@@ -5451,7 +5650,6 @@
                             });
                         });
                     } else {
-                        // Fallback: single player registration
                         const inGameName = reg.name || 'Unknown';
                         const uid = reg.userId || reg.freeFireId || 'N/A';
                         team.registrations.push({
@@ -5463,14 +5661,12 @@
                     }
                 });
 
-                // Convert map to array and sort by team number (numeric)
                 const sortedTeams = Array.from(teamsMap.values()).sort((a, b) => {
                     const numA = parseInt(a.teamNumber, 10) || 0;
                     const numB = parseInt(b.teamNumber, 10) || 0;
                     return numA - numB;
                 });
 
-                // Build the UI
                 const tournamentTitle = tournament?.title || 'Tournament';
                 const totalTeams = sortedTeams.length;
                 let totalPlayers = 0;
@@ -5494,7 +5690,6 @@
                             new Date(team.verifiedAt).toLocaleString()) :
                         'N/A';
 
-                    // Sort players by slotNumber if available
                     const sortedPlayers = [...team.registrations].sort((a, b) => {
                         if (a.slotNumber !== null && b.slotNumber !== null) {
                             return Number(a.slotNumber) - Number(b.slotNumber);
@@ -5720,9 +5915,12 @@
         }
 
         console.log("✅ Staff panel loaded with all requested features:");
-        console.log("  - [FIXED] saveCredentialsVisibility() now sends notification to registered users ONLY via include_player_ids");
-        console.log("  - [NEW] sendPushToPlayerIds() uses OneSignal's include_player_ids API");
-        console.log("  - [NEW] getRegisteredUserPlayerIds() fetches OneSignal IDs of approved registrants");
+        console.log("  - [REVAMPED] Prize Distribution: SOLO (Name, UID, Kills, Extra Prize)");
+        console.log("  - [REVAMPED] Prize Distribution: DUO/SQUAD (Team #, Players, Total Team Kills, Total Team Prize)");
+        console.log("  - [CALC] SOLO: Amount = (Kills * PerKill) + Extra Prize");
+        console.log("  - [CALC] DUO/SQUAD: Team Total = (Team Kills * PerKill) + Team Prize; Individual = Team Total / players");
+        console.log("  - [DIST] Winners array built with individual amounts; dailyPrizeLimit enforced");
+        console.log("  - [FIXED] saveCredentialsVisibility() sends notification to registered users ONLY via include_player_ids");
         console.log("  - [CHANGE 1] REST API key split into 3 parts (p1 + p2 + p3)");
         console.log("  - [CHANGE 2] Targeted notifications via tags (fallback)");
         console.log("  - [CHANGE 3] Slot-based Registered Users UI: grouped by teamNumber, shows slotNumber, inGameName, uid");
@@ -5733,8 +5931,7 @@
         console.log("  - Daily Auto-Repeat toggle");
         console.log("  - Automations & Templates section (templates + auto-repeat)");
         console.log("  - Fixed: forceLogout does NOT reset to false");
-        console.log("  - [FIXED] applyTemplateFromList() and loadTemplate() now robustly map all fields");
-        console.log("  - [FIXED] Image loading: URL, preview, and file-upload-text updated");
+        console.log("  - [FIXED] applyTemplateFromList() and loadTemplate() robustly map all fields");
         console.log("  - triggerAutoRepeatManually() with Run Auto-Repeat Now button");
     </script>
 </body>
