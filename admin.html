@@ -3837,6 +3837,7 @@
         // =====================================================
         // STAFF MANAGEMENT
         // =====================================================
+        // --- FIXED: Create Staff Account (Firebase Admin-level Hack) ---
         async function createStaffAccount() {
             const name = document.getElementById('staff-name').value.trim();
             const email = document.getElementById('staff-email').value.trim();
@@ -3854,8 +3855,6 @@
             }
             if (password !== confirm) { showToast('Passwords do not match', 'error'); return; }
             if (password.length < 6) { showToast('Password must be at least 6 chars', 'error'); return; }
-            if (!shiftStart || !shiftEnd) { showToast('Please set shift start and end times.', 'error'); return; }
-            if (isNaN(dailyLimit) || dailyLimit < 0) { showToast('Please enter a valid daily prize limit.', 'error'); return; }
 
             const perms = {
                 manageUsers: document.getElementById('perm-users').checked,
@@ -3864,8 +3863,19 @@
             };
 
             try {
-                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                showToast("Creating Staff Account...", 'info');
+                
+                // Secondary Firebase App ని క్రియేట్ చేయడం (దీనివల్ల అడ్మిన్ లాగవుట్ అవ్వడు)
+                const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
+
+                // ఆ Secondary App తో కొత్త అకౌంట్ క్రియేట్ చేస్తాం
+                const userCred = await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
                 const user = userCred.user;
+
+                // కొత్త అకౌంట్ క్రియేట్ అయ్యాక, ఆ Secondary App ని డిలీట్ చేసేస్తాం
+                await secondaryApp.delete();
+
+                // ఇప్పుడు మెయిన్ యాప్ తో (అడ్మిన్ పవర్స్ తో) Firestore లో వాడి డేటా సేవ్ చేస్తాం
                 await db.collection("users").doc(user.uid).set({
                     email: email,
                     name: name,
@@ -3878,14 +3888,17 @@
                     usersManaged: 0,
                     registeredAt: FieldValue.serverTimestamp(),
                     isBlocked: false,
-                    createdBy: currentAdmin.uid,
+                    createdBy: currentAdmin ? currentAdmin.uid : 'admin',
                     lastActive: FieldValue.serverTimestamp(),
                     shiftStart: shiftStart,
                     shiftEnd: shiftEnd,
                     dailyPrizeLimit: dailyLimit,
                     forceLogout: false
                 });
-                showToast('Staff account created!', 'success');
+
+                showToast('Staff account created successfully!', 'success');
+                
+                // Clear the form
                 document.getElementById('staff-name').value = '';
                 document.getElementById('staff-email').value = '';
                 document.getElementById('staff-phone').value = '';
@@ -3898,7 +3911,9 @@
                 document.getElementById('perm-users').checked = false;
                 document.getElementById('perm-tournaments').checked = false;
                 document.getElementById('perm-view').checked = false;
+
             } catch (error) {
+                console.error("Staff creation error:", error);
                 if (error.code === 'auth/email-already-in-use') showToast("Email already in use", 'error');
                 else showToast("Error: " + error.message, 'error');
             }
@@ -4131,6 +4146,7 @@
             }
         }
 
+        // --- FIXED: Clean 7-Day Old Logs (NO INDEX REQUIRED) ---
         async function cleanOldStaffLogs() {
             showConfirmationModal("Clean 7-Day Old Logs",
                 "This will:<br>• Sum up all actions older than 7 days<br>• Save a 1-line summary to staff_weekly_summaries<br>• Delete the old raw logs to save storage<br><br>Proceed?",
@@ -4140,17 +4156,29 @@
                         const sevenDaysAgo = new Date();
                         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-                        const snap = await db.collection("staff_logs")
-                            .where("timestamp", "<", sevenDaysAgo)
-                            .get();
+                        // FIREBASE INDEX ERROR రాకుండా, కేవలం staff_logs అన్నీ తెచ్చుకుంటాం
+                        const snap = await db.collection("staff_logs").get();
 
                         if (snap.empty) {
+                            showToast("No logs found.", 'info');
+                            return;
+                        }
+
+                        // జావాస్క్రిప్ట్ తో 7 రోజుల కంటే పాత వాటిని ఫిల్టర్ చేస్తాం
+                        const oldLogs = snap.docs.filter(doc => {
+                            const data = doc.data();
+                            if (!data.timestamp) return false;
+                            const logDate = data.timestamp.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+                            return logDate < sevenDaysAgo;
+                        });
+
+                        if (oldLogs.length === 0) {
                             showToast("No logs older than 7 days found.", 'info');
                             return;
                         }
 
                         const groups = {};
-                        snap.forEach(doc => {
+                        oldLogs.forEach(doc => {
                             const log = doc.data();
                             const sid = log.staffId || 'unknown';
                             if (!groups[sid]) {
@@ -4170,10 +4198,8 @@
                         const summaryPromises = [];
 
                         for (const [sid, data] of Object.entries(groups)) {
-                            const actionSummary = data.actions.slice(0, 5).join(', ') + (data.actions.length > 5 ?
-                                ` +${data.actions.length - 5} more` : '');
-                            const summaryLine =
-                                `${data.staffName}: ${data.count} actions, ₹${data.totalAmount.toFixed(2)} total. Actions: ${actionSummary}`;
+                            const actionSummary = data.actions.slice(0, 5).join(', ') + (data.actions.length > 5 ? ` +${data.actions.length - 5} more` : '');
+                            const summaryLine = `${data.staffName}: ${data.count} actions, ₹${data.totalAmount.toFixed(2)} total. Actions: ${actionSummary}`;
 
                             const summaryRef = db.collection("staff_weekly_summaries").doc();
                             summaryPromises.push(summaryRef.set({
@@ -4187,24 +4213,18 @@
                                 createdAt: FieldValue.serverTimestamp()
                             }));
 
-                            const staffSnap = await db.collection("staff_logs")
-                                .where("staffId", "==", sid)
-                                .where("timestamp", "<", sevenDaysAgo)
-                                .get();
-                            staffSnap.forEach(doc => {
+                            // డిలీట్ చేయడానికి పాత డాక్యుమెంట్స్ ని బ్యాచ్ లో యాడ్ చేస్తాం
+                            const staffOldLogs = oldLogs.filter(doc => doc.data().staffId === sid);
+                            staffOldLogs.forEach(doc => {
                                 batch.delete(doc.ref);
                             });
                         }
 
                         await Promise.all(summaryPromises);
-                        if (snap.size > 0) {
+                        if (oldLogs.length > 0) {
                             await batch.commit();
-                            showToast(
-                                `Cleaned ${snap.size} old logs. Summaries saved for ${Object.keys(groups).length} staff.`,
-                                'success');
-                            logRecentActivity(`Cleaned ${snap.size} old staff logs`);
-                        } else {
-                            showToast("No old logs found.", 'info');
+                            showToast(`Cleaned ${oldLogs.length} old logs. Summaries saved for ${Object.keys(groups).length} staff.`, 'success');
+                            logRecentActivity(`Cleaned ${oldLogs.length} old staff logs`);
                         }
                     } catch (error) {
                         console.error("Clean logs error:", error);
