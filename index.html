@@ -140,6 +140,7 @@
         #watch-ad-btn,
         #claim-ad-btn,
         #ad-close-btn,
+        #ad-close-btn-overlay,
         .profile-menu-item {
             transition: all var(--transition) !important;
             -webkit-tap-highlight-color: transparent !important;
@@ -162,6 +163,7 @@
         #watch-ad-btn:active,
         #claim-ad-btn:active,
         #ad-close-btn:active,
+        #ad-close-btn-overlay:active,
         .profile-menu-item:active {
             transform: scale(0.97) !important;
             transition-duration: 0.06s !important;
@@ -3771,6 +3773,18 @@
                 opacity: 0.5;
             }
         }
+        /* small helper for saved FF details in profile */
+        .ff-saved-badge {
+            background: rgba(26, 111, 181, 0.06);
+            border: 1px solid rgba(26, 111, 181, 0.10);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: inline-block;
+            margin-left: 4px;
+        }
     </style>
 </head>
 
@@ -3931,7 +3945,7 @@
             <div class="loading-spinner-large"></div>
         </div>
 
-        <!-- ===== AD MODAL ===== -->
+        <!-- ===== AD MODAL (legacy, kept but not used for new flow) ===== -->
         <div id="in-app-ad-modal" style="display:none;">
             <div class="ad-icon"><i class="fas fa-gift"></i></div>
             <h2>Sponsor Ad Running</h2>
@@ -3959,7 +3973,7 @@
             </div>
         </div>
 
-        <!-- ===== FULL-SCREEN AD OVERLAY ===== -->
+        <!-- ===== FULL-SCREEN AD OVERLAY (NEW IFrame-based) ===== -->
         <div id="ad-overlay">
             <iframe id="ad-iframe" src="about:blank" allow="autoplay; encrypted-media; fullscreen"></iframe>
             <div class="ad-timer-overlay" id="ad-timer-overlay">
@@ -4139,7 +4153,7 @@
                     </div>
                 </section>
 
-                <!-- 4. PROFILE -->
+                <!-- 4. PROFILE (UPDATED: shows Free Fire details) -->
                 <section id="profile-section" class="section" style="display:none;">
 
                     <div class="profile-card">
@@ -4168,6 +4182,19 @@
                                     <span class="label"><i class="fas fa-trophy"></i> Tournaments</span>
                                     <span class="value" id="profile-tournaments-count">0</span>
                                 </div>
+                                <!-- NEW: Free Fire Name -->
+                                <div class="profile-info-item">
+                                    <span class="label"><i class="fas fa-user-ninja"></i> FF Name</span>
+                                    <span class="value" id="profile-ff-name" style="color:var(--primary);">Not set</span>
+                                </div>
+                                <!-- NEW: Free Fire UID -->
+                                <div class="profile-info-item">
+                                    <span class="label"><i class="fas fa-id-card"></i> FF UID</span>
+                                    <span class="value" id="profile-ff-uid" style="color:var(--primary);">Not set</span>
+                                </div>
+                            </div>
+                            <div style="font-size:0.70rem; color:var(--text-muted); text-align:center; border-top:1px solid var(--border); padding-top:10px; margin-top:4px;">
+                                <i class="fas fa-save"></i> Your Free Fire details are auto-saved when you book a slot.
                             </div>
                         </div>
                     </div>
@@ -4549,7 +4576,7 @@
 
 
     <!-- =============================================================
-    JAVASCRIPT — FIXED AUTHENTICATION LOOP
+    JAVASCRIPT — FIXED AUTHENTICATION LOOP + UX UPGRADES
     ============================================================= -->
     <script>
         // ─── FIREBASE CONFIG ───
@@ -4621,7 +4648,7 @@
         };
 
         let currentForgotPasswordLanguage = 'english';
-        let isInitializing = false; // prevent multiple init calls
+        let isInitializing = false;
         let appInitialized = false;
 
         const forgotPasswordMessages = {
@@ -4856,21 +4883,20 @@
         }
 
         async function startGoogleAuth(mode) {
-    const isSignup = mode === 'signup';
-    const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
-    const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
-    sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
-    if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
-    else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
-    setButtonLoading(buttonId, true);
+            const isSignup = mode === 'signup';
+            const buttonId = isSignup ? 'google-signup-btn' : 'google-login-btn';
+            const referral = isSignup ? (document.getElementById('signup-referral-code')?.value.trim() || '') : '';
+            sessionStorage.setItem(GOOGLE_AUTH_MODE_KEY, mode);
+            if (isSignup) sessionStorage.setItem(GOOGLE_AUTH_REFERRAL_KEY, referral);
+            else sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+            setButtonLoading(buttonId, true);
 
-    // App (Android) లో ఉంటే, native Google Sign-In వాడండి
-    if (window.AndroidGoogleAuth) {
-        window.AndroidGoogleAuth.signIn();
-        return;
-    }
+            if (window.AndroidGoogleAuth) {
+                window.AndroidGoogleAuth.signIn();
+                return;
+            }
 
-    const provider = new firebase.auth.GoogleAuthProvider();
+            const provider = new firebase.auth.GoogleAuthProvider();
             try {
                 const result = await auth.signInWithPopup(provider);
                 if (result?.user) {
@@ -4915,58 +4941,57 @@
         }
         handleGoogleRedirectResult();
 
-       window.onAndroidGoogleSignIn = async function(idToken, email, name) {
-    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
-    const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
-    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
-    try {
-        const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
-        const result = await auth.signInWithCredential(credential);
-        if (result?.user) {
-            await ensureGoogleUserProfile(result.user, mode, referral);
-            document.getElementById('professional-auth-section').style.display = 'none';
-            document.getElementById('loading-screen').style.display = 'flex';
-
-            setTimeout(() => {
-                const mainApp = document.getElementById('main-app');
-                if (mainApp && mainApp.style.display !== 'block' && auth.currentUser) {
-                    console.warn('Stuck detected, forcing re-init');
-                    location.reload();
+        window.onAndroidGoogleSignIn = async function(idToken, email, name) {
+            const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+            const referral = sessionStorage.getItem(GOOGLE_AUTH_REFERRAL_KEY) || '';
+            const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+            try {
+                const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+                const result = await auth.signInWithCredential(credential);
+                if (result?.user) {
+                    await ensureGoogleUserProfile(result.user, mode, referral);
+                    document.getElementById('professional-auth-section').style.display = 'none';
+                    document.getElementById('loading-screen').style.display = 'flex';
+                    setTimeout(() => {
+                        const mainApp = document.getElementById('main-app');
+                        if (mainApp && mainApp.style.display !== 'block' && auth.currentUser) {
+                            console.warn('Stuck detected, forcing re-init');
+                            location.reload();
+                        }
+                    }, 6000);
                 }
-            }, 6000);
-        }
-    } catch (error) {
-        showToast(error.message || 'Google auth failed.', 'error');
-    } finally {
-        setButtonLoading(buttonId, false);
-        sessionStorage.removeItem(GOOGLE_AUTH_MODE_KEY);
-        sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
-    }
-};
-window.onAndroidGoogleSignInError = function(error) {
-    const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
-    const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
-    showToast('Google sign-in failed: ' + error, 'error');
-    setButtonLoading(buttonId, false);
-};
+            } catch (error) {
+                showToast(error.message || 'Google auth failed.', 'error');
+            } finally {
+                setButtonLoading(buttonId, false);
+                sessionStorage.removeItem(GOOGLE_AUTH_MODE_KEY);
+                sessionStorage.removeItem(GOOGLE_AUTH_REFERRAL_KEY);
+            }
+        };
+        window.onAndroidGoogleSignInError = function(error) {
+            const mode = sessionStorage.getItem(GOOGLE_AUTH_MODE_KEY) || 'login';
+            const buttonId = mode === 'signup' ? 'google-signup-btn' : 'google-login-btn';
+            showToast('Google sign-in failed: ' + error, 'error');
+            setButtonLoading(buttonId, false);
+        };
 
-         // ─── NATIVE ONESIGNAL PLAYER ID SAVE ───
-window.onNativeOneSignalId = function(playerId) {
-    window._pendingOneSignalId = playerId;
-    if (auth.currentUser) {
-        db.collection("users").doc(auth.currentUser.uid).update({
-            oneSignalId: playerId
-        }).catch(e => console.warn('OneSignal ID save failed:', e));
-    }
-};
+        // ─── NATIVE ONESIGNAL PLAYER ID SAVE ───
+        window.onNativeOneSignalId = function(playerId) {
+            window._pendingOneSignalId = playerId;
+            if (auth.currentUser) {
+                db.collection("users").doc(auth.currentUser.uid).update({
+                    oneSignalId: playerId
+                }).catch(e => console.warn('OneSignal ID save failed:', e));
+            }
+        };
 
-auth.onAuthStateChanged(function(user) {
-    if (user && window._pendingOneSignalId) {
-        db.collection("users").doc(user.uid).update({
-            oneSignalId: window._pendingOneSignalId
-        }).catch(e => console.warn('OneSignal ID save failed:', e));
-    }
-});
+        auth.onAuthStateChanged(function(user) {
+            if (user && window._pendingOneSignalId) {
+                db.collection("users").doc(user.uid).update({
+                    oneSignalId: window._pendingOneSignalId
+                }).catch(e => console.warn('OneSignal ID save failed:', e));
+            }
+        });
 
         // ─── SIGNUP / LOGIN ───
         async function handleProfessionalSignup() {
@@ -5131,8 +5156,12 @@ auth.onAuthStateChanged(function(user) {
                 if (userDoc.exists) {
                     const data = userDoc.data() || {};
                     withdrawableBalance = Number(data.withdrawableBalance || 0);
+                    // also capture FF details for display
+                    currentUserData.freeFireName = data.freeFireName || '';
+                    currentUserData.freeFireUID = data.freeFireUID || '';
                 }
                 updateWalletUI();
+                updateProfileFFDetails();
             } catch (e) { console.error('Wallet balance error:', e);
                 showToast('Unable to fetch wallet balance.', 'error'); }
         }
@@ -5210,7 +5239,13 @@ auth.onAuthStateChanged(function(user) {
                     await db.collection("users").doc(uid).update({ referralCode: code });
                     data.referralCode = code;
                 }
-                currentUserData = data;
+                // merge FF details if present
+                currentUserData = {
+                    ...currentUserData,
+                    ...data,
+                    freeFireName: data.freeFireName || currentUserData.freeFireName || '',
+                    freeFireUID: data.freeFireUID || currentUserData.freeFireUID || ''
+                };
                 if (display) display.textContent = code;
                 const countEl = document.getElementById('referral-count-display');
                 if (countEl) countEl.textContent = String(data.referralCount || 0);
@@ -5220,11 +5255,47 @@ auth.onAuthStateChanged(function(user) {
                 if (profCode) profCode.textContent = code || '-';
                 withdrawableBalance = Number(data.withdrawableBalance || 0);
                 updateWalletUI();
+                updateProfileFFDetails();
             } catch (e) {
                 console.error('Referral data error:', e);
                 showToast('Unable to load referral data.', 'error');
                 const display = document.getElementById('referral-code-display');
                 if (display && display.textContent === 'Generating...') display.textContent = 'Error';
+            }
+        }
+
+        // ─── UPDATE PROFILE FF DETAILS ───
+        function updateProfileFFDetails() {
+            const nameEl = document.getElementById('profile-ff-name');
+            const uidEl = document.getElementById('profile-ff-uid');
+            if (nameEl) {
+                const val = currentUserData.freeFireName || '';
+                nameEl.textContent = val || 'Not set';
+                nameEl.style.color = val ? 'var(--primary)' : 'var(--text-muted)';
+            }
+            if (uidEl) {
+                const val = currentUserData.freeFireUID || '';
+                uidEl.textContent = val || 'Not set';
+                uidEl.style.color = val ? 'var(--primary)' : 'var(--text-muted)';
+            }
+        }
+
+        // ─── SAVE FF DETAILS TO USER DOC ───
+        async function saveFreeFireDetailsToUser(ffName, ffUid) {
+            const uid = getCurrentUserId();
+            if (!uid) return;
+            try {
+                await db.collection("users").doc(uid).update({
+                    freeFireName: ffName,
+                    freeFireUID: ffUid,
+                    freeFireSavedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                currentUserData.freeFireName = ffName;
+                currentUserData.freeFireUID = ffUid;
+                updateProfileFFDetails();
+                console.log('✅ Free Fire details saved to user profile.');
+            } catch (e) {
+                console.warn('Failed to save FF details:', e);
             }
         }
 
@@ -5260,7 +5331,7 @@ auth.onAuthStateChanged(function(user) {
             try {
                 const doc = await db.collection("users").doc(uid).get();
                 const data = doc.data() || {};
-                currentUserData = data;
+                currentUserData = { ...currentUserData, ...data };
                 const displayName = data.username || currentUser?.displayName || '-';
                 document.getElementById('profile-username-display').textContent = displayName;
                 document.getElementById('profile-email-display').textContent = currentUser?.email || data.email || '-';
@@ -5270,6 +5341,7 @@ auth.onAuthStateChanged(function(user) {
                 document.getElementById('profile-referral-code').textContent = data.referralCode || '-';
                 withdrawableBalance = Number(data.withdrawableBalance || 0);
                 updateWalletUI();
+                updateProfileFFDetails();
                 checkAdStatus();
             } catch (e) { console.error('Profile data error:', e);
                 showToast('Unable to load profile data.', 'error'); }
@@ -5280,7 +5352,6 @@ auth.onAuthStateChanged(function(user) {
                 await Promise.all([fetchWalletBalance(), fetchWalletTransactions(), fetchReferralData(), fetchProfileData()]);
             } catch (e) {
                 console.error('loadWalletAndReferralData error:', e);
-                // DON'T throw — we want the app to continue even if this fails
             }
         }
 
@@ -5928,7 +5999,7 @@ auth.onAuthStateChanged(function(user) {
             await buildSlotUI(t);
         }
 
-        // ─── BUILD SLOT UI ───
+        // ─── BUILD SLOT UI (UPDATED: auto-fill FF details) ───
         async function buildSlotUI(tournament) {
             const formContainer = document.getElementById('registration-form-container');
             const t = tournament;
@@ -6123,22 +6194,28 @@ auth.onAuthStateChanged(function(user) {
                     }
                 }
 
+                // ─── AUTO-FILL FF DETAILS FROM currentUserData ───
+                const savedName = currentUserData.freeFireName || '';
+                const savedUid = currentUserData.freeFireUID || '';
+
                 html += `
                             <div class="slot-booking-form ${formVisibleClass}" id="slot-booking-form">
                                 <div style="font-weight:700;color:var(--text-primary);margin-bottom:8px;font-size:0.95rem;">
                                     <i class="fas fa-pen"></i> Book Slot
                                     <span id="slot-selection-display" style="color:var(--primary);font-weight:800;margin-left:6px;">${selectionDisplay}</span>
+                                    ${savedName || savedUid ? `<span style="margin-left:8px;font-size:0.60rem;background:rgba(30,142,74,0.08);color:#1e8e4a;padding:2px 10px;border-radius:10px;border:1px solid rgba(30,142,74,0.12);"><i class="fas fa-check-circle"></i> Saved</span>` : ''}
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label><i class="fas fa-user"></i> Free Fire In-Game Name</label>
-                                        <input type="text" id="slot-player-name" placeholder="Enter your FF name" required>
+                                        <input type="text" id="slot-player-name" placeholder="Enter your FF name" required value="${savedName}">
                                     </div>
                                     <div class="form-group">
                                         <label><i class="fas fa-id-card"></i> Free Fire UID</label>
-                                        <input type="text" id="slot-player-uid" placeholder="Enter your FF UID" required pattern="[0-9]*" title="Enter numbers only">
+                                        <input type="text" id="slot-player-uid" placeholder="Enter your FF UID" required pattern="[0-9]*" title="Enter numbers only" value="${savedUid}">
                                     </div>
                                 </div>
+                                ${savedName || savedUid ? `<div style="font-size:0.70rem;color:var(--text-muted);margin:-4px 0 8px;text-align:right;"><i class="fas fa-save"></i> Auto-filled from your profile. Edit if needed.</div>` : ''}
                                 <button class="btn-primary" onclick="processSlotBooking()" id="slot-pay-btn" style="width:100%;margin-top:4px;">
                                     <i class="fas fa-arrow-right"></i> Pay &amp; Join (<i class="fas fa-coins"></i> ${t.entryFee || 0})
                                 </button>
@@ -6225,7 +6302,7 @@ auth.onAuthStateChanged(function(user) {
             }
         }
 
-        // ─── PROCESS SLOT BOOKING ───
+        // ─── PROCESS SLOT BOOKING (UPDATED: save FF details) ───
         async function processSlotBooking() {
             const t = selectedTournament;
             if (!t) return showToast('No tournament selected.', 'error');
@@ -6302,6 +6379,9 @@ auth.onAuthStateChanged(function(user) {
                 await db.collection("tournaments").doc(t.id).update({
                     participants: firebase.firestore.FieldValue.increment(1)
                 });
+
+                // ─── SAVE FF DETAILS TO USER PROFILE ───
+                await saveFreeFireDetailsToUser(playerName, playerUid);
 
                 try {
                     if (typeof OneSignal !== 'undefined') {
@@ -6669,7 +6749,7 @@ auth.onAuthStateChanged(function(user) {
             } catch (e) { console.warn('saveOneSignalPlayerId error:', e); }
         }
 
-        // ─── INITIALIZE APP (with safe error handling) ───
+        // ─── INITIALIZE APP ───
         async function initializeApp(user, userData) {
             if (isInitializing || appInitialized) {
                 console.log('App already initializing or initialized, skipping.');
@@ -6724,7 +6804,6 @@ auth.onAuthStateChanged(function(user) {
             } catch (e) {
                 console.error('❌ InitializeApp error:', e);
                 showToast('Failed to initialize app. Please refresh.', 'error');
-                // DON'T sign out here — let the user retry
             } finally {
                 isInitializing = false;
             }
@@ -6780,35 +6859,32 @@ auth.onAuthStateChanged(function(user) {
                 claimBtn.style.display = 'none'; }
         }
 
-        // ─── AD OVERLAY ───
+        // ─── AD OVERLAY (NEW IFrame-based implementation) ───
         let adOverlayTimer = null;
         let adOverlaySeconds = 10;
 
         function startAd() {
-    const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
+            const adLink = 'https://www.effectivecpmnetwork.com/u56naq1b?key=42bef2da658f3d7febf396f481f9b4e9';
 
-    const overlay = document.getElementById('ad-overlay');
-    const timerNumber = document.getElementById('ad-timer-number');
-    const closeBtn = document.getElementById('ad-close-btn-overlay');
-    const timerOverlay = document.getElementById('ad-timer-overlay');
+            const overlay = document.getElementById('ad-overlay');
+            const iframe = document.getElementById('ad-iframe');
+            const timerNumber = document.getElementById('ad-timer-number');
+            const closeBtn = document.getElementById('ad-close-btn-overlay');
+            const timerOverlay = document.getElementById('ad-timer-overlay');
 
-    if (adOverlayTimer) clearInterval(adOverlayTimer);
-    adOverlaySeconds = 10;
-    timerNumber.textContent = '10';
-    timerNumber.classList.remove('complete');
-    closeBtn.style.display = 'none';
-    timerOverlay.style.display = 'flex';
+            // Reset state
+            if (adOverlayTimer) clearInterval(adOverlayTimer);
+            adOverlaySeconds = 10;
+            timerNumber.textContent = '10';
+            timerNumber.classList.remove('complete');
+            closeBtn.style.display = 'none';
+            timerOverlay.style.display = 'flex';
 
-    // App — professional in-app browser (Custom Tab) 
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
-        window.Capacitor.Plugins.Browser.open({ url: adLink });
-    } else {
-        // Normal website (browser), fallback 
-        window.open(adLink, '_blank');
-    }
-    overlay.style.display = 'flex';
+            // Load the ad inside the iframe
+            iframe.src = adLink;
+            overlay.style.display = 'flex';
 
-    
+            // Start the 10-second timer on top of the iframe
             adOverlayTimer = setInterval(() => {
                 adOverlaySeconds--;
                 if (adOverlaySeconds > 0) {
@@ -6819,8 +6895,18 @@ auth.onAuthStateChanged(function(user) {
                     timerNumber.textContent = '✓';
                     timerNumber.classList.add('complete');
                     closeBtn.style.display = 'block';
+                    // Optionally play a subtle sound or haptic feedback
+                    if (navigator.vibrate) navigator.vibrate(50);
                 }
             }, 1000);
+
+            // Safety: if the iframe fails to load, still show the timer
+            iframe.onerror = function() {
+                console.warn('Ad iframe failed to load, but timer continues.');
+                iframe.src = 'about:blank';
+                iframe.innerHTML =
+                    '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#111;font-size:1.2rem;padding:20px;text-align:center;">Ad failed to load.<br>Please wait 10 seconds then claim.</div>';
+            };
         }
 
         function closeAdOverlay() {
@@ -6832,13 +6918,29 @@ auth.onAuthStateChanged(function(user) {
                 adOverlayTimer = null;
             }
 
+            // Reset the iframe
             iframe.src = 'about:blank';
             overlay.style.display = 'none';
 
+            // Reward the user
             adsWatchedCount++;
             saveLocalAdCount();
             updateAdUI();
 
+            if (adsWatchedCount < ADS_NEEDED) {
+                showToast(`Task Complete! Watch ${ADS_NEEDED - adsWatchedCount} more ads for 1 Coin.`, 'info');
+            } else {
+                showToast('You\'ve watched all ads! Claim your coin now!', 'success');
+            }
+        }
+
+        // Legacy modal close (kept for compatibility)
+        function closeAdModal() {
+            document.getElementById('in-app-ad-modal').style.display = 'none';
+            // Treat as watched
+            adsWatchedCount++;
+            saveLocalAdCount();
+            updateAdUI();
             if (adsWatchedCount < ADS_NEEDED) {
                 showToast(`Task Complete! Watch ${ADS_NEEDED - adsWatchedCount} more ads for 1 Coin.`, 'info');
             } else {
@@ -6876,12 +6978,11 @@ auth.onAuthStateChanged(function(user) {
                 btn.innerHTML = '<i class="fas fa-gift"></i> CLAIM 1 COIN'; }
         }
 
-        // ─── AUTH STATE — FIXED ───
+        // ─── AUTH STATE ───
         auth.onAuthStateChanged(async user => {
             authStateChecked = true;
 
             if (user) {
-                // User is logged in — hide auth section and show loading while we init
                 document.getElementById('professional-auth-section').style.display = 'none';
                 document.getElementById('loading-screen').style.display = 'flex';
 
@@ -6897,22 +6998,17 @@ auth.onAuthStateChanged(function(user) {
                         return;
                     }
 
-                    // Now initialize the app (this will hide loading and show main app)
                     await initializeApp(user, data);
 
                 } catch (e) {
                     console.error('Auth state handler error:', e);
-                    // If we can't load user data, sign out and show auth
                     try { await auth.signOut(); } catch (_) {}
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('professional-auth-section').style.display = 'flex';
                     showToast('Error loading user data. Please try again.', 'error');
                 }
             } else {
-                // User is NOT logged in — show auth section
-                // Only show auth if we're not already initialized
                 if (appInitialized) {
-                    // We were initialized but user logged out — clean up
                     appInitialized = false;
                     isInitializing = false;
                     stopAllTimers();
@@ -6934,11 +7030,10 @@ auth.onAuthStateChanged(function(user) {
             }
         });
 
-        // ─── FALLBACK: If auth state doesn't resolve quickly, show auth ───
+        // ─── FALLBACK ───
         setTimeout(() => {
             if (!authStateChecked) {
                 document.getElementById('loading-screen').style.display = 'none';
-                // Only show auth if user is actually null (safety check)
                 if (!auth.currentUser) {
                     document.getElementById('professional-auth-section').style.display = 'flex';
                 }
@@ -6947,8 +7042,8 @@ auth.onAuthStateChanged(function(user) {
 
         // ─── INITIAL RENDER ───
         renderCoinPackages();
-        console.log('✅ TECHNO E-SPORTS — AUTH FIX APPLIED.');
-        console.log('🔐 Authentication loop fixed: login now stays logged in.');
+        console.log('✅ TECHNO E-SPORTS — UX UPGRADES APPLIED.');
+        console.log('🔐 Auto-save FF details + iframe ad overlay active.');
     </script>
     <!-- ===== ONESIGNAL NATIVE (CAPACITOR / CORDOVA) ===== -->
     <script>
