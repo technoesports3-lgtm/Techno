@@ -2004,23 +2004,15 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>TOURNAMENT ID</label>
-                                                <input type="text" id="solo-tournament-id" placeholder="e.g., SOL0123" required>
+                                                <label>PRIZES</label>
+                                                <textarea id="solo-prizes" rows="2" placeholder="1st: ₹1000, 2nd: ₹500, 3rd: ₹250" required></textarea>
                                             </div>
-                                        </div>
-
-                                        <div class="show-credentials-toggle">
-                                            <span>SHOW CREDENTIALS TO USERS</span>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" id="solo-show-credentials" checked>
-                                                <span class="toggle-slider"></span>
-                                            </label>
                                         </div>
 
                                         <div class="tournament-form-grid">
                                             <div class="form-group">
-                                                <label>TOURNAMENT PASSWORD</label>
-                                                <input type="text" id="solo-tournament-password" placeholder="Password for tournament" required>
+                                                <label>TOURNAMENT ID</label>
+                                                <input type="text" id="solo-tournament-id" placeholder="e.g., SOL0123" required>
                                             </div>
 
                                             <div class="form-group">
@@ -2032,6 +2024,19 @@
                                                     <option value="completed">Completed</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <div class="show-credentials-toggle">
+                                            <span>SHOW CREDENTIALS TO USERS</span>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="solo-show-credentials" checked>
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>TOURNAMENT PASSWORD</label>
+                                            <input type="text" id="solo-tournament-password" placeholder="Password for tournament" required>
                                         </div>
 
                                         <!-- Daily Auto-Repeat Toggle -->
@@ -3847,7 +3852,7 @@
             refreshTemplates(category);
         }
 
-        // ===== UPDATED: saveTemplate includes imageUrl =====
+        // ===== UPDATED: saveTemplate includes imageUrl and solo-prizes =====
         async function saveTemplate(category) {
             if (!hasPermissions.manageTournaments) {
                 showToast("You don't have permission to save templates.", 'error');
@@ -3873,6 +3878,7 @@
                 templateData.details = document.getElementById('solo-details').value.trim();
                 templateData.maxParticipants = Number(document.getElementById('solo-max-players').value) || 0;
                 templateData.perKill = document.getElementById('solo-per-kill').value.trim() || '0';
+                templateData.prizes = document.getElementById('solo-prizes').value.trim();
                 templateData.tournamentId = document.getElementById('solo-tournament-id').value.trim() || '';
                 templateData.tournamentPassword = document.getElementById('solo-tournament-password').value.trim() || '';
                 templateData.showCredentials = document.getElementById('solo-show-credentials').checked;
@@ -4032,6 +4038,7 @@
             if (category === 'solo') {
                 document.getElementById('solo-max-players').value = data.maxParticipants || 0;
                 document.getElementById('solo-per-kill').value = data.perKill || '0';
+                document.getElementById('solo-prizes').value = data.prizes || '';
                 document.getElementById('solo-show-credentials').checked = data.showCredentials !== false;
                 document.getElementById('solo-tournament-status').value = data.status || 'active';
             } else if (category === 'duo') {
@@ -4308,6 +4315,7 @@
                     maxParticipants: parseInt(document.getElementById('solo-max-players').value),
                     entryFee: parseInt(document.getElementById('solo-entry-fee').value),
                     perKill: document.getElementById('solo-per-kill').value.trim(),
+                    prizes: document.getElementById('solo-prizes').value.trim(),
                     tournamentId: document.getElementById('solo-tournament-id').value.trim(),
                     tournamentPassword: document.getElementById('solo-tournament-password').value.trim(),
                     showCredentials: document.getElementById('solo-show-credentials').checked,
@@ -4380,9 +4388,15 @@
                 }
             }
 
-            if (category === 'solo' && !formData.perKill) {
-                showToast("Please fill in the Per Kill Prize field.", 'error');
-                return;
+            if (category === 'solo') {
+                if (!formData.perKill) {
+                    showToast("Please fill in the Per Kill Prize field.", 'error');
+                    return;
+                }
+                if (!formData.prizes) {
+                    showToast("Please fill in the Prizes field.", 'error');
+                    return;
+                }
             }
 
             if ((category === 'duo' || category === 'squad') && !formData.prizes) {
@@ -4428,6 +4442,7 @@
 
             if (category === 'solo') {
                 document.getElementById('solo-per-kill').value = '';
+                document.getElementById('solo-prizes').value = '';
             } else {
                 document.getElementById(`${category}-prizes`).value = '';
             }
@@ -5915,6 +5930,10 @@
         }
 
         console.log("✅ Staff panel loaded with all requested features:");
+        console.log("  - [ADDED] 'Prizes' textarea to Solo Tournament Form (id: solo-prizes)");
+        console.log("  - [FIXED] createTournament() handles solo-prizes");
+        console.log("  - [FIXED] saveTemplate() handles solo-prizes");
+        console.log("  - [FIXED] applyTemplateData() handles solo-prizes");
         console.log("  - [REVAMPED] Prize Distribution: SOLO (Name, UID, Kills, Extra Prize)");
         console.log("  - [REVAMPED] Prize Distribution: DUO/SQUAD (Team #, Players, Total Team Kills, Total Team Prize)");
         console.log("  - [CALC] SOLO: Amount = (Kills * PerKill) + Extra Prize");
