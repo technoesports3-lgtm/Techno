@@ -5306,12 +5306,44 @@
                 .catch(() => showToast('Failed to copy.', 'error'));
         }
 
+        // ─── SHARE REFERRAL (UPDATED: Native Web Share API) ───
         function shareReferralLink() {
             const code = document.getElementById('referral-code-display')?.textContent?.trim() || '';
-            if (!code) return showToast('Referral code not available.', 'error');
-            const link = `${window.location.origin}${window.location.pathname}?ref=${encodeURIComponent(code)}`;
-            navigator.clipboard.writeText(link).then(() => showToast('Referral link copied!', 'success'))
-                .catch(() => showToast('Failed to copy.', 'error'));
+            if (!code) {
+                showToast('Referral code not available.', 'error');
+                return;
+            }
+
+            const shareTitle = "Play & Earn with Techno E-Sports!";
+            const shareText =
+                `Hey! Download the Techno E-Sports app and play Free Fire tournaments to win Real Cash daily! 🎮💸\n\nUse my referral code: ${code} to get a ₹10 Welcome Bonus!\n\nDownload App here:`;
+            const shareUrl = "https://technoesports.in/";
+
+            // If Native Web Share is supported, use it
+            if (navigator.share) {
+                navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        url: shareUrl
+                    })
+                    .catch((err) => {
+                        // User cancelled — do nothing (no error toast)
+                        if (err.name !== 'AbortError') {
+                            console.error('Share error:', err);
+                            showToast('Failed to share. Please try again.', 'error');
+                        }
+                    });
+            } else {
+                // Fallback: copy the full message + link to clipboard
+                const fullMessage = `${shareText} ${shareUrl}`;
+                navigator.clipboard.writeText(fullMessage)
+                    .then(() => {
+                        showToast('Referral message copied! Paste it anywhere to share.', 'success');
+                    })
+                    .catch(() => {
+                        showToast('Failed to copy message. Please try again.', 'error');
+                    });
+            }
         }
 
         async function applyReferralForNewUser(newUserId, referralCode) {
