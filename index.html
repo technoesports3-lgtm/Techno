@@ -3785,6 +3785,18 @@
             display: inline-block;
             margin-left: 4px;
         }
+        /* Credentials copy buttons */
+.credential-item button {
+    transition: all 0.25s ease !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation;
+}
+.credential-item button:active {
+    transform: scale(0.95) !important;
+}
+.credentials-box button:last-child:active {
+    transform: scale(0.97) !important;
+}
     </style>
 </head>
 
@@ -6461,45 +6473,144 @@
             if (!r.ok) throw new Error(d.message || 'Tournament payment failed.');
             return d;
         }
+        // ─── SHOW TOURNAMENT CREDENTIALS (WITH COPY FEATURE) ───
+async function showTournamentCredentials(tournamentId) {
+    const t = currentTournaments.find(t => t.id === tournamentId);
+    if (!t) return;
+    selectedTournament = t;
+    const reg = userRegistrations.find(r => r.tournamentId === tournamentId && r.status === 'approved');
+    if (!reg) return showToast("You need to be approved to view credentials.", 'error');
+    const modal = document.getElementById('credentials-modal');
+    const content = document.getElementById('credentials-content');
+    if (!t.tournamentId || !t.tournamentPassword) {
+        document.getElementById('credentials-not-set-modal').style.display = 'block';
+        return;
+    }
+    if (t.showCredentials === false) {
+        content.innerHTML = `
+                    <div style="text-align:center;padding:30px 15px;">
+                        <i class="fas fa-lock" style="font-size:48px;color:var(--primary);margin-bottom:14px;"></i>
+                        <h3 style="color:var(--text-primary);">Credentials Hidden</h3>
+                        <p style="color:var(--text-secondary);">The tournament ID and password are currently hidden by the administrator.</p>
+                        <p style="color:var(--text-muted);font-size:0.85rem;">Please check back later or contact support.</p>
+                    </div>
+                `;
+    } else {
+        // ─── MODIFIED: Added copy buttons ───
+        content.innerHTML = `
+                    <div class="credentials-box">
+                        <div style="margin-bottom:12px;color:#1e8e4a;font-size:0.85rem;"><i class="fas fa-check-circle"></i> You are approved for this tournament</div>
+                        
+                        <!-- Tournament ID with copy button -->
+                        <div class="credential-item">
+                            <div class="credential-label">Tournament ID</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="credential-value" id="cred-id-value">${t.tournamentId}</div>
+                                <button onclick="copyCredentials('${t.tournamentId}', 'ID')" 
+                                        style="background:#1a6fb5;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.70rem;font-weight:600;white-space:nowrap;transition:all 0.25s ease;"
+                                        onmouseover="this.style.background='#0f4b7a'"
+                                        onmouseout="this.style.background='#1a6fb5'">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Password with copy button -->
+                        <div class="credential-item">
+                            <div class="credential-label">Password</div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div class="credential-value" id="cred-pass-value">${t.tournamentPassword}</div>
+                                <button onclick="copyCredentials('${t.tournamentPassword}', 'Password')" 
+                                        style="background:#1a6fb5;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:0.70rem;font-weight:600;white-space:nowrap;transition:all 0.25s ease;"
+                                        onmouseover="this.style.background='#0f4b7a'"
+                                        onmouseout="this.style.background='#1a6fb5'">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
 
-        // ─── SHOW TOURNAMENT CREDENTIALS ───
-        async function showTournamentCredentials(tournamentId) {
-            const t = currentTournaments.find(t => t.id === tournamentId);
-            if (!t) return;
-            selectedTournament = t;
-            const reg = userRegistrations.find(r => r.tournamentId === tournamentId && r.status === 'approved');
-            if (!reg) return showToast("You need to be approved to view credentials.", 'error');
-            const modal = document.getElementById('credentials-modal');
-            const content = document.getElementById('credentials-content');
-            if (!t.tournamentId || !t.tournamentPassword) {
-                document.getElementById('credentials-not-set-modal').style.display = 'block';
-                return;
+                        <!-- COPY ALL button -->
+                        <button onclick="copyAllCredentials('${t.tournamentId}', '${t.tournamentPassword}')" 
+                                style="width:100%;margin-top:14px;padding:12px;background:linear-gradient(135deg,#1e8e4a,#157a3e);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.90rem;cursor:pointer;transition:all 0.25s ease;box-shadow:0 4px 20px rgba(30,142,74,0.20);"
+                                onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(30,142,74,0.30)'"
+                                onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(30,142,74,0.20)'">
+                            <i class="fas fa-copy"></i> Copy All (ID + Password)
+                        </button>
+                    </div>
+                    <div style="color:var(--text-muted);font-size:0.80rem;text-align:center;margin-top:12px;"><i class="fas fa-info-circle"></i> These credentials are for registered players only. Do not share.</div>
+                    <div style="background:rgba(255,199,0,0.04);border:1px solid rgba(255,199,0,0.10);border-radius:var(--radius-sm);padding:10px;margin-top:12px;">
+                        <p style="color:#b8860b;font-size:0.80rem;margin:0;"><i class="fas fa-exclamation-triangle"></i> Keep these credentials safe and use them only during the tournament.</p>
+                    </div>
+                `;
+    }
+    modal.style.display = 'block';
+}
+
+        // ─── COPY HELPER FUNCTIONS FOR CREDENTIALS ───
+function copyCredentials(text, label) {
+    if (!text) return showToast('Nothing to copy.', 'error');
+    navigator.clipboard.writeText(text).then(() => {
+        showToast(`${label} copied to clipboard!`, 'success', 'Copied!');
+        // Visual feedback: briefly flash the button
+        const btns = document.querySelectorAll('.credential-item button');
+        btns.forEach(btn => {
+            if (btn.textContent.includes('Copy')) {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = '#1e8e4a';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = '#1a6fb5';
+                }, 1500);
             }
-            if (t.showCredentials === false) {
-                content.innerHTML = `
-                            <div style="text-align:center;padding:30px 15px;">
-                                <i class="fas fa-lock" style="font-size:48px;color:var(--primary);margin-bottom:14px;"></i>
-                                <h3 style="color:var(--text-primary);">Credentials Hidden</h3>
-                                <p style="color:var(--text-secondary);">The tournament ID and password are currently hidden by the administrator.</p>
-                                <p style="color:var(--text-muted);font-size:0.85rem;">Please check back later or contact support.</p>
-                            </div>
-                        `;
-            } else {
-                content.innerHTML = `
-                            <div class="credentials-box">
-                                <div style="margin-bottom:12px;color:#1e8e4a;font-size:0.85rem;"><i class="fas fa-check-circle"></i> You are approved for this tournament</div>
-                                <div class="credential-item"><div class="credential-label">Tournament ID</div><div class="credential-value">${t.tournamentId}</div></div>
-                                <div class="credential-item"><div class="credential-label">Password</div><div class="credential-value">${t.tournamentPassword}</div></div>
-                            </div>
-                            <div style="color:var(--text-muted);font-size:0.80rem;text-align:center;margin-top:12px;"><i class="fas fa-info-circle"></i> These credentials are for registered players only. Do not share.</div>
-                            <div style="background:rgba(255,199,0,0.04);border:1px solid rgba(255,199,0,0.10);border-radius:var(--radius-sm);padding:10px;margin-top:12px;">
-                                <p style="color:#b8860b;font-size:0.80rem;margin:0;"><i class="fas fa-exclamation-triangle"></i> Keep these credentials safe and use them only during the tournament.</p>
-                            </div>
-                        `;
-            }
-            modal.style.display = 'block';
+        });
+    }).catch(() => {
+        // Fallback for older browsers
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(`${label} copied to clipboard!`, 'success', 'Copied!');
+        } catch (e) {
+            showToast('Failed to copy. Please copy manually.', 'error');
         }
+    });
+}
 
+function copyAllCredentials(id, pass) {
+    if (!id && !pass) return showToast('No credentials to copy.', 'error');
+    const fullText = `Tournament ID: ${id}\nPassword: ${pass}`;
+    navigator.clipboard.writeText(fullText).then(() => {
+        showToast('✅ ID & Password copied together!', 'success', 'Copied All!');
+        // Visual feedback on Copy All button
+        const btn = document.querySelector('.credentials-box button:last-child');
+        if (btn) {
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Copied All!';
+            btn.style.background = '#1e8e4a';
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.style.background = 'linear-gradient(135deg,#1e8e4a,#157a3e)';
+            }, 1800);
+        }
+    }).catch(() => {
+        // Fallback
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = fullText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('✅ ID & Password copied together!', 'success', 'Copied All!');
+        } catch (e) {
+            showToast('Failed to copy. Please copy manually.', 'error');
+        }
+    });
+}
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
         // ─── NAVIGATION ───
